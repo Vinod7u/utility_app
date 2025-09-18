@@ -9,6 +9,8 @@ import 'package:utility_app_flutter/screens/home/home_page.dart';
 import 'package:utility_app_flutter/utils/appcolors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
+import 'auth/retailer_register.dart';
+
 class Login extends StatefulWidget {
   final UserType userType;
 
