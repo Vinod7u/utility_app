@@ -17,6 +17,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final controller = Get.put(Logincontroller());
 
+  // Decide the text based on userType
+
   String get title {
     switch (widget.userType) {
       case UserType.user:
@@ -53,16 +55,21 @@ class _LoginState extends State<Login> {
   List<Color> get gradientColors {
     switch (widget.userType) {
       case UserType.user:
-        return [Color(0xFF667eea), Color(0xFF764ba2)];
+        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
       case UserType.retailer:
-        return [Color(0xFFf093fb), Color(0xFFf5576c)];
+        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
       case UserType.distributor:
-        return [Color(0xFF4facfe), Color(0xFF00f2fe)];
+        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    String prefixText = widget.userType == UserType.user
+        ? "Don't have an account? "
+        : widget.userType == UserType.retailer
+        ? "Don't have an account? "
+        : "Don't have an account? ";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -174,13 +181,25 @@ class _LoginState extends State<Login> {
                 onPressed: () {
                   // Handle forgot password
                 },
-                child: Text(
-                  widget.userType == UserType.user
-                      ? 'Forgot PIN?'
-                      : widget.userType == UserType.retailer
-                      ? 'Forgot Password?'
-                      : 'Forgot Access Key?',
-                  style: TextStyle(color: gradientColors[0], fontSize: 14),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: gradientColors[0],
+                      fontSize: 14,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: prefixText,
+                      ),
+                      TextSpan(
+                        text: "SignUp",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
