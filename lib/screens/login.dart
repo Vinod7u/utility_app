@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
+import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
+import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
+import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/utils/appcolors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 class Login extends StatefulWidget {
@@ -52,16 +56,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  List<Color> get gradientColors {
-    switch (widget.userType) {
-      case UserType.user:
-        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
-      case UserType.retailer:
-        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
-      case UserType.distributor:
-        return [Color(0xff0c3d4c), Color(0xff57A1CE)];
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +86,7 @@ class _LoginState extends State<Login> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: gradientColors),
+                  gradient: LinearGradient(colors:  [Appcolors.primaryC, Appcolors.primary]),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(icon, color: Colors.white, size: 40),
@@ -125,6 +120,7 @@ class _LoginState extends State<Login> {
                     : 'Enter Distributor Code',
               ),
               SizedBox(height: 16),
+
               // _buildTextField(
               //   controller: controller.passwordController,
               //   label: widget.userType == UserType.user
@@ -139,7 +135,6 @@ class _LoginState extends State<Login> {
               //       : 'Enter Access Key',
               //   obscureText: true,
               // ),
-             
               SizedBox(height: 32),
               Container(
                 height: 80,
@@ -160,7 +155,7 @@ class _LoginState extends State<Login> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: gradientColors),
+                      gradient: LinearGradient(colors:  [Appcolors.primaryC, Appcolors.primary]),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
@@ -180,18 +175,19 @@ class _LoginState extends State<Login> {
               SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  // Handle forgot password
+                  if (widget.userType == UserType.user) {
+                    Get.to(() => UserRegister(userType: widget.userType,));
+                  } else if (widget.userType == UserType.retailer) {
+                    Get.to(() => RetailerRegister());
+                  } else {
+                    Get.to(() => DistributerRegister());
+                  }
                 },
                 child: RichText(
                   text: TextSpan(
-                    style: TextStyle(
-                      color: gradientColors[0],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color:  Appcolors.primaryC, fontSize: 14),
                     children: [
-                      TextSpan(
-                        text: prefixText,
-                      ),
+                      TextSpan(text: prefixText),
                       TextSpan(
                         text: "SignUp",
                         style: TextStyle(
@@ -259,6 +255,4 @@ class _LoginState extends State<Login> {
       ],
     );
   }
-
-
 }
