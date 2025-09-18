@@ -125,20 +125,21 @@ class _LoginState extends State<Login> {
                     : 'Enter Distributor Code',
               ),
               SizedBox(height: 16),
-              _buildTextField(
-                controller: controller.passwordController,
-                label: widget.userType == UserType.user
-                    ? 'PIN'
-                    : widget.userType == UserType.retailer
-                    ? 'Password'
-                    : 'Access Key',
-                hint: widget.userType == UserType.user
-                    ? 'Enter 4-digit PIN'
-                    : widget.userType == UserType.retailer
-                    ? 'Enter Password'
-                    : 'Enter Access Key',
-                obscureText: true,
-              ),
+              // _buildTextField(
+              //   controller: controller.passwordController,
+              //   label: widget.userType == UserType.user
+              //       ? 'PIN'
+              //       : widget.userType == UserType.retailer
+              //       ? 'Password'
+              //       : 'Access Key',
+              //   hint: widget.userType == UserType.user
+              //       ? 'Enter 4-digit PIN'
+              //       : widget.userType == UserType.retailer
+              //       ? 'Enter Password'
+              //       : 'Enter Access Key',
+              //   obscureText: true,
+              // ),
+             
               SizedBox(height: 32),
               Container(
                 height: 80,
@@ -258,4 +259,6 @@ class _LoginState extends State<Login> {
       ],
     );
   }
+
+
 }
