@@ -3,18 +3,17 @@ import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
 import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
+import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
 import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/home/home_page.dart';
-import 'package:utility_app_flutter/utils/appcolors.dart';
+import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 import 'auth/retailer_register.dart';
 
 class Login extends StatefulWidget {
-  final UserType userType;
-
-  const Login({super.key, required this.userType});
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -25,51 +24,14 @@ class _LoginState extends State<Login> {
 
   // Decide the text based on userType
 
-  String get title {
-    switch (widget.userType) {
-      case UserType.user:
-        return 'User Login';
-      case UserType.retailer:
-        return 'Retailer Login';
-      case UserType.distributor:
-        return 'Distributor Login';
-    }
-  }
-
-  String get subtitle {
-    switch (widget.userType) {
-      case UserType.user:
-        return 'Welcome back! Please sign in';
-      case UserType.retailer:
-        return 'Access your retailer dashboard';
-      case UserType.distributor:
-        return 'Access distributor portal';
-    }
-  }
-
-  IconData get icon {
-    switch (widget.userType) {
-      case UserType.user:
-        return Icons.person;
-      case UserType.retailer:
-        return Icons.store;
-      case UserType.distributor:
-        return Icons.business;
-    }
-  }
-
-  
-
   @override
   Widget build(BuildContext context) {
-    String prefixText = widget.userType == UserType.user
-        ? "Don't have an account? "
-        : widget.userType == UserType.retailer
-        ? "Don't have an account? "
-        : "Don't have an account? ";
+    String prefixText = "Don't have an account? ";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
+        title: Text("Login"),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -88,14 +50,16 @@ class _LoginState extends State<Login> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
+                  gradient: LinearGradient(
+                    colors: [AppColors.primaryC, AppColors.primary],
+                  ),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Icon(icon, color: Colors.white, size: 40),
+                child: Icon(Icons.person_2, color: Colors.white, size: 40),
               ),
               SizedBox(height: 20),
               Text(
-                title,
+                "User Login",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
@@ -104,39 +68,23 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(height: 8),
               Text(
-                subtitle,
+                "Welcome back! Please sign in",
                 style: TextStyle(fontSize: 16, color: Color(0xFF64748b)),
               ),
               SizedBox(height: 40),
               _buildTextField(
                 controller: controller.usernameController,
-                label: widget.userType == UserType.user
-                    ? 'Mobile Number'
-                    : widget.userType == UserType.retailer
-                    ? 'Retailer ID'
-                    : 'Distributor Code',
-                hint: widget.userType == UserType.user
-                    ? '+91 98765 43210'
-                    : widget.userType == UserType.retailer
-                    ? 'Enter Retailer ID'
-                    : 'Enter Distributor Code',
+                label: 'Mobile Number',
+                hint: '+91 98765 43210',
               ),
               SizedBox(height: 16),
 
-              // _buildTextField(
-              //   controller: controller.passwordController,
-              //   label: widget.userType == UserType.user
-              //       ? 'PIN'
-              //       : widget.userType == UserType.retailer
-              //       ? 'Password'
-              //       : 'Access Key',
-              //   hint: widget.userType == UserType.user
-              //       ? 'Enter 4-digit PIN'
-              //       : widget.userType == UserType.retailer
-              //       ? 'Enter Password'
-              //       : 'Enter Access Key',
-              //   obscureText: true,
-              // ),
+              _buildTextField(
+                controller: controller.passwordController,
+                label: 'Password',
+                hint: 'Enter Password',
+                obscureText: true,
+              ),
               SizedBox(height: 32),
               SizedBox(
                 height: 80,
@@ -144,7 +92,7 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (controller.formKey.currentState!.validate()) {
-                      Get.to(() => HomePage(userType: widget.userType));
+                      Get.to(() => OtpVerifyScreen());
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -157,7 +105,9 @@ class _LoginState extends State<Login> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
+                      gradient: LinearGradient(
+                        colors: [AppColors.primaryC, AppColors.primary],
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
@@ -175,32 +125,33 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  if (widget.userType == UserType.user) {
-                    Get.to(() => UserRegister(userType: widget.userType,));
-                  } else if (widget.userType == UserType.retailer) {
-                    Get.to(() => RetailerRegister());
-                  } else {
-                    Get.to(() => DistributerRegister());
-                  }
-                },
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(color:  AppColors.primaryC, fontSize: 14),
-                    children: [
-                      TextSpan(text: prefixText),
-                      TextSpan(
-                        text: "SignUp",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+
+              // TextButton(
+              //   onPressed: () {
+              //     if (widget.userType == UserType.user) {
+              //       Get.to(() => UserRegister(userType: widget.userType));
+              //     } else if (widget.userType == UserType.retailer) {
+              //       Get.to(() => RetailerRegister());
+              //     } else {
+              //       Get.to(() => DistributerRegister());
+              //     }
+              //   },
+              //   child: RichText(
+              //     text: TextSpan(
+              //       style: TextStyle(color: AppColors.primaryC, fontSize: 14),
+              //       children: [
+              //         TextSpan(text: prefixText),
+              //         TextSpan(
+              //           text: "SignUp",
+              //           style: TextStyle(
+              //             decoration: TextDecoration.underline,
+              //             fontWeight: FontWeight.bold,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

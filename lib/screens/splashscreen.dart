@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/splash_controller.dart';
+import 'package:utility_app_flutter/screens/login.dart';
 import 'package:utility_app_flutter/screens/loginselection.dart';
+import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xff0c3d4c), Color(0xff57A1CE)],
+            colors: [AppColors.primaryC, AppColors.primary],
           ),
         ),
         child: SafeArea(
@@ -64,11 +66,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(() => Loginselection());
+                    Get.off(() => Login());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Color(0xFF667eea),
+                    foregroundColor: AppColors.primary,
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
