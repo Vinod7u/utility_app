@@ -136,7 +136,7 @@ class _LoginState extends State<Login> {
               //   obscureText: true,
               // ),
               SizedBox(height: 32),
-              Container(
+              SizedBox(
                 height: 80,
                 width: double.infinity,
                 child: ElevatedButton(
