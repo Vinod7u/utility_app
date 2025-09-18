@@ -49,12 +49,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                         Icons.flash_on,
                         [Color(0xFFff9a9e), Color(0xFFfecfef)],
                         () {
-                          //    Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ElectricityBillScreen(),
-                          //   ),
-                          // ),
+                         
                         },
                       ),
                       _buildServiceItem(
@@ -64,12 +59,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                         Icons.send,
                         [Color(0xFFa8edea), Color(0xFFfed6e3)],
                         () {},
-                        //  Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => DMTTransferScreen(),
-                        //   ),
-                        // ),
+                       
                       ),
                       _buildServiceItem(
                         context,
@@ -78,12 +68,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                         Icons.phone_android,
                         [Color(0xFFffecd2), Color(0xFFfcb69f)],
                         () {
-                          //   Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => MobileRechargeScreen(),
-                          //   ),
-                          // ),
+                          
                         },
                       ),
                       _buildServiceItem(
