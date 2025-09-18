@@ -150,7 +150,7 @@ class _UserRegisterState extends State<UserRegister> {
             Obx(
               () => CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                activeColor: Appcolors.primaryC,
+                activeColor: AppColors.primaryC,
                 title: const Text("I accept Terms & Conditions"),
                 value: controller.acceptedTerms.value,
                 onChanged: controller.toggleTerms,
@@ -179,7 +179,7 @@ class _UserRegisterState extends State<UserRegister> {
                 child: Ink(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Appcolors.primaryC, Appcolors.primary],
+                      colors: [AppColors.primaryC, AppColors.primary],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),

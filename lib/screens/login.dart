@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors:  [Appcolors.primaryC, Appcolors.primary]),
+                  gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(icon, color: Colors.white, size: 40),
@@ -157,7 +157,7 @@ class _LoginState extends State<Login> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors:  [Appcolors.primaryC, Appcolors.primary]),
+                      gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
@@ -187,7 +187,7 @@ class _LoginState extends State<Login> {
                 },
                 child: RichText(
                   text: TextSpan(
-                    style: TextStyle(color:  Appcolors.primaryC, fontSize: 14),
+                    style: TextStyle(color:  AppColors.primaryC, fontSize: 14),
                     children: [
                       TextSpan(text: prefixText),
                       TextSpan(
