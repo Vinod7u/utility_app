@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:utility_app_flutter/controller/user_register_controller.dart';
 
 class UserRegister extends StatefulWidget {
   const UserRegister({super.key});
@@ -8,15 +11,26 @@ class UserRegister extends StatefulWidget {
 }
 
 class _UserRegisterState extends State<UserRegister> {
+  final controller = Get.put(UserRegisterController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
+      appBar: AppBar(backgroundColor: Colors.white),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter full name"),
+            _buildTextField(controller: controller.mobileController, label: "Mobile Number", hint: "Enter mobile number"),
+            _buildTextField(controller: controller.emailController, label: "Email", hint: "Enter email"),
+
+            Text("Address"),
+            _buildTextField(controller: controller.streetController , label: "Street Name", hint: "Enter street name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
+            _buildTextField(controller: controller.fullNameController, label: "Full Name", hint: "Enter Full Name"),
 
           ],
         ),
@@ -24,7 +38,7 @@ class _UserRegisterState extends State<UserRegister> {
     );
   }
 
-   Widget _buildTextField({
+  Widget _buildTextField({
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -73,6 +87,4 @@ class _UserRegisterState extends State<UserRegister> {
       ],
     );
   }
-
-
 }
