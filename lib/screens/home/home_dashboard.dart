@@ -428,7 +428,7 @@ class _HomeDashboardState extends State<HomeDashboard>
                 child: AnimatedScale(
                   scale: _selectedQuickAction == index ? 0.95 : 1.0,
                   duration: const Duration(milliseconds: 100),
-                  child: Container(
+                  child: SizedBox(
                     width: 70,
                     child: Column(
                       children: [
