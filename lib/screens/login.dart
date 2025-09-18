@@ -5,6 +5,8 @@ import 'package:utility_app_flutter/controller/loginController.dart';
 import 'package:utility_app_flutter/screens/home/home_page.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
+import 'auth/retailer_register.dart';
+
 class Login extends StatefulWidget {
   final UserType userType;
 
@@ -178,9 +180,9 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  // Handle forgot password
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RetailerRegister()));
                 },
                 child: RichText(
                   text: TextSpan(
