@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
+import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
+import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
+import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/utils/appcolors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
+
+import 'auth/retailer_register.dart';
 
 class Login extends StatefulWidget {
   final UserType userType;
@@ -16,6 +22,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final controller = Get.put(Logincontroller());
+
+  // Decide the text based on userType
 
   String get title {
     switch (widget.userType) {
@@ -50,19 +58,15 @@ class _LoginState extends State<Login> {
     }
   }
 
-  List<Color> get gradientColors {
-    switch (widget.userType) {
-      case UserType.user:
-        return [Color(0xFF667eea), Color(0xFF764ba2)];
-      case UserType.retailer:
-        return [Color(0xFFf093fb), Color(0xFFf5576c)];
-      case UserType.distributor:
-        return [Color(0xFF4facfe), Color(0xFF00f2fe)];
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+    String prefixText = widget.userType == UserType.user
+        ? "Don't have an account? "
+        : widget.userType == UserType.retailer
+        ? "Don't have an account? "
+        : "Don't have an account? ";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -84,7 +88,7 @@ class _LoginState extends State<Login> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: gradientColors),
+                  gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(icon, color: Colors.white, size: 40),
@@ -118,20 +122,21 @@ class _LoginState extends State<Login> {
                     : 'Enter Distributor Code',
               ),
               SizedBox(height: 16),
-              _buildTextField(
-                controller: controller.passwordController,
-                label: widget.userType == UserType.user
-                    ? 'PIN'
-                    : widget.userType == UserType.retailer
-                    ? 'Password'
-                    : 'Access Key',
-                hint: widget.userType == UserType.user
-                    ? 'Enter 4-digit PIN'
-                    : widget.userType == UserType.retailer
-                    ? 'Enter Password'
-                    : 'Enter Access Key',
-                obscureText: true,
-              ),
+
+              // _buildTextField(
+              //   controller: controller.passwordController,
+              //   label: widget.userType == UserType.user
+              //       ? 'PIN'
+              //       : widget.userType == UserType.retailer
+              //       ? 'Password'
+              //       : 'Access Key',
+              //   hint: widget.userType == UserType.user
+              //       ? 'Enter 4-digit PIN'
+              //       : widget.userType == UserType.retailer
+              //       ? 'Enter Password'
+              //       : 'Enter Access Key',
+              //   obscureText: true,
+              // ),
               SizedBox(height: 32),
               SizedBox(
                 height: 80,
@@ -152,7 +157,7 @@ class _LoginState extends State<Login> {
                   ),
                   child: Ink(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: gradientColors),
+                      gradient: LinearGradient(colors:  [AppColors.primaryC, AppColors.primary]),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
@@ -172,15 +177,28 @@ class _LoginState extends State<Login> {
               SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  // Handle forgot password
+                  if (widget.userType == UserType.user) {
+                    Get.to(() => UserRegister(userType: widget.userType,));
+                  } else if (widget.userType == UserType.retailer) {
+                    Get.to(() => RetailerRegister());
+                  } else {
+                    Get.to(() => DistributerRegister());
+                  }
                 },
-                child: Text(
-                  widget.userType == UserType.user
-                      ? 'Forgot PIN?'
-                      : widget.userType == UserType.retailer
-                      ? 'Forgot Password?'
-                      : 'Forgot Access Key?',
-                  style: TextStyle(color: gradientColors[0], fontSize: 14),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(color:  AppColors.primaryC, fontSize: 14),
+                    children: [
+                      TextSpan(text: prefixText),
+                      TextSpan(
+                        text: "SignUp",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
