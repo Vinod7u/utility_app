@@ -12,7 +12,7 @@ import 'package:utility_app_flutter/utils/utils.dart';
 class HomePage extends StatefulWidget {
   final UserType userType;
 
-  HomePage({super.key, required this.userType});
+  const HomePage({super.key, required this.userType});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -44,12 +44,12 @@ class _HomePageState extends State<HomePage> {
           child: screens[controller.selectedIndex.value],
         ),
         bottomNavigationBar: ConvexAppBar(
-          style: TabStyle.react, 
+          style: TabStyle.react,
           backgroundColor: Colors.white,
           activeColor: const Color(0xFF667eea),
           color: const Color(0xFF9ca3af),
           elevation: 6,
-          curveSize: 90, 
+          curveSize: 90,
           items: const [
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.apps, title: 'Services'),

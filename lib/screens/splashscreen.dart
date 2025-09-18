@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:utility_app_flutter/controller/splash_controller.dart';
 import 'package:utility_app_flutter/screens/loginselection.dart';
 
