@@ -32,7 +32,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Name'),
+              //Text('Name'),
               TextFormField(
                 controller: nameC,
                 keyboardType: TextInputType.text,
@@ -56,7 +56,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                 },
               ),
               SizedBox(height: 10,),
-              Text('Phone'),
+              //Text('Phone'),
               TextFormField(
                 controller: phoneC,
                 keyboardType: TextInputType.text,
@@ -80,7 +80,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                 },
               ),
               SizedBox(height: 10,),
-              Text('Email'),
+              //Text('Email'),
               TextFormField(
                 controller: emailC,
                 keyboardType: TextInputType.text,
@@ -106,7 +106,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
 
               SizedBox(height: 10,),
               //Business Section
-              Text('Business Name'),
+              //Text('Business Name'),
               TextFormField(
                 controller: businessNameC,
                 keyboardType: TextInputType.text,
@@ -130,7 +130,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                 },
               ),
               SizedBox(height: 10,),
-              Text('Pincode'),
+              //Text('Pincode'),
               TextFormField(
                 controller: pinCodeC,
                 keyboardType: TextInputType.text,
@@ -154,7 +154,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                 },
               ),
               SizedBox(height: 10,),
-              Text('Address'),
+              //Text('Address'),
               TextFormField(
                 controller: addressC,
                 keyboardType: TextInputType.text,
@@ -179,15 +179,15 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               ),
 
               SizedBox(height: 10,),
-              Text('Owner Photo'),
+             // Text('Owner Photo'),
               TextFormField(
                 controller: fileC,
                 readOnly: true,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                  labelText: 'No File Chosen',
-                  hintText: 'Enter your Address',
+                  labelText: 'Owner Photo',
+                  hintText: 'Choose File',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
