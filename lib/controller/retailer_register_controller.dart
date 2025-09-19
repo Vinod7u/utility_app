@@ -10,9 +10,19 @@ class RetailerRegisterController extends GetxController{
   final  phoneC = TextEditingController();
   final  emailC = TextEditingController();
   final  shopNameC = TextEditingController();
+  final  mPinC = TextEditingController();
+  final  passC = TextEditingController();
+  final  confirmPassC = TextEditingController();
 
   final  pinCodeC = TextEditingController();
   final  addressC = TextEditingController();
+  final  stateC = TextEditingController();
+  final  districtC = TextEditingController();
+  final  aadhaarController = TextEditingController();
+  final  panController = TextEditingController();
+  final  bankAccountController = TextEditingController();
+  final  ifscController = TextEditingController();
+  final  nomineeController = TextEditingController();
   final  fileC = TextEditingController();
   final  mFilesC = TextEditingController();
 

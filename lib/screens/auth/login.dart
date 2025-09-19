@@ -69,7 +69,7 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "User Login",
+                  "Login",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                 _buildTextField(
                   controller: controller.mobileNumberController,
                   label: 'Mobile Number',
-                  hint: '+91 98765 43210',
+                  hint: 'Enter Number',
                 ),
                 SizedBox(height: 16),
 
@@ -198,6 +198,7 @@ class _LoginState extends State<Login> {
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
+            counterText: '',
             fillColor: Color(0xFFf9fafb),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
