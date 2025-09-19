@@ -5,6 +5,8 @@ import 'package:utility_app_flutter/controller/user_register_controller.dart';
 import 'package:utility_app_flutter/screens/home/home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
+import 'package:utility_app_flutter/widgets/app_button.dart';
+import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class UserRegister extends StatefulWidget {
   final UserType userType;
@@ -17,23 +19,33 @@ class UserRegister extends StatefulWidget {
 
 class _UserRegisterState extends State<UserRegister> {
   final controller = Get.put(UserRegisterController());
-  final RxInt stepIndex = 0.obs; // Track current step
+  final RxInt stepIndex = 0.obs;
+
+  // 🔹 Form keys for validation in each step
+  final formKeys = [
+    GlobalKey<FormState>(), // Step 0
+    GlobalKey<FormState>(), // Step 1
+    GlobalKey<FormState>(), // Step 2
+    GlobalKey<FormState>(), // Step 3
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            if (stepIndex.value > 0) {
-              stepIndex.value--;
-            } else {
-              Get.back();
-            }
-          },
-          child: const Icon(Icons.arrow_back_ios),
-        ),
+        leading: stepIndex.value > 0
+            ? InkWell(
+                onTap: () {
+                  if (stepIndex.value > 0) {
+                    stepIndex.value--;
+                  } else {
+                    Get.back();
+                  }
+                },
+                child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+              )
+            : null, // No leading icon when stepIndex == 0
         centerTitle: true,
         title: const Text("Register"),
         backgroundColor: Colors.white,
@@ -103,6 +115,7 @@ class _UserRegisterState extends State<UserRegister> {
   /// Step 1: User details
   Widget _buildUserDetails() {
     return _wrapStep(
+      step: 0,
       children: [
         _buildTextField(
           controller: controller.fullNameController,
@@ -112,7 +125,7 @@ class _UserRegisterState extends State<UserRegister> {
         _buildTextField(
           controller: controller.mobileController,
           label: "Mobile Number",
-          hint: "Enter mobile number",
+          hint: "Enter 10-digit mobile number",
         ),
         _buildTextField(
           controller: controller.emailController,
@@ -127,6 +140,7 @@ class _UserRegisterState extends State<UserRegister> {
   /// Step 2: Address
   Widget _buildAddressDetails() {
     return _wrapStep(
+      step: 1,
       children: [
         _buildTextField(
           controller: controller.streetController,
@@ -146,7 +160,7 @@ class _UserRegisterState extends State<UserRegister> {
         _buildTextField(
           controller: controller.pincodeController,
           label: "Pin Code",
-          hint: "Enter pin code",
+          hint: "Enter 6-digit pin code",
         ),
       ],
       onNext: () => stepIndex.value++,
@@ -156,11 +170,12 @@ class _UserRegisterState extends State<UserRegister> {
   /// Step 3: Aadhaar + PAN
   Widget _buildIdentityDetails() {
     return _wrapStep(
+      step: 2,
       children: [
         _buildTextField(
           controller: controller.aadhaarController,
           label: "Aadhaar Number",
-          hint: "Enter Aadhaar number",
+          hint: "Enter 12-digit Aadhaar number",
         ),
         _buildUploadTile(
           title: "Upload Aadhaar",
@@ -178,13 +193,21 @@ class _UserRegisterState extends State<UserRegister> {
           onTap: () => controller.pickFile(controller.panFile),
         ),
       ],
-      onNext: () => stepIndex.value++,
+      onNext: () {
+        if (controller.aadhaarFile.value == null ||
+            controller.panFile.value == null) {
+          Get.snackbar("Error", "Please upload Aadhaar and PAN files");
+        } else {
+          stepIndex.value++;
+        }
+      },
     );
   }
 
   /// Step 4: Bank + Selfie
   Widget _buildBankDetails() {
     return _wrapStep(
+      step: 3,
       children: [
         _buildTextField(
           controller: controller.bankAccountController,
@@ -225,74 +248,59 @@ class _UserRegisterState extends State<UserRegister> {
         const SizedBox(height: 20),
       ],
       onNext: () {
-        if (controller.acceptedTerms.value) {
-          Get.to(() => HomePage(userType: widget.userType));
-        } else {
+        if (!controller.acceptedTerms.value) {
           Get.snackbar("Error", "Please accept Terms & Conditions");
+        } else if (controller.bankFile.value == null ||
+            controller.selfieFile.value == null) {
+          Get.snackbar("Error", "Please upload bank proof and selfie");
+        } else {
+          Get.to(() => HomePage(userType: widget.userType));
         }
       },
       isLast: true,
     );
   }
 
-  /// 🔹 Step Wrapper with Next Button
+  /// 🔹 Step Wrapper with Validation
   Widget _wrapStep({
     required List<Widget> children,
     required VoidCallback onNext,
+    required int step,
     bool isLast = false,
   }) {
     return Padding(
-      key: ValueKey(children.hashCode), // Important for animation
+      key: ValueKey(children.hashCode),
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(child: Column(children: children)),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: ElevatedButton(
-              onPressed: onNext,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              child: Ink(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primaryC, AppColors.primary],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    isLast ? "Register" : "Next",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+      child: Form(
+        key: formKeys[step],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(child: Column(children: children)),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            appButton(
+              title: isLast ? "Register" : "Next",
+              onTap: () {
+                if (formKeys[step].currentState!.validate()) {
+                  onNext();
+                } else {
+                  showSnackBar(
+                    title: "Error",
+                    message: "Please fill all required fields",
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
 
-  /// 🔹 TextField Builder
+  /// 🔹 TextField Builder with validation
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -316,6 +324,9 @@ class _UserRegisterState extends State<UserRegister> {
           TextFormField(
             controller: controller,
             obscureText: obscureText,
+            keyboardType: label.contains("Mobile")
+                ? TextInputType.phone
+                : TextInputType.text,
             decoration: InputDecoration(
               hintText: hint,
               filled: true,
@@ -336,8 +347,41 @@ class _UserRegisterState extends State<UserRegister> {
                 vertical: 12,
               ),
             ),
-            validator: (value) =>
-                value == null || value.isEmpty ? 'Please enter $label' : null,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter $label';
+              }
+
+              if (label == "Mobile Number" &&
+                  !RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                return "Enter a valid 10-digit mobile number";
+              }
+
+              if (label == "Email" &&
+                  !RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
+                return "Enter a valid email address";
+              }
+
+              if (label == "Pin Code" && value.length != 6) {
+                return "Enter a valid 6-digit pin code";
+              }
+
+              if (label == "Aadhaar Number" &&
+                  !RegExp(r'^[0-9]{12}$').hasMatch(value)) {
+                return "Enter a valid 12-digit Aadhaar number";
+              }
+
+              if (label == "PAN Card Number" &&
+                  !RegExp(
+                    r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+                  ).hasMatch(value.toUpperCase())) {
+                return "Enter a valid PAN number";
+              }
+
+              return null;
+            },
           ),
         ],
       ),

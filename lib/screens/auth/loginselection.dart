@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
 import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
-import 'package:utility_app_flutter/screens/login.dart';
+import 'package:utility_app_flutter/screens/auth/login.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
@@ -23,7 +23,7 @@ class _LoginselectionState extends State<Loginselection> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFf5f7fa), Color(0xFFc3cfe2)],
+            colors: [AppColors.whiteshade, AppColors.purpleshade],
           ),
         ),
         child: SafeArea(
@@ -54,7 +54,7 @@ class _LoginselectionState extends State<Loginselection> {
                   [AppColors.primaryC, AppColors.primary],
                   UserType.user,
                   () {
-                    Get.to(() => UserRegister(userType: UserType.user));
+                    Get.offAll(() => UserRegister(userType: UserType.user));
                   },
                 ),
                 SizedBox(height: 16),
@@ -66,7 +66,7 @@ class _LoginselectionState extends State<Loginselection> {
                   [AppColors.primaryC, AppColors.primary],
                   UserType.retailer,
                   () {
-                    Get.to(() => RetailerRegister());
+                    Get.offAll(() => RetailerRegister());
                   },
                 ),
                 SizedBox(height: 16),
@@ -78,7 +78,7 @@ class _LoginselectionState extends State<Loginselection> {
                   [AppColors.primaryC, AppColors.primary],
                   UserType.distributor,
                   () {
-                    Get.to(() => DistributerRegister());
+                    Get.offAll(() => DistributerRegister());
                   },
                 ),
               ],
@@ -132,13 +132,13 @@ class _LoginselectionState extends State<Loginselection> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1a202c),
+                color: AppColors.primaryC,
               ),
             ),
             SizedBox(height: 4),
             Text(
               subtitle,
-              style: TextStyle(fontSize: 12, color: Color(0xFF64748b)),
+              style: TextStyle(fontSize: 12, color: AppColors.primary),
             ),
           ],
         ),
