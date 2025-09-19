@@ -9,9 +9,15 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 import '../../controller/retailer_register_controller.dart';
+import '../../utils/Validators/validators.dart';
+import '../../utils/utils.dart';
+import '../../widgets/app_button.dart';
+import '../../widgets/snackbar.dart';
+import '../home/home_page.dart';
 
 class RetailerRegister extends StatefulWidget {
-  const RetailerRegister({super.key});
+  final UserType userType;
+  RetailerRegister({super.key,required this.userType});
 
   @override
   State<RetailerRegister> createState() => _RetailerRegisterState();
@@ -19,8 +25,16 @@ class RetailerRegister extends StatefulWidget {
 
 class _RetailerRegisterState extends State<RetailerRegister> {
   final controller = Get.put(RetailerRegisterController());
+  final RxInt stepIndex = 0.obs;
   final List<String> items = [
     'Retailer',
+  ];
+  // 🔹 Form keys for validation in each step
+  final formKeys = [
+    GlobalKey<FormState>(), // Step 0
+    GlobalKey<FormState>(), // Step 1
+    GlobalKey<FormState>(), // Step 2
+    GlobalKey<FormState>(), // Step 3
   ];
 
   @override
@@ -28,325 +42,360 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Retailer Register', style: TextStyle(color: Colors.white)),
-        backgroundColor: AppColors.secondary,
+        leading: stepIndex.value > 0
+            ? InkWell(
+          onTap: () {
+            if (stepIndex.value > 0) {
+              stepIndex.value--;
+            } else {
+              Get.back();
+            }
+          },
+          child: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        )
+            : null, // No leading icon when stepIndex == 0
+        centerTitle: true,
+        title: const Text("Register"),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
+      body: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 🔹 Step Indicator
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: List.generate(4, (index) {
+                    return Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        height: 6,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: stepIndex.value >= index
+                              ? AppColors.primary
+                              : Colors.grey.shade300,
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 400),
+                  transitionBuilder: (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1, 0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                  child: _buildStep(stepIndex.value),
+                ),
+              ),
+            ],
+          )
+      ),
+    );
+  }
+  /// 🔹 Handle each step UI
+  Widget _buildStep(int index) {
+    switch (index) {
+      case 0:
+        return _buildUserDetails();
+      case 1:
+        return _buildAddressDetails();
+      case 2:
+        return _buildIdentityDetails();
+      case 3:
+        return _buildBankDetails();
+      default:
+        return _buildUserDetails();
+    }
+  }
+  Widget _buildUserDetails() {
+    return _wrapStep(
+      step: 0,
+      children: [
+        _buildTextField(
+          controller: controller.nameC,
+          label: "Full Name",
+          hint: "Enter full name",
+        ),
+        _buildTextField(
+          controller: controller.phoneC,
+          label: "Mobile Number",
+          maxL: 10,
+          hint: "Enter 10-digit mobile number",
+        ),
+        _buildTextField(
+          controller: controller.emailC,
+          label: "Email",
+          hint: "Enter email",
+          validator: Validators.validateEmail
+        ),
+      ],
+      onNext: () => stepIndex.value++,
+    );
+  }
+  /// Step 2: Address
+  Widget _buildAddressDetails() {
+    return _wrapStep(
+      step: 1,
+      children: [
+        _buildTextField(
+          controller: controller.stateC,
+          label: "State Name",
+          hint: "Enter State name",
+        ),
+        _buildTextField(
+          controller: controller.districtC,
+          label: "District Name",
+          hint: "Enter district name",
+        ),
+        _buildTextField(
+          controller: controller.pinCodeC,
+          label: "Pin Code",
+          maxL: 6,
+          hint: "Enter 6-digit pin code",
+        ),
+        _buildTextField(
+          controller: controller.stateC,
+          label: "Full Address",
+          hint: "Enter Full Address",
+        ),
+      ],
+      onNext: () => stepIndex.value++,
+    );
+  }
+
+
+  /// Step 3: Aadhaar + PAN
+  Widget _buildIdentityDetails() {
+    return _wrapStep(
+      step: 2,
+      children: [
+        _buildTextField(
+          controller: controller.aadhaarController,
+          label: "Aadhaar Number",
+          maxL: 12,
+          hint: "Enter 12-digit Aadhaar number",
+        ),
+        _buildUploadTile(
+          title: "Upload Aadhaar",
+          fileObs: controller.aadhaarFile,
+          onTap: () => controller.pickFile(controller.aadhaarFile),
+        ),
+        _buildTextField(
+          controller: controller.panController,
+          label: "PAN Card Number",
+          hint: "Enter PAN number",
+        ),
+        _buildUploadTile(
+          title: "Upload PAN",
+          fileObs: controller.panFile,
+          onTap: () => controller.pickFile(controller.panFile),
+        ),
+      ],
+      onNext: () {
+        if (controller.aadhaarFile.value == null ||
+            controller.panFile.value == null) {
+          Get.snackbar("Error", "Please upload Aadhaar and PAN files");
+        } else {
+          stepIndex.value++;
+        }
+      },
+    );
+  }
+
+  /// Step 4: Bank + Selfie
+  Widget _buildBankDetails() {
+    return _wrapStep(
+      step: 3,
+      children: [
+        _buildTextField(
+          controller: controller.bankAccountController,
+          label: "Account Number",
+          maxL: 14,
+          hint: "Enter bank account number",
+        ),
+        _buildTextField(
+          controller: controller.ifscController,
+          label: "IFSC Code",
+          maxL: 11,
+          hint: "Enter IFSC code",
+        ),
+        _buildUploadTile(
+          title: "Upload Bank Proof (Cheque/Passbook)",
+          fileObs: controller.bankFile,
+          onTap: () => controller.pickFile(controller.bankFile),
+        ),
+        _buildUploadTile(
+          title: "Capture Selfie",
+          fileObs: controller.selfieFile,
+          onTap: controller.captureSelfie,
+          isImagePreview: true,
+        ),
+        _buildTextField(
+          controller: controller.nomineeController,
+          label: "Nominee",
+          hint: "Enter nominee name",
+        ),
+        const SizedBox(height: 12),
+        Obx(
+              () => CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            activeColor: AppColors.primaryC,
+            title: const Text("I accept Terms & Conditions"),
+            value: controller.acceptedTerms.value,
+            onChanged: controller.toggleTerms,
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+      onNext: () {
+        if (!controller.acceptedTerms.value) {
+          Get.snackbar("Error", "Please accept Terms & Conditions");
+        } else if (controller.bankFile.value == null ||
+            controller.selfieFile.value == null) {
+          Get.snackbar("Error", "Please upload bank proof and selfie");
+        } else {
+          Get.to(() => HomePage(userType: widget.userType));
+        }
+      },
+      isLast: true,
+    );
+  }
+
+  /// 🔹 Step Wrapper with Validation
+  Widget _wrapStep({
+    required List<Widget> children,
+    required VoidCallback onNext,
+    required int step,
+    bool isLast = false,
+  }) {
+    return Padding(
+      key: ValueKey(children.hashCode),
+      padding: const EdgeInsets.all(16),
+      child: Form(
+        key: formKeys[step],
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTextField(
-              controller: controller.nameC,
-              label: ' Full Name',
-              hint: 'Enter Your Name',
+            Expanded(
+              child: SingleChildScrollView(child: Column(children: children)),
             ),
-            _buildTextField(
-              controller: controller.phoneC,
-              label: 'Mobile Number',
-              hint: 'Enter Your Phone',
+            const SizedBox(height: 20),
+            appButton(
+              title: isLast ? "Register" : "Next",
+              onTap: () {
+                if (formKeys[step].currentState!.validate()) {
+                  onNext();
+                } else {
+                  showSnackBar(
+                    title: "Error",
+                    message: "Please fill all required fields",
+                  );
+                }
+              },
             ),
-            _buildTextField(
-              controller: controller.emailC,
-              label: 'Email',
-              hint: 'Enter Your Email',
-            ),
-
-            _buildDropDownTile(title: controller.selectedValue.value),
-            /*InputDecorator(
-              decoration: InputDecoration(
-                hintText: 'Role',
-                filled: true,
-                fillColor: const Color(0xFFf9fafb),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFe5e7eb),
-                    width: 2,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF667eea),
-                    width: 2,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<String>(
-                  isExpanded: true,
-                  value: selectedValue,
-                  hint: const Text(
-                    'Select Type',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  items: items
-                      .map(
-                        (String item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  )
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-                  },
-                  dropdownStyleData: DropdownStyleData(
-                    maxHeight: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.white,
-                    ),
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 14),
-                  ),
-                ),
-              ),
-            ),*/
-            _buildTextField(
-              controller: controller.shopNameC,
-              label: 'MPIN',
-              hint: 'Enter MPIN',
-            ),
-            _buildTextField(
-              controller: controller.shopNameC,
-              label: 'Password',
-              hint: 'Confirm Password',
-            ),
-            _buildTextField(
-              controller: controller.shopNameC,
-              label: 'Shop Name',
-              hint: 'Enter Shop Name',
-            ),
-           /* Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  hintText: 'Select Type',
-                  filled: true,
-                  fillColor: const Color(0xFFf9fafb),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFe5e7eb),
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF667eea),
-                      width: 2,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 12,
-                  ),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
-                    isExpanded: true,
-                    value: selectedValue,
-                    hint: const Text(
-                      'Select Type',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    items: items
-                        .map(
-                          (String item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    )
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value;
-                      });
-                    },
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: Colors.white,
-                      ),
-                    ),
-                    menuItemStyleData: const MenuItemStyleData(
-                      height: 40,
-                      padding: EdgeInsets.symmetric(horizontal: 14),
-                    ),
-                  ),
-                ),
-              ),
-            ),*/
-
-            _buildDropDownTile(title: controller.selectedShop.value),
-            /*Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Upload Documents",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // _buildUploadTile(
-                    //   title: "Upload Aadhaar",
-                    //   fileObs: controller.aadhaarFile,
-                    //   onTap: () => controller.pickFile(controller.aadhaarFile),
-                    // ),
-                    // _buildUploadTile(
-                    //   title: "Upload PAN",
-                    //   fileObs: controller.panFile,
-                    //   onTap: () => controller.pickFile(controller.panFile),
-                    // ),
-                    _buildUploadTile(
-                      title: "Upload Shop Photos",
-                      fileObs: controller.bankFile,
-                      onTap: () => controller.pickFile(controller.bankFile),
-                    ),
-                    _buildUploadTile(
-                      title: "Shop Address Proof",
-                      fileObs: controller.selfieFile,
-                      onTap: controller.captureSelfie,
-                      isImagePreview: true,
-                    ),
-                    _buildUploadTile(
-                      title: "Upload Owner Photo",
-                      fileObs: controller.selfieFile,
-                      onTap: controller.captureSelfie,
-                      isImagePreview: true,
-                    ),
-                  ],
-                ),
-              ),
-            ),*/
-            _buildTextField(
-              controller: controller.nameC,
-              label: 'PinCode',
-              hint: 'Enter PinCode',
-            ),
-            _buildDropDownTile(title: controller.selectedShop.value),
-            _buildTextField(
-              controller: controller.nameC,
-              label: 'State',
-              hint: '',
-            ),
-            _buildTextField(
-              controller: controller.nameC,
-              label: 'City/District',
-              hint: '',
-            ),
-            _buildDropDownTile(title: controller.selectedShop.value),
-            _buildTextField(
-              controller: controller.nameC,
-              label: 'Full Address',
-              hint: 'Full Address',
-            ),
-
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
-
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
     required String hint,
     bool obscureText = false,
+    int? maxL,
+    FormFieldValidator<String>? validator,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF374151),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF374151),
           ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: controller,
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              hintText: hint,
-              filled: true,
-              fillColor: const Color(0xFFf9fafb),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFFe5e7eb),
-                  width: 2,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFF667eea),
-                  width: 2,
-                ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          maxLength: maxL,
+          keyboardType: label.contains("Mobile") || label.contains('Pin') || label.contains('Aadhaar')
+              ? TextInputType.phone
+              : TextInputType.text,
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            counterText: '',
+            fillColor: const Color(0xFFf9fafb),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Color(0xFFe5e7eb),
+                width: 2,
               ),
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter $label';
-              }
-              return null;
-            },
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Color(0xFF667eea),
+                width: 2,
+              ),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
-        ],
-      ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter $label';
+            }
+            if (label == "Email" &&
+                !RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
+              return "Enter a valid email address";
+            }
+            if (label == "Aadhaar Number" &&
+                !RegExp(r'^[0-9]{12}$').hasMatch(value)) {
+              return "Enter a valid 12-digit Aadhaar number";
+            }
+
+            if (label == "PAN Card Number" &&
+                !RegExp(
+                  r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+                ).hasMatch(value.toUpperCase())) {
+              return "Enter a valid PAN number";
+            }
+            if (label == "IFSC Code" &&
+                !RegExp(r'^[A-Z]{4}0[A-Z0-9]{6}$')
+                    .hasMatch(value.toUpperCase())) {
+              return "Enter a valid IFSC code";
+            }
+            if (label == "Account Number" &&
+                !RegExp(r'^[0-9]{9,18}$').hasMatch(value)) {
+              return "Enter a valid account number (9–18 digits)";
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 
@@ -402,81 +451,91 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     );
   }
 
-  Widget _buildDropDownTile({required String title}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6,vertical: 10),
-      child: Obx(
-            () => InputDecorator(
-          decoration: InputDecoration(
-            hintText: 'Select Type',
-            filled: true,
-            fillColor: const Color(0xFFf9fafb),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color(0xFFe5e7eb),
-                width: 2,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Color(0xFF667eea),
-                width: 2,
-              ),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 12,
-            ),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2<String>(
-              isExpanded: true,
-              value: controller.selectedValue.value.isEmpty
-                  ? null
-                  : controller.selectedValue.value,
-              hint: const Text(
-                'Select Type',
-                style: TextStyle(
+  Widget _buildDropDownTile({required String title,required String label}) {
+    return Obx(
+          () => Column(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF374151),
                 ),
               ),
-              items: items
-                  .map(
-                    (String item) => DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+              const SizedBox(height: 10,),
+              InputDecorator(
+                      decoration: InputDecoration(
+              hintText: 'Select Type',
+              filled: true,
+              fillColor: const Color(0xFFf9fafb),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color(0xFFe5e7eb),
+                  width: 2,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: Color(0xFF667eea),
+                  width: 2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 12,
+              ),
+                      ),
+                      child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                value: controller.selectedValue.value.isEmpty
+                    ? null
+                    : controller.selectedValue.value,
+                hint: const Text(
+                  'Select Type',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-              )
-                  .toList(),
-              onChanged: (value) {
-                controller.selectedValue.value = value!;
-              },
-              dropdownStyleData: DropdownStyleData(
-                maxHeight: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.white,
+                items: items
+                    .map(
+                      (String item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                )
+                    .toList(),
+                onChanged: (value) {
+                  controller.selectedValue.value = value!;
+                },
+                dropdownStyleData: DropdownStyleData(
+                  maxHeight: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white,
+                  ),
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                  padding: EdgeInsets.symmetric(horizontal: 14),
                 ),
               ),
-              menuItemStyleData: const MenuItemStyleData(
-                height: 40,
-                padding: EdgeInsets.symmetric(horizontal: 14),
-              ),
-            ),
+                      ),
+                    ),
+            ],
           ),
-        ),
-      ),
     );
   }
 

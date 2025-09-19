@@ -66,7 +66,7 @@ class _LoginselectionState extends State<Loginselection> {
                   [AppColors.primaryC, AppColors.primary],
                   UserType.retailer,
                   () {
-                    Get.offAll(() => RetailerRegister());
+                    Get.offAll(() => RetailerRegister(userType: UserType.retailer,));
                   },
                 ),
                 SizedBox(height: 16),

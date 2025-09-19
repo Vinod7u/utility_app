@@ -24,7 +24,7 @@ class OtpverifyController extends GetxController {
         isLoading.value = false;
 
         showSnackBar(title: "Success", message: response.data["message"]);
-        Get.to(() => HomePage(userType: UserType.user,));
+        Get.to(() => Loginselection());
       } else {
         isLoading.value = false;
 
