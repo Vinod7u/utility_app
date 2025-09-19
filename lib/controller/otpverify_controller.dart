@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
+import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/utils/Constants/api_url.dart';
 import 'package:utility_app_flutter/utils/appServices/apiservices.dart';
+import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
-class Logincontroller extends GetxController {
+class OtpverifyController extends GetxController {
   final formKey = GlobalKey<FormState>();
-  final mobileNumberController = TextEditingController();
-  final passwordController = TextEditingController();
+  final otpController = TextEditingController();
   RxBool isLoading = false.obs;
 
-  // function for calling the sendOtpApi
-  Future<void> sendOtpApi(String mobileNumber) async {
+  Future<void> verifyOtp({required String otp, required String mobile}) async {
     try {
       isLoading.value = true;
-      final data = {"mobileNumber": mobileNumber};
+      final data = {"mobileNumber": mobile, "otp": otp};
       final response = await Apiservices().postRequest(
-        ApiUrl.sendOtp,
+        ApiUrl.verifyOtp,
         data: data,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         isLoading.value = false;
 
         showSnackBar(title: "Success", message: response.data["message"]);
-        Get.to(() => OtpVerifyScreen(), arguments: {
-          "mobile" : mobileNumber
-        });
+        Get.to(() => HomePage(userType: UserType.user,));
       } else {
         isLoading.value = false;
 
@@ -38,6 +36,4 @@ class Logincontroller extends GetxController {
       showSnackBar(title: "Failed", message: e.toString());
     }
   }
-
-
 }

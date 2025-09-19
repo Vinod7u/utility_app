@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:utility_app_flutter/screens/login.dart';
+import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
+import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
+import 'package:utility_app_flutter/screens/auth/user_register.dart';
+import 'package:utility_app_flutter/screens/auth/login.dart';
+import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 class Loginselection extends StatefulWidget {
@@ -19,7 +23,7 @@ class _LoginselectionState extends State<Loginselection> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFf5f7fa), Color(0xFFc3cfe2)],
+            colors: [AppColors.whiteshade, AppColors.purpleshade],
           ),
         ),
         child: SafeArea(
@@ -33,13 +37,13 @@ class _LoginselectionState extends State<Loginselection> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a202c),
+                    color: AppColors.primaryC,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   'Select your account type to continue',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF64748b)),
+                  style: TextStyle(fontSize: 16, color: Colors.blueGrey),
                 ),
                 SizedBox(height: 40),
                 _buildLoginOption(
@@ -47,8 +51,11 @@ class _LoginselectionState extends State<Loginselection> {
                   'User Login',
                   'Individual customers',
                   Icons.person,
-                  [Color(0xff0c3d4c), Color(0xff57A1CE)],
+                  [AppColors.primaryC, AppColors.primary],
                   UserType.user,
+                  () {
+                    Get.offAll(() => UserRegister(userType: UserType.user));
+                  },
                 ),
                 SizedBox(height: 16),
                 _buildLoginOption(
@@ -56,8 +63,11 @@ class _LoginselectionState extends State<Loginselection> {
                   'Retailer Login',
                   'Retail partners',
                   Icons.store,
-                  [Color(0xff0c3d4c), Color(0xff57A1CE)],
+                  [AppColors.primaryC, AppColors.primary],
                   UserType.retailer,
+                  () {
+                    Get.offAll(() => RetailerRegister());
+                  },
                 ),
                 SizedBox(height: 16),
                 _buildLoginOption(
@@ -65,8 +75,11 @@ class _LoginselectionState extends State<Loginselection> {
                   'Distributor Login',
                   'Distribution partners',
                   Icons.business,
-                  [Color(0xff0c3d4c), Color(0xff57A1CE)],
+                  [AppColors.primaryC, AppColors.primary],
                   UserType.distributor,
+                  () {
+                    Get.offAll(() => DistributerRegister());
+                  },
                 ),
               ],
             ),
@@ -83,11 +96,10 @@ class _LoginselectionState extends State<Loginselection> {
     IconData icon,
     List<Color> gradientColors,
     UserType userType,
+    VoidCallback onTap,
   ) {
     return GestureDetector(
-      onTap: () {
-        Get.to(() => Login(userType: userType));
-      },
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(20),
@@ -120,13 +132,13 @@ class _LoginselectionState extends State<Loginselection> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1a202c),
+                color: AppColors.primaryC,
               ),
             ),
             SizedBox(height: 4),
             Text(
               subtitle,
-              style: TextStyle(fontSize: 12, color: Color(0xFF64748b)),
+              style: TextStyle(fontSize: 12, color: AppColors.primary),
             ),
           ],
         ),
