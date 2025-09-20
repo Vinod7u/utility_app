@@ -69,7 +69,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    Get.off(() => RetailerRegister(userType: UserType.retailer,));
+
+                    Get.offAll(() => Login());
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,

@@ -11,16 +11,24 @@ class UserRegisterController extends GetxController {
   final fullNameController = TextEditingController();
   final mobileController = TextEditingController();
   final emailController = TextEditingController();
-  final streetController = TextEditingController();
+  final mpinController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswodController = TextEditingController();
+
+  final fullAddressController = TextEditingController();
   final districtController = TextEditingController();
   final stateController = TextEditingController();
+  final countryController = TextEditingController();
+
   final pincodeController = TextEditingController();
   final aadhaarController = TextEditingController();
   final panController = TextEditingController();
   final bankAccountController = TextEditingController();
   final ifscController = TextEditingController();
   final nomineeController = TextEditingController();
-  var aadhaarFile = Rx<File?>(null);
+  var aadhaarFrontFile = Rx<File?>(null);
+  var aadhaarbackFile = Rx<File?>(null);
+
   var panFile = Rx<File?>(null);
   var bankFile = Rx<File?>(null);
   var selfieFile = Rx<File?>(null);
@@ -32,13 +40,13 @@ class UserRegisterController extends GetxController {
   final picker = ImagePicker();
 
   Future<void> pickFile(Rx<File?> target) async {
-     final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
       target.value = File(picked.path);
     }
   }
 
-   Future<void> captureSelfie() async {
+  Future<void> captureSelfie() async {
     final picked = await picker.pickImage(source: ImageSource.camera);
     if (picked != null) {
       selfieFile.value = File(picked.path);

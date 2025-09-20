@@ -59,6 +59,7 @@ class _UserRegisterState extends State<UserRegister> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: List.generate(4, (index) {
+                  
                   return Expanded(
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -132,6 +133,22 @@ class _UserRegisterState extends State<UserRegister> {
           label: "Email",
           hint: "Enter email",
         ),
+
+        _buildTextField(
+          controller: controller.mpinController,
+          label: "Mpin",
+          hint: "Enter Mpin",
+        ),
+        _buildTextField(
+          controller: controller.passwordController,
+          label: "Password",
+          hint: "Enter password",
+        ),
+        _buildTextField(
+          controller: controller.confirmPasswodController,
+          label: "Confirm Password",
+          hint: "Confirm Password",
+        ),
       ],
       onNext: () => stepIndex.value++,
     );
@@ -143,11 +160,6 @@ class _UserRegisterState extends State<UserRegister> {
       step: 1,
       children: [
         _buildTextField(
-          controller: controller.streetController,
-          label: "Street Name",
-          hint: "Enter street name",
-        ),
-        _buildTextField(
           controller: controller.districtController,
           label: "District Name",
           hint: "Enter district name",
@@ -157,10 +169,24 @@ class _UserRegisterState extends State<UserRegister> {
           label: "State Name",
           hint: "Enter state name",
         ),
+
+        _buildTextField(
+          controller: controller.countryController,
+          label: "Country Name",
+          hint: "Enter country name",
+        ),
+
         _buildTextField(
           controller: controller.pincodeController,
           label: "Pin Code",
           hint: "Enter 6-digit pin code",
+          maxlength: 6,
+        ),
+
+        _buildTextField(
+          controller: controller.fullAddressController,
+          label: "Full Address",
+          hint: "Enter full Address",
         ),
       ],
       onNext: () => stepIndex.value++,
@@ -176,12 +202,20 @@ class _UserRegisterState extends State<UserRegister> {
           controller: controller.aadhaarController,
           label: "Aadhaar Number",
           hint: "Enter 12-digit Aadhaar number",
+          maxlength: 12,
         ),
         _buildUploadTile(
-          title: "Upload Aadhaar",
-          fileObs: controller.aadhaarFile,
-          onTap: () => controller.pickFile(controller.aadhaarFile),
+          title: "Upload Aadhaar Front",
+          fileObs: controller.aadhaarFrontFile,
+          onTap: () => controller.pickFile(controller.aadhaarFrontFile),
         ),
+
+        _buildUploadTile(
+          title: "Upload Aadhaar Back",
+          fileObs: controller.aadhaarbackFile,
+          onTap: () => controller.pickFile(controller.aadhaarbackFile),
+        ),
+        
         _buildTextField(
           controller: controller.panController,
           label: "PAN Card Number",
@@ -194,7 +228,8 @@ class _UserRegisterState extends State<UserRegister> {
         ),
       ],
       onNext: () {
-        if (controller.aadhaarFile.value == null ||
+        if (controller.aadhaarFrontFile.value == null ||
+            controller.aadhaarbackFile.value == null ||
             controller.panFile.value == null) {
           Get.snackbar("Error", "Please upload Aadhaar and PAN files");
         } else {
@@ -306,6 +341,7 @@ class _UserRegisterState extends State<UserRegister> {
     required String label,
     required String hint,
     bool obscureText = false,
+    int? maxlength,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -322,6 +358,7 @@ class _UserRegisterState extends State<UserRegister> {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            maxLength: maxlength,
             controller: controller,
             obscureText: obscureText,
             keyboardType: label.contains("Mobile")
