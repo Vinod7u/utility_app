@@ -59,6 +59,7 @@ class _UserRegisterState extends State<UserRegister> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: List.generate(4, (index) {
+                  
                   return Expanded(
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
