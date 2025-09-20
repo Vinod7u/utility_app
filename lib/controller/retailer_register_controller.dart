@@ -27,16 +27,27 @@ class RetailerRegisterController extends GetxController{
   final  mFilesC = TextEditingController();
 
   var aadhaarFile = Rx<File?>(null);
+  var shopPhotoFile = Rx<File?>(null);
+  var ownerPhotoFile = Rx<File?>(null);
+  var addressProofFile = Rx<File?>(null);
   var panFile = Rx<File?>(null);
   var bankFile = Rx<File?>(null);
   var selfieFile = Rx<File?>(null);
-  var selectedValue = 'Retailer'.obs;
+  var selectedValue = 'Select Type'.obs;
   var selectedShop = 'Normal'.obs;
+  final List<String> items = [
+    'CSc',
+    'General Store',
+    'Mobile Shop',
+    'Cyber Cafe',
+    'Other',
+  ];
   // Terms & location
   var acceptedTerms = false.obs;
   var position = Rx<Position?>(null);
 
   final picker = ImagePicker();
+  RxBool isLoading = false.obs;
 
   Future<void> pickFile(Rx<File?> target) async {
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -71,4 +82,31 @@ class RetailerRegisterController extends GetxController{
 
     Get.snackbar("Success", "Form submitted successfully");
   }
+
+  /*Future<void> createRetailerApi(String mobileNumber) async {
+    try {
+      isLoading.value = true;
+      final data = {"mobileNumber": mobileNumber};
+      final response = await Apiservices().postRequest(
+        ApiUrl.sendOtp,
+        data: data,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+
+        showSnackBar(title: "Success", message: response.data["message"]);
+        Get.to(() => OtpVerifyScreen(), arguments: {
+          "mobile" : mobileNumber
+        });
+      } else {
+        isLoading.value = false;
+
+        showSnackBar(title: "Failed", message: response.data["message"]);
+      }
+    } catch (e) {
+      isLoading.value = false;
+
+      showSnackBar(title: "Failed", message: e.toString());
+    }
+  }*/
 }

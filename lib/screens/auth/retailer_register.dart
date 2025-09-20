@@ -26,9 +26,7 @@ class RetailerRegister extends StatefulWidget {
 class _RetailerRegisterState extends State<RetailerRegister> {
   final controller = Get.put(RetailerRegisterController());
   final RxInt stepIndex = 0.obs;
-  final List<String> items = [
-    'Retailer',
-  ];
+
   // 🔹 Form keys for validation in each step
   final formKeys = [
     GlobalKey<FormState>(), // Step 0
@@ -139,6 +137,80 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           label: "Email",
           hint: "Enter email",
           validator: Validators.validateEmail
+        ),
+
+        //_buildDropDownTile(title: 'Role', label: 'Select Role'),
+        _buildTextField(
+            controller: controller.mPinC,
+            label: "MPIN",
+            obscureText: true,
+            maxL: 6,
+            hint: "",
+            validator: Validators.validateEmail
+        ),
+        _buildTextField(
+            controller: controller.passC,
+            label: "Password",
+            obscureText: true,
+            hint: "",
+            validator: Validators.validateEmail
+        ),
+        _buildTextField(
+            controller: controller.confirmPassC,
+            label: "Confirm Password",
+            obscureText: true,
+            hint: "",
+            validator: Validators.validateEmail
+        ),
+        Align(alignment: Alignment.centerLeft,
+        child: Text('Retailer Details',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),),
+        _buildTextField(
+          controller: controller.stateC,
+          label: "Shop Name",
+          hint: "Enter Shop name",
+        ),
+        //_buildDropDownTile(title: 'Select Role', label: 'Shop Type'),
+
+        _buildUploadTile(
+          title: "Upload Shop Photos",
+          fileObs: controller.shopPhotoFile,
+          onTap: () => controller.pickFile(controller.shopPhotoFile),
+        ),
+
+        _buildUploadTile(
+          title: "Upload Owner Photo",
+          fileObs: controller.ownerPhotoFile,
+          onTap: () => controller.pickFile(controller.ownerPhotoFile),
+        ),
+
+        _buildUploadTile(
+          title: "Shop Address Proof (utility bill, license etc.) ",
+          fileObs: controller.addressProofFile,
+          onTap: () => controller.pickFile(controller.addressProofFile),
+        ),
+
+        Align(alignment: Alignment.centerLeft,
+          child: Text('Address Information',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),),
+        _buildTextField(
+          controller: controller.stateC,
+          label: "State Name",
+          hint: "Enter State name",
+        ),
+        _buildTextField(
+          controller: controller.districtC,
+          label: "District Name",
+          hint: "Enter district name",
+        ),
+        _buildTextField(
+          controller: controller.pinCodeC,
+          label: "Pin Code",
+          maxL: 6,
+          hint: "Enter 6-digit pin code",
+        ),
+        _buildTextField(
+          controller: controller.addressC,
+          label: "Full Address",
+          hint: "Enter Full Address",
         ),
       ],
       onNext: () => stepIndex.value++,
@@ -395,6 +467,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             return null;
           },
         ),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -454,6 +527,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
   Widget _buildDropDownTile({required String title,required String label}) {
     return Obx(
           () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
@@ -466,7 +540,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               const SizedBox(height: 10,),
               InputDecorator(
                       decoration: InputDecoration(
-              hintText: 'Select Type',
+              hintText: title,
               filled: true,
               fillColor: const Color(0xFFf9fafb),
               border: OutlineInputBorder(
@@ -502,7 +576,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                     color: Colors.black,
                   ),
                 ),
-                items: items
+                items: controller.items
                     .map(
                       (String item) => DropdownMenuItem<String>(
                     value: item,
