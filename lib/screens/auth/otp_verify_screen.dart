@@ -36,7 +36,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         border: Border.all(color: Colors.grey.shade200),
       ),
     );
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -97,14 +96,14 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                   ),
                   showCursor: true,
                   onCompleted: (pin) {
-                    // controller.verifyOtp();
+                    //  controller.verifyOtp();
                   },
                 ),
 
                 const SizedBox(height: 32),
 
                 /// 🔹 Verify Button with Gradient
-                ///
+
                 appButton(
                   title: "Verify Otp",
                   onTap: () {

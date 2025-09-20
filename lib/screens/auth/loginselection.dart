@@ -16,7 +16,7 @@ class Loginselection extends StatefulWidget {
 }
 
 class _LoginselectionState extends State<Loginselection> {
-  final  roleController = Get.put(LoginSelectionController());
+  final roleController = Get.put(LoginSelectionController());
 
   @override
   void initState() {
@@ -27,20 +27,14 @@ class _LoginselectionState extends State<Loginselection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.whiteshade, AppColors.purpleshade],
-          ),
-        ),
+      body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Text(
                   'Choose Login Type',
                   style: TextStyle(
@@ -52,22 +46,26 @@ class _LoginselectionState extends State<Loginselection> {
                 const SizedBox(height: 8),
                 Text(
                   'Select your account type to continue',
-                  style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                  style: TextStyle(fontSize: 16, color: AppColors.primaryC),
                 ),
                 const SizedBox(height: 40),
 
                 // 🔹 Role List from API
                 Obx(() {
                   if (roleController.isLoading.value) {
-                    return const CircularProgressIndicator();
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryC,
+                      ),
+                    );
                   }
 
                   if (roleController.roles.isEmpty) {
-                    return const Text("No roles available");
+                    return Center(child: const Text("No roles available"));
                   }
 
                   return Column(
-                    children: roleController.roles.map((roleData) {
+                    children: roleController.filteredRoles.map((roleData) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: _buildLoginOption(
@@ -79,13 +77,24 @@ class _LoginselectionState extends State<Loginselection> {
                           () {
                             // 🔹 Navigate based on role
                             if (roleData.role?.toLowerCase() == "user") {
-                              Get.offAll(() => UserRegister(userType: UserType.user));
-                            } else if (roleData.role?.toLowerCase() == "retailer") {
-                              Get.offAll(() => RetailerRegister(userType: UserType.retailer));
-                            } else if (roleData.role?.toLowerCase() == "distributor") {
+                              Get.offAll(
+                                () => UserRegister(userType: UserType.user),
+                              );
+                            } else if (roleData.role?.toLowerCase() ==
+                                "retailer") {
+                              Get.offAll(
+                                () => RetailerRegister(
+                                  userType: UserType.retailer,
+                                ),
+                              );
+                            } else if (roleData.role?.toLowerCase() ==
+                                "distributor") {
                               Get.offAll(() => DistributerRegister());
                             } else {
-                              Get.snackbar("Info", "No screen mapped for ${roleData.role}");
+                              Get.snackbar(
+                                "Info",
+                                "No screen mapped for ${roleData.role}",
+                              );
                             }
                           },
                         ),

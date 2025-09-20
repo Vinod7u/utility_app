@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:utility_app_flutter/screens/home/home_page.dart';
 import 'package:utility_app_flutter/screens/splashscreen.dart';
+import 'package:utility_app_flutter/utils/utils.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,9 +17,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Utility Services',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Inter'),
-      home: SplashScreen(),
+      home: HomePage(userType: UserType.distributor),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

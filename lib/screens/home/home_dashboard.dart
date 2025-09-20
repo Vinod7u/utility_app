@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 class HomeDashboard extends StatefulWidget {
@@ -56,7 +57,7 @@ class _HomeDashboardState extends State<HomeDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFF),
+      backgroundColor: Colors.blueGrey.shade100,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -94,7 +95,11 @@ class _HomeDashboardState extends State<HomeDashboard>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFF667eea)],
+              colors: [
+                AppColors.primary,
+                AppColors.primaryC,
+                AppColors.primary,
+              ],
             ),
           ),
           child: Padding(
@@ -200,7 +205,7 @@ class _HomeDashboardState extends State<HomeDashboard>
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2D3748),
+                    color: AppColors.primaryC,
                   ),
                 ),
               ],
@@ -208,7 +213,7 @@ class _HomeDashboardState extends State<HomeDashboard>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF667eea).withOpacity(0.1),
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -226,7 +231,7 @@ class _HomeDashboardState extends State<HomeDashboard>
                   const Text(
                     'Online',
                     style: TextStyle(
-                      color: Color(0xFF667eea),
+                      color: AppColors.primary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -249,7 +254,7 @@ class _HomeDashboardState extends State<HomeDashboard>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF667eea).withOpacity(0.3),
+              color: AppColors.primary,
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -264,9 +269,9 @@ class _HomeDashboardState extends State<HomeDashboard>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFF667eea),
-                  Color(0xFF764ba2),
-                  Color(0xFF667eea),
+                  AppColors.primary,
+                  AppColors.primaryC,
+                  AppColors.primary,
                 ],
               ),
             ),
@@ -796,12 +801,12 @@ class _HomeDashboardState extends State<HomeDashboard>
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+          colors: [AppColors.primary, AppColors.primaryC],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.4),
+            color: const Color(,
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

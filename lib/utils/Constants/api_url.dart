@@ -6,7 +6,4 @@ class ApiUrl {
   static const String verifyOtp = "${baseUrl}auth/verify-otp";
   static const String createCandidate = "${baseUrl}v1/auth/register";
   static const String getrole = "${baseUrl}v1/getallrole";
-
-
- 
 }
