@@ -78,7 +78,10 @@ class _LoginselectionState extends State<Loginselection> {
                   [AppColors.primaryC, AppColors.primary],
                   UserType.distributor,
                   () {
-                    Get.offAll(() => DistributerRegister());
+                    //  Get.offAll(() => DistributorRegister());
+                    Get.offAll(
+                      () => DistributorRegister(userType: UserType.distributor),
+                    );
                   },
                 ),
               ],
