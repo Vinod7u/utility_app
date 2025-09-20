@@ -4,6 +4,9 @@ import 'package:utility_app_flutter/controller/splash_controller.dart';
 import 'package:utility_app_flutter/screens/auth/login.dart';
 import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/utils/utils.dart';
+
+import 'auth/retailer_register.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -66,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    Get.off(() => Login());
+                    Get.off(() => RetailerRegister(userType: UserType.retailer,));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
