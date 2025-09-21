@@ -25,21 +25,17 @@ class Apiservices {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          if (kDebugMode) {
-            print("➡️ ${options.method} | ${options.uri}");
-          }
+          debugPrint("➡️ ${options.method} | ${options.uri}");
+
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          if (kDebugMode) {
-            print("✅ Response: ${response.statusCode} | ${response.data}");
-          }
+          debugPrint("✅ Response: ${response.statusCode} | ${response.data}");
           return handler.next(response);
         },
         onError: (DioException e, handler) {
-          if (kDebugMode) {
-            print("❌ Error: ${e.message}");
-          }
+          debugPrint("❌ Error: ${e.message}");
+
           return handler.next(e);
         },
       ),
@@ -63,7 +59,7 @@ class Apiservices {
     String endpoint, {
     dynamic data,
     Map<String, dynamic>? queryParams,
-  }) async {
+  }) async { 
     try {
       return await _dio.post(
         endpoint,

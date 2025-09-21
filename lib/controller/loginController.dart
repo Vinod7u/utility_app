@@ -25,7 +25,7 @@ class Logincontroller extends GetxController {
 
         showSnackBar(title: "Success", message: response.data["message"]);
         Get.to(() => OtpVerifyScreen(), arguments: {
-          "mobile" : mobileNumber
+          "mobile" : mobileNumber,
         });
       } else {
         isLoading.value = false;

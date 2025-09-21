@@ -13,7 +13,7 @@ import '../../utils/Validators/validators.dart';
 import '../../utils/utils.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/snackbar.dart';
-import '../home/home_page.dart';
+import '../home/usersection/user_home_page.dart';
 
 class RetailerRegister extends StatefulWidget {
   final UserType userType;
@@ -561,6 +561,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         const SizedBox(height: 20),
       ],
       onNext: () {
+
         // if (!controller.acceptedTerms.value) {
         //   Get.snackbar("Error", "Please accept Terms & Conditions");
         // } else if (controller.bankFile.value == null ||
@@ -569,6 +570,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         // } else {
         //   Get.to(() => HomePage(userType: widget.userType));
         // }
+  
       },
       isLast: true,
     );

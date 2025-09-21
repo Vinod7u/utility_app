@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
-import '../screens/home/home_page.dart';
+import '../screens/home/usersection/user_home_page.dart';
 import '../utils/Constants/api_url.dart';
 import '../utils/appServices/apiservices.dart';
 import '../widgets/snackbar.dart';
@@ -189,15 +189,12 @@ class RetailerRegisterController extends GetxController{
         // token = prefs.getString('token');
         print("Response : ${response.data}");
         showSnackBar(title: "Success", message: response.data["message"]);
-
       } else {
         isLoading.value = false;
-
         showSnackBar(title: "Failed", message: response.data["message"]);
       }
     } catch (e) {
       isLoading.value = false;
-
       showSnackBar(title: "Failed", message: e.toString());
     }
   }
