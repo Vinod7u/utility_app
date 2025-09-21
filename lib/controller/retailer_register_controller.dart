@@ -63,7 +63,12 @@ class RetailerRegisterController extends GetxController{
 
   final picker = ImagePicker();
   RxBool isLoading = false.obs;
+  RxBool isLoadingOtp = false.obs;
+  RxBool isLoadingVerifyOtp = false.obs;
 
+
+  RxBool isShowButton = false.obs;
+  RxBool isShowButtonPan = false.obs;
 
   Future<void> pickFile(Rx<File?> target) async {
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -116,6 +121,9 @@ class RetailerRegisterController extends GetxController{
     final state = stateC.text;
     final city = districtC.text;
     final shopName = shopNameC.text;
+
+
+
     //final block = pinCodeC.text;
     try {
       isLoading.value = true;
@@ -167,10 +175,17 @@ class RetailerRegisterController extends GetxController{
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         isLoading.value = false;
+        log("${response.data}");
+        log("${response.statusCode}");
         final token = response.data["token"];
+        final userId = response.data["newUser"]["_id"];
         print('My Token Generated : ${token}');
+        print('My UserId : ${userId}');
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', token);
+        prefs.setString('userId', userId);
+
+        print("User id Set : ${userId}");
         // token = prefs.getString('token');
         print("Response : ${response.data}");
         showSnackBar(title: "Success", message: response.data["message"]);
@@ -188,7 +203,7 @@ class RetailerRegisterController extends GetxController{
   Future<void> sendAadhaarOtpApi() async {
     final aadhaar = aadhaarController.text;
     try {
-      isLoading.value = true;
+      isLoadingOtp.value = true;
       final data = {"aadharNumber": aadhaar};
       final response = await Apiservices().postRequest(
         ApiUrl.verifyAadhaarOtp,
@@ -196,11 +211,174 @@ class RetailerRegisterController extends GetxController{
       );
       print('${data}');
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Api Response : ${response.data}");
+        print("Api Response 2 : ${response.data}");
+        print("Api Response 3 : ${response.data["data"]["data"]["data"]["client_id"]}");
+        final clientID = response.data["data"]["data"]["data"]["client_id"];
+        print("client Id : ${clientID}");
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('client_id', clientID);
+        print("client_id : ${clientID}");
         if(response.data["message"] != "Invalid Aadhaar Number."){
           isAadhaarVerify.value = true;
         }
+        isLoadingOtp.value = false;
+
+        showSnackBar(title: "Success", message: response.data["message"]);
+
+      } else {
+        isLoadingOtp.value = false;
+
+        showSnackBar(title: "Failed", message: response.data["message"]);
+      }
+    } catch (e) {
+      isLoadingOtp.value = false;
+
+      showSnackBar(title: "Failed", message: e.toString());
+    }
+  }
+
+  Future<void> verifyAadhaarOtpApi() async {
+    final aadhaarNo = aadhaarController.text;
+    final otpText = otpC.text;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString('client_id');
+    final userId = prefs.getString('_id');
+    try {
+      isLoadingVerifyOtp.value = true;
+      final data = {
+        "aadharNumber": aadhaarNo,
+        "otp": otpText,
+        "client_id": clientId,
+        "userId": userId,
+      };
+      final response = await Apiservices().postRequest(
+        ApiUrl.submitAadhaarOtp,
+        data: data,
+      );
+      print('${clientId}');
+      print('${userId}');
+      print('${data}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoadingVerifyOtp.value = false;
+
+        showSnackBar(title: "Success", message: response.data["message"]);
+
+      } else {
+        isLoadingVerifyOtp.value = false;
+
+        showSnackBar(title: "Failed", message: response.data["message"]);
+      }
+    } catch (e) {
+      isLoadingVerifyOtp.value = false;
+
+      showSnackBar(title: "Failed", message: e.toString());
+    }
+  }
+
+  Future<void> verifyPanOtpApi() async {
+    final panNo = panController.text;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString('client_id');
+    final userId = prefs.getString('_id');
+    try {
+      isLoading.value = true;
+      final data = {
+        "id_number": panNo,
+        "userId": userId,
+      };
+      final response = await Apiservices().postRequest(
+        ApiUrl.verifyPanOtp,
+        data: data,
+      );
+      print('Client ID ${clientId}');
+      print('User ID ${userId}');
+      print('DATA : ${data}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+        isShowButtonPan.value = true;
+        showSnackBar(title: "Success", message: response.data["message"]);
+
+      } else {
         isLoading.value = false;
 
+        showSnackBar(title: "Failed", message: response.data["message"]);
+      }
+    } catch (e) {
+      isLoading.value = false;
+
+      showSnackBar(title: "Failed", message: e.toString());
+    }
+  }
+
+
+  Future<void> verifyBankApi() async {
+    final bankAccNo = bankAccountController.text;
+    final ifsc = ifscController.text;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString('client_id');
+    final userId = prefs.getString('_id');
+    try {
+      isLoading.value = true;
+      final data = {
+        "id_number": bankAccNo,
+        "ifsc": ifsc,
+        "userId": userId,
+      };
+      final response = await Apiservices().postRequest(
+        ApiUrl.verifyBank,
+        data: data,
+      );
+      print('Client ID ${clientId}');
+      print('User ID ${userId}');
+      print('DATA : ${data}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final name = response.data["pandata"]["data"]["data"]["account_name"];
+        final accountNo = response.data["pandata"]["data"]["data"]["account_number"];
+        final ifsc = response.data["pandata"]["data"]["data"]["ifsc"];
+        prefs.setString('account_name',name);
+        prefs.setString('account_number',accountNo);
+        prefs.setString('ifsc',ifsc);
+
+        isLoading.value = false;
+        isShowButtonPan.value = true;
+        showSnackBar(title: "Success", message: response.data["message"]);
+
+      } else {
+        isLoading.value = false;
+
+        showSnackBar(title: "Failed", message: response.data["message"]);
+      }
+    } catch (e) {
+      isLoading.value = false;
+
+      showSnackBar(title: "Failed", message: e.toString());
+    }
+  }
+
+  Future<void> submitKYCApi() async {
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final clientId = prefs.getString('client_id');
+    final userId = prefs.getString('_id');
+    try {
+      isLoading.value = true;
+      final data = {
+        "userId": userId,
+      };
+      final response = await Apiservices().postRequest(
+        ApiUrl.verifyBank,
+        data: data,
+      );
+      print('Client ID ${clientId}');
+      print('User ID ${userId}');
+      print('DATA : ${data}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+        isShowButtonPan.value = true;
         showSnackBar(title: "Success", message: response.data["message"]);
 
       } else {
