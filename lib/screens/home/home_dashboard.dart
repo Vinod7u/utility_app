@@ -57,7 +57,7 @@ class _HomeDashboardState extends State<HomeDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade100,
+      backgroundColor: const Color(0xFFF8FAFF),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -95,11 +95,7 @@ class _HomeDashboardState extends State<HomeDashboard>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                AppColors.primary,
-                AppColors.primaryC,
-                AppColors.primary,
-              ],
+              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFF667eea)],
             ),
           ),
           child: Padding(
@@ -205,7 +201,7 @@ class _HomeDashboardState extends State<HomeDashboard>
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primaryC,
+                    color: Color(0xFF2D3748),
                   ),
                 ),
               ],
@@ -213,7 +209,7 @@ class _HomeDashboardState extends State<HomeDashboard>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.primary,
+                color: const Color(0xFF667eea).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -231,7 +227,7 @@ class _HomeDashboardState extends State<HomeDashboard>
                   const Text(
                     'Online',
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: Color(0xFF667eea),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -254,7 +250,7 @@ class _HomeDashboardState extends State<HomeDashboard>
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary,
+              color: const Color(0xFF667eea).withOpacity(0.3),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -269,9 +265,9 @@ class _HomeDashboardState extends State<HomeDashboard>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  AppColors.primary,
-                  AppColors.primaryC,
-                  AppColors.primary,
+                  Color(0xFF667eea),
+                  Color(0xFF764ba2),
+                  Color(0xFF667eea),
                 ],
               ),
             ),
@@ -801,12 +797,12 @@ class _HomeDashboardState extends State<HomeDashboard>
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.primaryC],
+          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(,
+            color: const Color(0xFF667eea).withOpacity(0.4),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

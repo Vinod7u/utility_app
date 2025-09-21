@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Utility Services',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Inter'),
-      home: HomePage(userType: UserType.distributor),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
