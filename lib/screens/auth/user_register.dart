@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/user_register_controller.dart';
-import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
@@ -289,7 +289,7 @@ class _UserRegisterState extends State<UserRegister> {
             controller.selfieFile.value == null) {
           Get.snackbar("Error", "Please upload bank proof and selfie");
         } else {
-          Get.to(() => HomePage(userType: widget.userType));
+          Get.to(() => UserHomePage(userType: widget.userType));
         }
       },
       isLast: true,

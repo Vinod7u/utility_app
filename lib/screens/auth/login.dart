@@ -8,7 +8,7 @@ import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
 import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
-import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
@@ -100,7 +100,7 @@ class _LoginState extends State<Login> {
                   title: "Login with Password",
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
-                      Get.to(() => HomePage(userType: UserType.user));
+                      Get.to(() => UserHomePage(userType: UserType.user));
                     } else {
                       showSnackBar(
                         title: "Error",
