@@ -165,7 +165,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         Align(alignment: Alignment.centerLeft,
         child: Text('Retailer Details',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),),
         _buildTextField(
-          controller: controller.stateC,
+          controller: controller.shopNameC,
           label: "Shop Name",
           hint: "Enter Shop name",
         ),
@@ -221,27 +221,57 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     return _wrapStep(
       step: 1,
       children: [
+        Align(alignment: Alignment.centerLeft,
+          child: Text('Aadhaar Details',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),),
+        Align(alignment: Alignment.centerLeft,
+          child: Text('Verify Aadhaar and review the details',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),),),
+        SizedBox(height: 10,),
         _buildTextField(
-          controller: controller.stateC,
-          label: "State Name",
-          hint: "Enter State name",
+          controller: controller.aadhaarController,
+          label: "Aadhaar Number",
+          maxL: 12,
+          hint: "Enter 12-digit Aadhaar number",
         ),
-        _buildTextField(
-          controller: controller.districtC,
-          label: "District Name",
-          hint: "Enter district name",
+        SizedBox(height: 10,),
+
+        appButton(title: 'Verify Otp', onTap: ()async{
+          if (controller.aadhaarController.text.length == 12) {
+            await controller.sendAadhaarOtpApi();
+          } else {
+            showSnackBar(
+              title: "Error",
+              message: "Enter a valid 12-digit Aadhaar number",
+            );
+          }
+          //controller.isAadhaarVerify.value = true;
+        }),
+        if(controller.isAadhaarVerify.value)
+        _buildUploadTile(
+          title: "Upload Aadhaar",
+          fileObs: controller.aadhaarFile,
+          onTap: () => controller.pickFile(controller.aadhaarFile),
         ),
+        if(controller.isAadhaarVerify.value)
         _buildTextField(
-          controller: controller.pinCodeC,
-          label: "Pin Code",
+          controller: controller.otpC,
+          label: "Otp",
           maxL: 6,
-          hint: "Enter 6-digit pin code",
+          hint: "Enter Otp",
         ),
-        _buildTextField(
-          controller: controller.stateC,
-          label: "Full Address",
-          hint: "Enter Full Address",
-        ),
+        if(controller.isAadhaarVerify.value)
+        appButton(title: 'Send Otp', onTap: ()async{
+          if (controller.otpC.text.isNotEmpty || controller.otpC.text.length == 6) {
+            await controller.sendAadhaarOtpApi();
+          } else {
+            showSnackBar(
+              title: "Error",
+              message: "Enter a valid 12-digit Aadhaar number",
+            );
+          }
+          //controller.isAadhaarVerify.value = true;
+        }),
+
+
       ],
       onNext: () => stepIndex.value++,
     );
@@ -253,17 +283,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     return _wrapStep(
       step: 2,
       children: [
-        _buildTextField(
-          controller: controller.aadhaarController,
-          label: "Aadhaar Number",
-          maxL: 12,
-          hint: "Enter 12-digit Aadhaar number",
-        ),
-        _buildUploadTile(
-          title: "Upload Aadhaar",
-          fileObs: controller.aadhaarFile,
-          onTap: () => controller.pickFile(controller.aadhaarFile),
-        ),
+
         _buildTextField(
           controller: controller.panController,
           label: "PAN Card Number",
@@ -366,9 +386,21 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             const SizedBox(height: 20),
             appButton(
               title: isLast ? "Register" : "Next",
-              onTap: () {
+              onTap: () async{
                 if (formKeys[step].currentState!.validate()) {
-                  onNext();
+                  if (step == 0) {
+                    // 👇 Call API when Address Details step is completed
+                    await controller.createRetailerApi();
+                    onNext();
+                  }
+                  if (step == 1) {
+                    // 👇 Call API when Address Details step is completed
+                    await controller.sendAadhaarOtpApi();
+                    onNext();
+                  }else {
+                    onNext();
+                  }
+
                 } else {
                   showSnackBar(
                     title: "Error",
@@ -385,7 +417,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
   }
   Widget _buildTextField({
     required TextEditingController controller,
-    required String label,
+     String? label,
     required String hint,
     bool obscureText = false,
     int? maxL,
@@ -395,7 +427,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          label!,
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
