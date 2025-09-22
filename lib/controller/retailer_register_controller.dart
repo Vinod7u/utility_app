@@ -65,6 +65,7 @@ class RetailerRegisterController extends GetxController{
   RxBool isLoading = false.obs;
   RxBool isLoadingOtp = false.obs;
   RxBool isLoadingVerifyOtp = false.obs;
+  RxBool initialButtonShow = true.obs;
 
 
   RxBool isShowButton = false.obs;
@@ -173,7 +174,9 @@ class RetailerRegisterController extends GetxController{
         data: data,
         files: files,
       );
+      log('status Code : ${response.statusCode}');
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print('HEllo');
         isLoading.value = false;
         log("${response.data}");
         log("${response.statusCode}");
@@ -210,11 +213,10 @@ class RetailerRegisterController extends GetxController{
         data: data,
       );
       print('${data}');
+      print("isAadhaarVerify : ${isAadhaarVerify.value}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Api Response : ${response.data}");
-        print("Api Response 2 : ${response.data}");
-        print("Api Response 3 : ${response.data["data"]["data"]["data"]["client_id"]}");
-        final clientID = response.data["data"]["data"]["data"]["client_id"];
+        final clientID = response.data["data"]["data"]["data"]["client_id"] ?? '';
         print("client Id : ${clientID}");
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('client_id', clientID);
@@ -223,13 +225,13 @@ class RetailerRegisterController extends GetxController{
           isAadhaarVerify.value = true;
         }
         isLoadingOtp.value = false;
-
-        showSnackBar(title: "Success", message: response.data["message"]);
+        print("Hell : ${isAadhaarVerify.value}");
+        showSnackBar(title: "Success", message: response.data["data"]["message"]);
 
       } else {
         isLoadingOtp.value = false;
 
-        showSnackBar(title: "Failed", message: response.data["message"]);
+        showSnackBar(title: "11111Failed", message: response.data["data"]["message"]);
       }
     } catch (e) {
       isLoadingOtp.value = false;

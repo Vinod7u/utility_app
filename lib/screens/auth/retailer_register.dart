@@ -54,12 +54,18 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               )
             : null, // No leading icon when stepIndex == 0
         centerTitle: true,
+        surfaceTintColor: Colors.white,
         title: const Text("Register"),
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-      body: Obx(
-        () => Column(
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(
+            child: CircularProgressIndicator(color: AppColors.primaryC),
+          );
+        }
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 🔹 Step Indicator
@@ -99,8 +105,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -170,9 +176,10 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Retailer Details',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
         ),
+        SizedBox(height: 10),
         _buildTextField(
           controller: controller.shopNameC,
           label: "Shop Name",
@@ -295,7 +302,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             hint: "Enter Otp",
           ),
         if (controller.isAadhaarVerify.value)
-          Obx((){
+          Obx(() {
             if (controller.isLoadingVerifyOtp.value) {
               return Center(
                 child: CircularProgressIndicator(color: AppColors.primaryC),
@@ -316,9 +323,16 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                 //controller.isAadhaarVerify.value = true;
               },
             );
-          })
+          }),
       ],
-      onNext: () => stepIndex.value++,
+      onNext: () {
+        if (formKeys[stepIndex.value].currentState!.validate()){
+
+        } else {
+          stepIndex.value++;
+        }
+      }
+
     );
   }
 
@@ -341,19 +355,19 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(height: 10),
         _buildTextField(
           controller: controller.panController,
           label: "PAN Card Number",
           hint: "Enter PAN number",
-          validator: Validators.validatePan
+          validator: Validators.validatePan,
         ),
+
         // _buildUploadTile(
         //   title: "Upload PAN",
         //   fileObs: controller.panFile,
         //   onTap: () => controller.pickFile(controller.panFile),
         // ),
-
         Obx(() {
           if (controller.isLoadingOtp.value) {
             return Center(
@@ -363,10 +377,9 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Verify Pan',
             onTap: () async {
-              if(formKeys[stepIndex.value].currentState!.validate()){
-               await controller.verifyPanOtpApi();
-              }
-              else {
+              if (formKeys[stepIndex.value].currentState!.validate()) {
+                await controller.verifyPanOtpApi();
+              } else {
                 showSnackBar(
                   title: "Error",
                   message: "Enter a valid Pan number",
@@ -408,6 +421,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           maxL: 11,
           hint: "Enter IFSC code",
         ),
+
         // _buildUploadTile(
         //   title: "Upload Bank Proof (Cheque/Passbook)",
         //   fileObs: controller.bankFile,
@@ -424,7 +438,6 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         //   label: "Nominee",
         //   hint: "Enter nominee name",
         // ),
-
         const SizedBox(height: 12),
         Obx(() {
           if (controller.isLoadingOtp.value) {
@@ -435,13 +448,10 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Verify Bank',
             onTap: () async {
-              if(formKeys[stepIndex.value].currentState!.validate()){
-               // await controller.verifyBankApi();
+              if (formKeys[stepIndex.value].currentState!.validate()) {
+                // await controller.verifyBankApi();
               } else {
-                showSnackBar(
-                  title: "Error",
-                  message: "Enter a valid Details",
-                );
+                showSnackBar(title: "Error", message: "Enter a valid Details");
               }
               //controller.isAadhaarVerify.value = true;
             },
@@ -478,7 +488,6 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     return _wrapStep(
       step: 4,
       children: [
-
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -494,7 +503,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           ),
         ),
 
-        SizedBox(height: 10,),
+        SizedBox(height: 10),
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -510,6 +519,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
           ),
         ),
+
         // _buildUploadTile(
         //   title: "Upload Bank Proof (Cheque/Passbook)",
         //   fileObs: controller.bankFile,
@@ -526,7 +536,6 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         //   label: "Nominee",
         //   hint: "Enter nominee name",
         // ),
-
         const SizedBox(height: 12),
         Obx(() {
           if (controller.isLoadingOtp.value) {
@@ -537,13 +546,10 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Submit KYC',
             onTap: () async {
-              if(formKeys[stepIndex.value].currentState!.validate()){
+              if (formKeys[stepIndex.value].currentState!.validate()) {
                 // await controller.verifyBankApi();
               } else {
-                showSnackBar(
-                  title: "Error",
-                  message: "Enter a valid Details",
-                );
+                showSnackBar(title: "Error", message: "Enter a valid Details");
               }
               //controller.isAadhaarVerify.value = true;
             },
@@ -561,7 +567,6 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         const SizedBox(height: 20),
       ],
       onNext: () {
-
         // if (!controller.acceptedTerms.value) {
         //   Get.snackbar("Error", "Please accept Terms & Conditions");
         // } else if (controller.bankFile.value == null ||
@@ -570,12 +575,10 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         // } else {
         //   Get.to(() => HomePage(userType: widget.userType));
         // }
-  
       },
       isLast: true,
     );
   }
-
 
   /// 🔹 Step Wrapper with Validation
   Widget _wrapStep({
@@ -596,73 +599,74 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               child: SingleChildScrollView(child: Column(children: children)),
             ),
             const SizedBox(height: 20),
+            if( controller.initialButtonShow.value)
             Obx(() {
               if (controller.isLoading.value) {
                 return Center(
                   child: CircularProgressIndicator(color: AppColors.primaryC),
                 );
               }
-              return controller.isShowButton.value  || controller.isShowButtonPan.value == false? appButton(
-                title: isLast ? "Register" : "Next",
-                onTap: () async {
-                  onNext();
-                 /* if (formKeys[step].currentState!.validate()) {
-                    if (step == 0) {
-                      if (controller.shopPhotoFile.value == null) {
-                        showSnackBar(
-                          title: "Error",
-                          message: "Please upload shop photo",
-                        );
-                        return;
-                      }
-                      if (controller.ownerPhotoFile.value == null) {
-                        showSnackBar(
-                          title: "Error",
-                          message: "Please upload owner photo",
-                        );
-                        return;
-                      }
-                      if (controller.addressProofFile.value == null) {
-                        showSnackBar(
-                          title: "Error",
-                          message: "Please upload address proof",
-                        );
-                        return;
-                      }
-                      print("Index = ${step}");
-                      // 👇 Call API when Address Details step is completed
-                      await controller.createRetailerApi();
-                      onNext();
-                    }
-                    if (step == 1) {
-                      print("Index = 1");
-                      // 👇 Call API when Address Details step is completed
-                      //await controller.sendAadhaarOtpApi();
-                      onNext();
-                    }
-                    if (step == 2) {
-                      print("Index = 2");
-                      // 👇 Call API when Address Details step is completed
-                      //await controller.sendAadhaarOtpApi();
-                      onNext();
-                    }
-                    if (step == 3) {
-                      // print("Index = 3");
-                      // // 👇 Call API when Address Details step is completed
-                      // await controller.verifyBankApi();
-                       onNext();
-                    }
-                    else {
-                      onNext();
-                    }
-                  } else {
-                    showSnackBar(
-                      title: "Error",
-                      message: "Please fill all required fields",
+              return
+                   appButton(
+                      title: isLast ? "Register" : "Next",
+                      onTap: () async {
+                        // onNext();
+                        if (formKeys[step].currentState!.validate()) {
+                          if (step == 0) {
+                            if (controller.shopPhotoFile.value == null) {
+                              showSnackBar(
+                                title: "Error",
+                                message: "Please upload shop photo",
+                              );
+                              return;
+                            }
+                            if (controller.ownerPhotoFile.value == null) {
+                              showSnackBar(
+                                title: "Error",
+                                message: "Please upload owner photo",
+                              );
+                              return;
+                            }
+                            if (controller.addressProofFile.value == null) {
+                              showSnackBar(
+                                title: "Error",
+                                message: "Please upload address proof",
+                              );
+                              return;
+                            }
+                            print("Index = ${step}");
+                            // 👇 Call API when Address Details step is completed
+                            await controller.createRetailerApi();
+                            //onNext();
+                          }
+                          if (step == 1) {
+                            print("Index = 1");
+                            // 👇 Call API when Address Details step is completed
+                            //await controller.sendAadhaarOtpApi();
+                           // onNext();
+                          }
+                          if (step == 2) {
+                            print("Index = 2");
+                            // 👇 Call API when Address Details step is completed
+                            //await controller.sendAadhaarOtpApi();
+                            onNext();
+                          }
+                          if (step == 3) {
+                            // print("Index = 3");
+                            // // 👇 Call API when Address Details step is completed
+                            // await controller.verifyBankApi();
+                            onNext();
+                          } else {
+                            onNext();
+                          }
+                        } else {
+                          showSnackBar(
+                            title: "Error",
+                            message: "Please fill all required fields",
+                          );
+                        }
+                      },
                     );
-                  }*/
-                },
-              ) : SizedBox.shrink();
             }),
             const SizedBox(height: 20),
           ],
@@ -699,7 +703,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           keyboardType:
               label.contains("Mobile") ||
                   label.contains('Pin') ||
-                  label.contains('Aadhaar')
+                  label.contains('Aadhaar') || label.contains('MPIN')
               ? TextInputType.phone
               : TextInputType.text,
           decoration: InputDecoration(
@@ -750,14 +754,16 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               return "Enter a valid account number (9–18 digits)";
             }
             if (label == "Password" &&
-                !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$')
-                    .hasMatch(value)) {
+                !RegExp(
+                  r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$',
+                ).hasMatch(value)) {
               return "Password must be at least 8 chars, include upper, lower, number & special char";
             }
             if (label == "Confirm Password" &&
-              !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$')
-                  .hasMatch(value)) {
-            return "Password must be at least 8 chars, include upper, lower, number & special char";
+                !RegExp(
+                  r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$',
+                ).hasMatch(value)) {
+              return "Password must be at least 8 chars, include upper, lower, number & special char";
             }
 
             return null;

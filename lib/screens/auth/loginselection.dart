@@ -27,6 +27,7 @@ class _LoginselectionState extends State<Loginselection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
