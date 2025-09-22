@@ -90,7 +90,7 @@ class _LoginselectionState extends State<Loginselection> {
                               );
                             } else if (roleData.role?.toLowerCase() ==
                                 "distributor") {
-                              Get.offAll(() => DistributerRegister());
+                              Get.offAll(() => DistributorRegister(userType: UserType.distributor,));
                             } else {
                               Get.snackbar(
                                 "Info",
