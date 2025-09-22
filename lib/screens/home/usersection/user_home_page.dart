@@ -4,15 +4,13 @@ import 'package:utility_app_flutter/controller/home_page_controller.dart';
 import 'package:utility_app_flutter/screens/home/usersection/profile_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/scanner_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/service_screen.dart';
-import 'package:utility_app_flutter/screens/home/usersection/trasection_history_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_trasection_history_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/user_home_dashboard.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 class UserHomePage extends StatefulWidget {
-  final UserType userType;
-
-  const UserHomePage({super.key, required this.userType});
+  const UserHomePage({super.key});
 
   @override
   State<UserHomePage> createState() => _UserHomePageState();
@@ -37,8 +35,8 @@ class _UserHomePageState extends State<UserHomePage> {
       UserHomeDashboard(),
       const ServiceScreen(),
       const ScannerScreen(),
-      const TransactionHistoryScreen(),
-      ProfileScreen(userType: widget.userType),
+      UserTrasectionHistoryScreen(),
+      ProfileScreen(),
     ];
 
     return Obx(
@@ -59,7 +57,7 @@ class _UserHomePageState extends State<UserHomePage> {
 
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
-          elevation: 10,
+          elevation: 20,
           shape: const CircularNotchedRectangle(),
           notchMargin: 10,
           child: Container(
@@ -85,7 +83,7 @@ class _UserHomePageState extends State<UserHomePage> {
                           icons[index],
                           size: 28, // 🔥 bigger icons for all tabs
                           color: isSelected
-                              ? AppColors.secondary
+                              ? AppColors.new_blue
                               : Colors.blueGrey.shade300,
                         ),
                         const SizedBox(height: 3), // less padding under icons
@@ -94,7 +92,7 @@ class _UserHomePageState extends State<UserHomePage> {
                           style: TextStyle(
                             fontSize: 12,
                             color: isSelected
-                                ? AppColors.secondary
+                                ? AppColors.new_blue
                                 : Colors.blueGrey.shade300,
                             fontWeight: isSelected
                                 ? FontWeight.w600
@@ -117,7 +115,7 @@ class _UserHomePageState extends State<UserHomePage> {
             height: 70,
             width: 70,
             decoration: BoxDecoration(
-              color: AppColors.secondary,
+              color: AppColors.new_blue,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(

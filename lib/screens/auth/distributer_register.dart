@@ -282,7 +282,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
             message: "Please upload all required documents",
           );
         } else {
-          Get.to(() => UserHomePage(userType: widget.userType));
+          Get.to(() => UserHomePage());
         }
       },
       isLast: true,

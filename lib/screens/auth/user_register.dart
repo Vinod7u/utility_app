@@ -289,7 +289,7 @@ class _UserRegisterState extends State<UserRegister> {
             controller.selfieFile.value == null) {
           Get.snackbar("Error", "Please upload bank proof and selfie");
         } else {
-          Get.to(() => UserHomePage(userType: widget.userType));
+          Get.to(() => UserHomePage());
         }
       },
       isLast: true,
