@@ -98,11 +98,26 @@ class _LoginState extends State<Login> {
 
                 // --- Login with Password ---
                 appButton(
-                  title: "Login with Password",
+                  title: "Login for Retailer",
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
                       Get.offAll(() => RetailerHomePage());
                      // Get.to(() => UserHomePage(userType: UserType.user));
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid credentials",
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: 10,),
+                appButton(
+                  title: "Login for User",
+                  onTap: () {
+                    if (controller.formKey.currentState!.validate()) {
+                      Get.offAll(() => UserHomePage(userType: UserType.user,));
+                      // Get.to(() => UserHomePage(userType: UserType.user));
                     } else {
                       showSnackBar(
                         title: "Error",
@@ -118,23 +133,23 @@ class _LoginState extends State<Login> {
                 appButton(
                   title: "Send Otp",
                   onTap: () {
-                    final mobile = controller.mobileNumberController.text
-                        .trim();
-
-                    if (mobile.isEmpty) {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter mobile number",
-                      );
-                    } else if (!RegExp(r'^[0-9]{10}$').hasMatch(mobile)) {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter a valid 10-digit mobile number",
-                      );
-                    } else {
-                      // Get.to(() => Loginselection());
-                      controller.sendOtpApi(mobile);
-                    }
+                    // final mobile = controller.mobileNumberController.text
+                    //     .trim();
+                    //
+                    // if (mobile.isEmpty) {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Enter mobile number",
+                    //   );
+                    // } else if (!RegExp(r'^[0-9]{10}$').hasMatch(mobile)) {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Enter a valid 10-digit mobile number",
+                    //   );
+                    // } else {
+                    //   // Get.to(() => Loginselection());
+                    //   controller.sendOtpApi(mobile);
+                    // }
                   },
                 ),
 
