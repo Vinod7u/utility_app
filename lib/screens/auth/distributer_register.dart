@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/distributor_register_controller.dart';
+
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
@@ -282,6 +283,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
             message: "Please upload all required documents",
           );
         } else {
+
           Get.to(() => UserHomePage());
         }
       },
