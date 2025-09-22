@@ -14,6 +14,7 @@ import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
+import '../home/retailerSection/retailerHomepage.dart';
 import 'retailer_register.dart';
 
 class Login extends StatefulWidget {
@@ -100,7 +101,8 @@ class _LoginState extends State<Login> {
                   title: "Login with Password",
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
-                      Get.to(() => UserHomePage(userType: UserType.user));
+                      Get.offAll(() => RetailerHomePage());
+                     // Get.to(() => UserHomePage(userType: UserType.user));
                     } else {
                       showSnackBar(
                         title: "Error",
