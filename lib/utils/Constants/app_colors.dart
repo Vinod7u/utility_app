@@ -11,4 +11,6 @@ class AppColors {
   static const Color tertiary = Color(0xff57A1CE);
   static const Color whiteshade = Color(0xFFf5f7fa);
   static const Color purpleshade = Color(0xFFc3cfe2);
+  static const Color textColor = Color(0xff115D8E);
+  static const Color newPrimaryColor = Color(0xff8DDCFB);
 }
