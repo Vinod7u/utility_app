@@ -12,68 +12,72 @@ class ServiceScreen extends StatefulWidget {
 
 class _ServiceScreenState extends State<ServiceScreen> {
   final controller = Get.put(UserServiceController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("All Services"),
-      ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.off_white,
       body: SafeArea(
-        child: Column(
-          children: [
-            // 🔹 Search bar
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade300),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.search, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        onChanged: controller.updateSearch,
-                        decoration: const InputDecoration(
-                          hintText: "Search services",
-                          border: InputBorder.none,
-                        ),
+        child: CustomScrollView(
+          slivers: [
+            _buildCustomAppBar(),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  // 🔹 Search bar
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.search, color: Colors.grey),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              onChanged: controller.updateSearch,
+                              decoration: const InputDecoration(
+                                hintText: "Search services",
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => controller.searchQuery.value.isNotEmpty
+                                ? GestureDetector(
+                                    onTap: () => controller.updateSearch(""),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ),
+                        ],
                       ),
                     ),
-                    Obx(
-                      () => controller.searchQuery.value.isNotEmpty
-                          ? GestureDetector(
-                              onTap: () => controller.updateSearch(""),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.grey,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 
             // 🔹 Body
-            Expanded(
+            SliverFillRemaining(
               child: Obx(() {
                 if (controller.searchQuery.isEmpty) {
                   // Show all categories in Grid
@@ -137,7 +141,109 @@ class _ServiceScreenState extends State<ServiceScreen> {
     );
   }
 
-  /// 🔹 Grid Style Card
+  /// ---------------- CUSTOM APP BAR ----------------
+  Widget _buildCustomAppBar() {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      expandedHeight: 80,
+      floating: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.new_blue, AppColors.primary],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.widgets,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "Services",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildAppBarIcon(Icons.qr_code_scanner, () {}),
+                    const SizedBox(width: 10),
+                    _buildAppBarIcon(Icons.notifications_outlined, () {}),
+                    const SizedBox(width: 10),
+                    _buildProfileAvatar(),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileAvatar() {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(11),
+        child: Container(
+          width: 34,
+          height: 34,
+          color: AppColors.primary,
+          child: const Icon(Icons.person, color: Colors.white, size: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBarIcon(IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: Colors.white, size: 18),
+      ),
+    );
+  }
+
+  /// ---------------- GRID STYLE ----------------
   Widget _buildServiceTile(Service s) {
     return Container(
       decoration: BoxDecoration(
@@ -163,7 +269,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
     );
   }
 
-  /// 🔹 List Style Search Result
+  /// ---------------- SEARCH RESULT ----------------
   Widget _buildSearchResultTile(Service s) {
     return Container(
       padding: const EdgeInsets.all(14),
