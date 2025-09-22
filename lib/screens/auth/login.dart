@@ -4,15 +4,17 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
 import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
+import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
 import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
-import 'package:utility_app_flutter/screens/home/home_page.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
+import '../home/retailerSection/retailerHomepage.dart';
 import 'retailer_register.dart';
 
 class Login extends StatefulWidget {
@@ -37,10 +39,7 @@ class _LoginState extends State<Login> {
         title: Text("Login"),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF1a202c)),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -69,7 +68,7 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "User Login",
+                  "Login",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
@@ -85,7 +84,7 @@ class _LoginState extends State<Login> {
                 _buildTextField(
                   controller: controller.mobileNumberController,
                   label: 'Mobile Number',
-                  hint: '+91 98765 43210',
+                  hint: 'Enter Number',
                 ),
                 SizedBox(height: 16),
 
@@ -96,36 +95,14 @@ class _LoginState extends State<Login> {
                   obscureText: true,
                 ),
                 SizedBox(height: 32),
-                // --- Send OTP ---
-                appButton(
-                  title: "Send Otp",
-                  onTap: () {
-                    final mobile = controller.mobileNumberController.text
-                        .trim();
-
-                    if (mobile.isEmpty) {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter mobile number",
-                      );
-                    } else if (!RegExp(r'^[0-9]{10}$').hasMatch(mobile)) {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter a valid 10-digit mobile number",
-                      );
-                    } else {
-                      controller.sendOtpApi(mobile);
-                    }
-                  },
-                ),
-                SizedBox(height: 32),
 
                 // --- Login with Password ---
                 appButton(
-                  title: "Login with Password",
+                  title: "Login for Retailer",
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
-                      Get.to(() => HomePage(userType: UserType.user));
+                      Get.offAll(() => RetailerHomePage());
+                     // Get.to(() => UserHomePage(userType: UserType.user));
                     } else {
                       showSnackBar(
                         title: "Error",
@@ -134,6 +111,48 @@ class _LoginState extends State<Login> {
                     }
                   },
                 ),
+                SizedBox(height: 10,),
+                appButton(
+                  title: "Login for User",
+                  onTap: () {
+                    if (controller.formKey.currentState!.validate()) {
+                      Get.offAll(() => UserHomePage(userType: UserType.user,));
+                      // Get.to(() => UserHomePage(userType: UserType.user));
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid credentials",
+                      );
+                    }
+                  },
+                ),
+
+                SizedBox(height: 16),
+
+                // --- Send OTP ---
+                appButton(
+                  title: "Send Otp",
+                  onTap: () {
+                    // final mobile = controller.mobileNumberController.text
+                    //     .trim();
+                    //
+                    // if (mobile.isEmpty) {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Enter mobile number",
+                    //   );
+                    // } else if (!RegExp(r'^[0-9]{10}$').hasMatch(mobile)) {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Enter a valid 10-digit mobile number",
+                    //   );
+                    // } else {
+                    //   // Get.to(() => Loginselection());
+                    //   controller.sendOtpApi(mobile);
+                    // }
+                  },
+                ),
+
                 SizedBox(height: 16),
 
                 // TextButton(
@@ -198,6 +217,7 @@ class _LoginState extends State<Login> {
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
+            counterText: '',
             fillColor: Color(0xFFf9fafb),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

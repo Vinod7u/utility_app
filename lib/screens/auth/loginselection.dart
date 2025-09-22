@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:utility_app_flutter/controller/login_selection_controller.dart';
 import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
 import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
@@ -15,23 +16,26 @@ class Loginselection extends StatefulWidget {
 }
 
 class _LoginselectionState extends State<Loginselection> {
+  final roleController = Get.put(LoginSelectionController());
+
+  @override
+  void initState() {
+    super.initState();
+    roleController.loadRoles(); // fetch roles from API
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.whiteshade, AppColors.purpleshade],
-          ),
-        ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Text(
                   'Choose Login Type',
                   style: TextStyle(
@@ -40,50 +44,66 @@ class _LoginselectionState extends State<Loginselection> {
                     color: AppColors.primaryC,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'Select your account type to continue',
-                  style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+
+                  style: TextStyle(fontSize: 16, color: AppColors.primaryC),
                 ),
-                SizedBox(height: 40),
-                _buildLoginOption(
-                  context,
-                  'User Login',
-                  'Individual customers',
-                  Icons.person,
-                  [AppColors.primaryC, AppColors.primary],
-                  UserType.user,
-                  () {
-                    Get.offAll(() => UserRegister(userType: UserType.user));
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildLoginOption(
-                  context,
-                  'Retailer Login',
-                  'Retail partners',
-                  Icons.store,
-                  [AppColors.primaryC, AppColors.primary],
-                  UserType.retailer,
-                  () {
-                    Get.offAll(() => RetailerRegister());
-                  },
-                ),
-                SizedBox(height: 16),
-                _buildLoginOption(
-                  context,
-                  'Distributor Login',
-                  'Distribution partners',
-                  Icons.business,
-                  [AppColors.primaryC, AppColors.primary],
-                  UserType.distributor,
-                  () {
-                    //  Get.offAll(() => DistributorRegister());
-                    Get.offAll(
-                      () => DistributorRegister(userType: UserType.distributor),
+                const SizedBox(height: 40),
+
+                // 🔹 Role List from API
+                Obx(() {
+                  if (roleController.isLoading.value) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryC,
+                      ),
                     );
-                  },
-                ),
+                  }
+
+                  if (roleController.roles.isEmpty) {
+                    return Center(child: const Text("No roles available"));
+                  }
+
+                  return Column(
+                    children: roleController.filteredRoles.map((roleData) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildLoginOption(
+                          context,
+                          "${roleData.role} Login", // Role name from API
+                          "Login as ${roleData.role}", // Subtitle
+                          Icons.person, // you can map roles -> icons if needed
+                          [AppColors.primaryC, AppColors.primary],
+                          () {
+                            // 🔹 Navigate based on role
+                            if (roleData.role?.toLowerCase() == "user") {
+                              Get.offAll(
+                                () => UserRegister(userType: UserType.user),
+                              );
+                            } else if (roleData.role?.toLowerCase() ==
+                                "retailer") {
+                              Get.offAll(
+                                () => RetailerRegister(
+                                  userType: UserType.retailer,
+                                ),
+                              );
+                            } else if (roleData.role?.toLowerCase() ==
+                                "distributor") {
+                              Get.offAll(() => DistributorRegister(userType: UserType.distributor,));
+                            } else {
+                              Get.snackbar(
+                                "Info",
+                                "No screen mapped for ${roleData.role}",
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }),
               ],
             ),
           ),
@@ -98,14 +118,13 @@ class _LoginselectionState extends State<Loginselection> {
     String subtitle,
     IconData icon,
     List<Color> gradientColors,
-    UserType userType,
     VoidCallback onTap,
   ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -129,7 +148,7 @@ class _LoginselectionState extends State<Loginselection> {
               ),
               child: Icon(icon, color: Colors.white, size: 24),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
               title,
               style: TextStyle(
@@ -138,7 +157,7 @@ class _LoginselectionState extends State<Loginselection> {
                 color: AppColors.primaryC,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               subtitle,
               style: TextStyle(fontSize: 12, color: AppColors.primary),

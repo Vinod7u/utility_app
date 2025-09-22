@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:utility_app_flutter/screens/home/home_page.dart';
 import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/utils/Constants/api_url.dart';
 import 'package:utility_app_flutter/utils/appServices/apiservices.dart';
-import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class OtpverifyController extends GetxController {
