@@ -22,7 +22,6 @@ class RetailerRegisterController extends GetxController{
   final  passC = TextEditingController();
   final  confirmPassC = TextEditingController();
   final  otpC = TextEditingController();
-
   final  pinCodeC = TextEditingController();
   final  addressC = TextEditingController();
   final  stateC = TextEditingController();
@@ -122,9 +121,6 @@ class RetailerRegisterController extends GetxController{
     final state = stateC.text;
     final city = districtC.text;
     final shopName = shopNameC.text;
-
-
-
     //final block = pinCodeC.text;
     try {
       isLoading.value = true;
@@ -362,7 +358,6 @@ class RetailerRegisterController extends GetxController{
   }
 
   Future<void> submitKYCApi() async {
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final clientId = prefs.getString('client_id');
     final userId = prefs.getString('_id');
@@ -394,4 +389,7 @@ class RetailerRegisterController extends GetxController{
       showSnackBar(title: "Failed", message: e.toString());
     }
   }
+
+
+
 }

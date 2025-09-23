@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/user_register_controller.dart';
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/utils/Validators/validators.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
@@ -21,13 +22,8 @@ class _UserRegisterState extends State<UserRegister> {
   final controller = Get.put(UserRegisterController());
   final RxInt stepIndex = 0.obs;
 
-  // 🔹 Form keys for validation in each step
-  final formKeys = [
-    GlobalKey<FormState>(), // Step 0
-    GlobalKey<FormState>(), // Step 1
-    GlobalKey<FormState>(), // Step 2
-    GlobalKey<FormState>(), // Step 3
-  ];
+  /// Form keys for each step
+  final formKeys = List.generate(5, (_) => GlobalKey<FormState>());
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +41,7 @@ class _UserRegisterState extends State<UserRegister> {
                 },
                 child: const Icon(Icons.arrow_back_ios, color: Colors.black),
               )
-            : null, // No leading icon when stepIndex == 0
+            : null,
         centerTitle: true,
         title: const Text("Register"),
         backgroundColor: Colors.white,
@@ -54,12 +50,11 @@ class _UserRegisterState extends State<UserRegister> {
       body: Obx(
         () => Column(
           children: [
-            // 🔹 Step Indicator
+            /// Step Indicator
             Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
-                children: List.generate(4, (index) {
-                  
+                children: List.generate(5, (index) {
                   return Expanded(
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -79,15 +74,13 @@ class _UserRegisterState extends State<UserRegister> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 400),
-                transitionBuilder: (child, animation) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(1, 0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  );
-                },
+                transitionBuilder: (child, animation) => SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
                 child: _buildStep(stepIndex.value),
               ),
             ),
@@ -97,23 +90,120 @@ class _UserRegisterState extends State<UserRegister> {
     );
   }
 
-  /// 🔹 Handle each step UI
+  /// Step switcher
   Widget _buildStep(int index) {
     switch (index) {
       case 0:
         return _buildUserDetails();
       case 1:
-        return _buildAddressDetails();
+        return _buildAadharDetails();
       case 2:
-        return _buildIdentityDetails();
+        return _buildPandVerify();
       case 3:
         return _buildBankDetails();
+      case 4:
+        return _buildKycDetails();
       default:
         return _buildUserDetails();
     }
   }
 
-  /// Step 1: User details
+  /// KYC Final Step
+  Widget _buildKycDetails() {
+    return _wrapStep(
+      step: 4,
+      isLast: true,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Submit KYC',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Everything looks good -- submit your KYC',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Review Completed. Click below to submit your KYC',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Obx(
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Submit KYC',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.submitKYCApi();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid details",
+                      );
+                    }
+                  },
+                ),
+        ),
+      ],
+      onNext: () {},
+    );
+  }
+
+  /// PAN Verification Step
+  Widget _buildPandVerify() {
+    return _wrapStep(
+      step: 2,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'PAN Details',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(
+          controller: controller.panController,
+          label: "PAN Card Number",
+          hint: "Enter PAN number",
+        ),
+        Obx(
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Verify Pan',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.verifyPan();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter a valid PAN number",
+                      );
+                    }
+                  },
+                ),
+        ),
+      ],
+      onNext: () => stepIndex.value++,
+    );
+  }
+
+  /// User + Address Step
   Widget _buildUserDetails() {
     return _wrapStep(
       step: 0,
@@ -133,7 +223,6 @@ class _UserRegisterState extends State<UserRegister> {
           label: "Email",
           hint: "Enter email",
         ),
-
         _buildTextField(
           controller: controller.mpinController,
           label: "Mpin",
@@ -145,20 +234,23 @@ class _UserRegisterState extends State<UserRegister> {
           hint: "Enter password",
         ),
         _buildTextField(
-          controller: controller.confirmPasswodController,
+          controller: controller.confirmPasswordController,
           label: "Confirm Password",
           hint: "Confirm Password",
         ),
-      ],
-      onNext: () => stepIndex.value++,
-    );
-  }
-
-  /// Step 2: Address
-  Widget _buildAddressDetails() {
-    return _wrapStep(
-      step: 1,
-      children: [
+        const SizedBox(height: 20),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Address Information",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
         _buildTextField(
           controller: controller.districtController,
           label: "District Name",
@@ -169,77 +261,106 @@ class _UserRegisterState extends State<UserRegister> {
           label: "State Name",
           hint: "Enter state name",
         ),
-
         _buildTextField(
           controller: controller.countryController,
           label: "Country Name",
           hint: "Enter country name",
         ),
-
         _buildTextField(
           controller: controller.pincodeController,
           label: "Pin Code",
           hint: "Enter 6-digit pin code",
           maxlength: 6,
         ),
-
         _buildTextField(
           controller: controller.fullAddressController,
           label: "Full Address",
           hint: "Enter full Address",
         ),
       ],
+      onNext: () => controller.registerUserApi(stepIndex.value),
+    );
+  }
+
+  /// Aadhaar Step
+  Widget _buildAadharDetails() {
+    return _wrapStep(
+      step: 1,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Aadhaar Details',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Verify Aadhaar and review the details',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(
+          controller: controller.aadhaarController,
+          label: "Aadhaar Number",
+          maxlength: 12,
+          hint: "Enter 12-digit Aadhaar number",
+        ),
+        const SizedBox(height: 10),
+        Obx(
+          () => controller.isOtpSending.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Send Otp',
+                  onTap: () async {
+                    if (controller.aadhaarController.text.length == 12) {
+                      await controller.sendAadhaarOtp();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter a valid 12-digit Aadhaar number",
+                      );
+                    }
+                  },
+                ),
+        ),
+        const SizedBox(height: 10),
+        if (controller.isOtpVerifying.value) ...[
+          _buildTextField(
+            controller: controller.aadharOtpController,
+            label: "Otp",
+            hint: "Enter Otp",
+          ),
+          Obx(
+            () => controller.isOtpVerifying.value
+                ? Center(
+                    child: CircularProgressIndicator(color: AppColors.primaryC),
+                  )
+                : appButton(
+                    title: 'Verify Otp',
+                    onTap: () async {
+                      if (controller.aadharOtpController.text.length == 6) {
+                        await controller.verifyAadhaarOtp();
+                      } else {
+                        showSnackBar(
+                          title: "Error",
+                          message: "Enter a valid 6-digit Otp",
+                        );
+                      }
+                    },
+                  ),
+          ),
+        ],
+      ],
       onNext: () => stepIndex.value++,
     );
   }
 
-  /// Step 3: Aadhaar + PAN
-  Widget _buildIdentityDetails() {
-    return _wrapStep(
-      step: 2,
-      children: [
-        _buildTextField(
-          controller: controller.aadhaarController,
-          label: "Aadhaar Number",
-          hint: "Enter 12-digit Aadhaar number",
-          maxlength: 12,
-        ),
-        _buildUploadTile(
-          title: "Upload Aadhaar Front",
-          fileObs: controller.aadhaarFrontFile,
-          onTap: () => controller.pickFile(controller.aadhaarFrontFile),
-        ),
-
-        _buildUploadTile(
-          title: "Upload Aadhaar Back",
-          fileObs: controller.aadhaarbackFile,
-          onTap: () => controller.pickFile(controller.aadhaarbackFile),
-        ),
-        
-        _buildTextField(
-          controller: controller.panController,
-          label: "PAN Card Number",
-          hint: "Enter PAN number",
-        ),
-        _buildUploadTile(
-          title: "Upload PAN",
-          fileObs: controller.panFile,
-          onTap: () => controller.pickFile(controller.panFile),
-        ),
-      ],
-      onNext: () {
-        if (controller.aadhaarFrontFile.value == null ||
-            controller.aadhaarbackFile.value == null ||
-            controller.panFile.value == null) {
-          Get.snackbar("Error", "Please upload Aadhaar and PAN files");
-        } else {
-          stepIndex.value++;
-        }
-      },
-    );
-  }
-
-  /// Step 4: Bank + Selfie
+  /// Bank Step
   Widget _buildBankDetails() {
     return _wrapStep(
       step: 3,
@@ -254,49 +375,32 @@ class _UserRegisterState extends State<UserRegister> {
           label: "IFSC Code",
           hint: "Enter IFSC code",
         ),
-        _buildUploadTile(
-          title: "Upload Bank Proof (Cheque/Passbook)",
-          fileObs: controller.bankFile,
-          onTap: () => controller.pickFile(controller.bankFile),
-        ),
-        _buildUploadTile(
-          title: "Capture Selfie",
-          fileObs: controller.selfieFile,
-          onTap: controller.captureSelfie,
-          isImagePreview: true,
-        ),
-        _buildTextField(
-          controller: controller.nomineeController,
-          label: "Nominee",
-          hint: "Enter nominee name",
-        ),
         const SizedBox(height: 12),
         Obx(
-          () => CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: AppColors.primaryC,
-            title: const Text("I accept Terms & Conditions"),
-            value: controller.acceptedTerms.value,
-            onChanged: controller.toggleTerms,
-          ),
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Verify Bank',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.verifyBankAccount();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid details",
+                      );
+                    }
+                  },
+                ),
         ),
-        const SizedBox(height: 20),
       ],
-      onNext: () {
-        if (!controller.acceptedTerms.value) {
-          Get.snackbar("Error", "Please accept Terms & Conditions");
-        } else if (controller.bankFile.value == null ||
-            controller.selfieFile.value == null) {
-          Get.snackbar("Error", "Please upload bank proof and selfie");
-        } else {
-          Get.to(() => UserHomePage());
-        }
-      },
-      isLast: true,
+      onNext: () => stepIndex.value++,
     );
   }
 
-  /// 🔹 Step Wrapper with Validation
+  /// Step Wrapper with Validation
   Widget _wrapStep({
     required List<Widget> children,
     required VoidCallback onNext,
@@ -335,7 +439,7 @@ class _UserRegisterState extends State<UserRegister> {
     );
   }
 
-  /// 🔹 TextField Builder with validation
+  /// TextField Builder with validation
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -425,7 +529,7 @@ class _UserRegisterState extends State<UserRegister> {
     );
   }
 
-  /// 🔹 Upload Button Builder
+  /// Upload Tile Builder
   Widget _buildUploadTile({
     required String title,
     required Rx<File?> fileObs,

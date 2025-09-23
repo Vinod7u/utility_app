@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                   title: "Login for User",
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
-                      Get.offAll(() => UserHomePage(userType: UserType.user,));
+                      Get.offAll(() => UserHomePage());
                       // Get.to(() => UserHomePage(userType: UserType.user));
                     } else {
                       showSnackBar(

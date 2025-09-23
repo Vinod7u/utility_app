@@ -33,8 +33,8 @@ class _UserHomePageState extends State<UserHomePage> {
   Widget build(BuildContext context) {
     final screens = [
       UserHomeDashboard(),
-      const ServiceScreen(),
-      const ScannerScreen(),
+      ServiceScreen(),
+      ScannerScreen(),
       UserTrasectionHistoryScreen(),
       ProfileScreen(),
     ];
@@ -110,7 +110,9 @@ class _UserHomePageState extends State<UserHomePage> {
 
         /// Floating Center Scan Button
         floatingActionButton: GestureDetector(
-          onTap: () => controller.userchangeTab(2),
+          onTap: () {
+            Get.to(() => ScannerScreen());
+          },
           child: Container(
             height: 70,
             width: 70,
@@ -129,7 +131,7 @@ class _UserHomePageState extends State<UserHomePage> {
             child: const Icon(
               Icons.qr_code_scanner_outlined,
               color: Colors.white,
-              size: 36, // 🔥 bigger scan icon
+              size: 36, 
             ),
           ),
         ),
