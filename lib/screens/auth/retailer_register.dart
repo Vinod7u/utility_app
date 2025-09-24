@@ -25,7 +25,6 @@ class RetailerRegister extends StatefulWidget {
 
 class _RetailerRegisterState extends State<RetailerRegister> {
   final controller = Get.put(RetailerRegisterController());
-  final RxInt stepIndex = 0.obs;
 
   // 🔹 Form keys for validation in each step
   final formKeys = [
@@ -41,11 +40,11 @@ class _RetailerRegisterState extends State<RetailerRegister> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: stepIndex.value > 0
+        leading: controller.stepIndex.value > 0
             ? InkWell(
                 onTap: () {
-                  if (stepIndex.value > 0) {
-                    stepIndex.value--;
+                  if (controller.stepIndex.value > 0) {
+                    controller.stepIndex.value--;
                   } else {
                     Get.back();
                   }
@@ -79,7 +78,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                       height: 6,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: stepIndex.value >= index
+                        color: controller.stepIndex.value >= index
                             ? AppColors.primary
                             : Colors.grey.shade300,
                       ),
@@ -101,7 +100,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                     child: child,
                   );
                 },
-                child: _buildStep(stepIndex.value),
+                child: _buildStep(controller.stepIndex.value),
               ),
             ),
           ],
@@ -186,7 +185,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           hint: "Enter Shop name",
         ),
 
-        //_buildDropDownTile(title: 'Select Role', label: 'Shop Type'),
+        _buildDropDownTile(title: 'Select Role', label: 'Shop Type'),
         _buildUploadTile(
           title: "Upload Shop Photos",
           fileObs: controller.shopPhotoFile,
@@ -234,7 +233,14 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           hint: "Enter Full Address",
         ),
       ],
-      onNext: () => stepIndex.value++,
+      onNext: () async {
+        // final success = await controller.createRetailerApi();
+        // if (success) {
+        //   print('Sucessss');
+        //   controller.stepIndex.value++;// ✅ Only go to next step if API success
+        // }
+        controller.stepIndex.value++;
+      },
     );
   }
 
@@ -266,27 +272,20 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         ),
         SizedBox(height: 10),
 
-        Obx(() {
-          if (controller.isLoadingOtp.value) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryC),
-            );
-          }
-          return appButton(
-            title: 'Send Otp',
-            onTap: () async {
-              if (controller.aadhaarController.text.length == 12) {
-                await controller.sendAadhaarOtpApi();
-              } else {
-                showSnackBar(
-                  title: "Error",
-                  message: "Enter a valid 12-digit Aadhaar number",
-                );
-              }
-              //controller.isAadhaarVerify.value = true;
-            },
-          );
-        }),
+        appButton(
+          title: 'Send Otp',
+          onTap: () async {
+            if (controller.aadhaarController.text.length == 12) {
+              await controller.sendAadhaarOtpApi();
+            } else {
+              showSnackBar(
+                title: "Error",
+                message: "Enter a valid 12-digit Aadhaar number",
+              );
+            }
+            //controller.isAadhaarVerify.value = true;
+          },
+        ),
         SizedBox(height: 10),
         // if(controller.isAadhaarVerify.value)
         // _buildUploadTile(
@@ -326,13 +325,11 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           }),
       ],
       onNext: () {
-        if (formKeys[stepIndex.value].currentState!.validate()){
-
+        if (formKeys[controller.stepIndex.value].currentState!.validate()) {
         } else {
-          stepIndex.value++;
+          controller.stepIndex.value++;
         }
-      }
-
+      },
     );
   }
 
@@ -377,7 +374,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Verify Pan',
             onTap: () async {
-              if (formKeys[stepIndex.value].currentState!.validate()) {
+              if (formKeys[controller.stepIndex.value].currentState!
+                  .validate()) {
                 await controller.verifyPanOtpApi();
               } else {
                 showSnackBar(
@@ -392,7 +390,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         SizedBox(height: 10),
       ],
       onNext: () {
-        stepIndex.value++;
+        controller.stepIndex.value++;
         // if (controller.aadhaarFile.value == null ||
         //     controller.panFile.value == null) {
         //   Get.snackbar("Error", "Please upload Aadhaar and PAN files");
@@ -448,7 +446,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Verify Bank',
             onTap: () async {
-              if (formKeys[stepIndex.value].currentState!.validate()) {
+              if (formKeys[controller.stepIndex.value].currentState!
+                  .validate()) {
                 // await controller.verifyBankApi();
               } else {
                 showSnackBar(title: "Error", message: "Enter a valid Details");
@@ -469,7 +468,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         const SizedBox(height: 20),
       ],
       onNext: () {
-        stepIndex.value++;
+        controller.stepIndex.value++;
         // if (!controller.acceptedTerms.value) {
         //   Get.snackbar("Error", "Please accept Terms & Conditions");
         // } else if (controller.bankFile.value == null ||
@@ -546,7 +545,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           return appButton(
             title: 'Submit KYC',
             onTap: () async {
-              if (formKeys[stepIndex.value].currentState!.validate()) {
+              if (formKeys[controller.stepIndex.value].currentState!
+                  .validate()) {
                 // await controller.verifyBankApi();
               } else {
                 showSnackBar(title: "Error", message: "Enter a valid Details");
@@ -599,75 +599,78 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               child: SingleChildScrollView(child: Column(children: children)),
             ),
             const SizedBox(height: 20),
-            if( controller.initialButtonShow.value)
-            Obx(() {
-              if (controller.isLoading.value) {
-                return Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
+            if (controller.initialButtonShow.value)
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(
+                    child: CircularProgressIndicator(color: AppColors.primaryC),
+                  );
+                }
+                return appButton(
+                  title: isLast ? "Register" : "Next",
+                  onTap: () async {
+                    onNext();
+                    // if (formKeys[step].currentState!.validate()) {
+                    //   if (step == 0) {
+                    //     if (controller.shopPhotoFile.value == null) {
+                    //       showSnackBar(
+                    //         title: "Error",
+                    //         message: "Please upload shop photo",
+                    //       );
+                    //       return;
+                    //     }
+                    //     if (controller.ownerPhotoFile.value == null) {
+                    //       showSnackBar(
+                    //         title: "Error",
+                    //         message: "Please upload owner photo",
+                    //       );
+                    //       return;
+                    //     }
+                    //     if (controller.addressProofFile.value == null) {
+                    //       showSnackBar(
+                    //         title: "Error",
+                    //         message: "Please upload address proof",
+                    //       );
+                    //       return;
+                    //     }
+                    //     print("Index = ${step}");
+                    //     // 👇 Call API when Address Details step is completed
+                    //     // final success = await controller.createRetailerApi();
+                    //     // if (success) {
+                    //     //   print('Sucessss12');
+                    //     //   onNext(); // ✅ Only go to next step if API success
+                    //     // }
+                    //     //onNext();
+                    //   }
+                    //   if (step == 1) {
+                    //     print("Index = 1");
+                    //     // 👇 Call API when Address Details step is completed
+                    //     //await controller.sendAadhaarOtpApi();
+                    //    // onNext();
+                    //   }
+                    //   if (step == 2) {
+                    //     print("Index = 2");
+                    //     // 👇 Call API when Address Details step is completed
+                    //     //await controller.sendAadhaarOtpApi();
+                    //     onNext();
+                    //   }
+                    //   if (step == 3) {
+                    //     // print("Index = 3");
+                    //     // // 👇 Call API when Address Details step is completed
+                    //     // await controller.verifyBankApi();
+                    //     onNext();
+                    //   } else {
+                    //     onNext();
+                    //   }
+                    // } else {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Please fill all required fields",
+                    //   );
+                    // }
+                  },
                 );
-              }
-              return
-                   appButton(
-                      title: isLast ? "Register" : "Next",
-                      onTap: () async {
-                        // onNext();
-                        if (formKeys[step].currentState!.validate()) {
-                          if (step == 0) {
-                            if (controller.shopPhotoFile.value == null) {
-                              showSnackBar(
-                                title: "Error",
-                                message: "Please upload shop photo",
-                              );
-                              return;
-                            }
-                            if (controller.ownerPhotoFile.value == null) {
-                              showSnackBar(
-                                title: "Error",
-                                message: "Please upload owner photo",
-                              );
-                              return;
-                            }
-                            if (controller.addressProofFile.value == null) {
-                              showSnackBar(
-                                title: "Error",
-                                message: "Please upload address proof",
-                              );
-                              return;
-                            }
-                            print("Index = ${step}");
-                            // 👇 Call API when Address Details step is completed
-                            await controller.createRetailerApi();
-                            //onNext();
-                          }
-                          if (step == 1) {
-                            print("Index = 1");
-                            // 👇 Call API when Address Details step is completed
-                            //await controller.sendAadhaarOtpApi();
-                           // onNext();
-                          }
-                          if (step == 2) {
-                            print("Index = 2");
-                            // 👇 Call API when Address Details step is completed
-                            //await controller.sendAadhaarOtpApi();
-                            onNext();
-                          }
-                          if (step == 3) {
-                            // print("Index = 3");
-                            // // 👇 Call API when Address Details step is completed
-                            // await controller.verifyBankApi();
-                            onNext();
-                          } else {
-                            onNext();
-                          }
-                        } else {
-                          showSnackBar(
-                            title: "Error",
-                            message: "Please fill all required fields",
-                          );
-                        }
-                      },
-                    );
-            }),
+              }),
             const SizedBox(height: 20),
           ],
         ),
@@ -703,7 +706,9 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           keyboardType:
               label.contains("Mobile") ||
                   label.contains('Pin') ||
-                  label.contains('Aadhaar') || label.contains('MPIN')
+                  label.contains('Aadhaar') ||
+                  label.contains('MPIN') ||
+                  label.contains('Otp')
               ? TextInputType.phone
               : TextInputType.text,
           decoration: InputDecoration(
@@ -886,7 +891,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
                           item,
                           style: const TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
                         ),
@@ -910,6 +915,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               ),
             ),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );

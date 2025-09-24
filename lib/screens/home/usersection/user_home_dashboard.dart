@@ -744,6 +744,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
@@ -812,21 +813,16 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  _buildWelcomeSection(),
+                  _buildBannerCarouselSection(),
                   _buildSectionDivider(),
                   _buildBalanceCard(),
                   _buildSectionDivider(height: 24),
-                  _buildQuickActionsSection(),
-                  _buildSectionDivider(),
-                  _buildServicesSection(),
-                  _buildSectionDivider(),
-                  _buildBannerCarouselSection(),
-                  _buildSectionDivider(),
-                  _buildTicketsSection(),
-                  _buildSectionDivider(),
-                  _buildCreditScoreSection(),
-                  _buildSectionDivider(),
-                  _buildRecentTransactions(),
+                  _buildMoneyTransferSection(),
+                  _buildRechargeSection(),
+                  _buildCashWithDrawlSection(),
+                  _buildBookingSection(),
+                  _buildFinanceSection(),
+
 
                   const SizedBox(height: 20),
                 ],
@@ -875,7 +871,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: 80,
+      expandedHeight: 70,
       floating: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -883,7 +879,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
         background: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.new_blue, AppColors.primary],
+              colors: [Color(0xffA9E2FF), Color(0xff44A5E9)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -893,7 +889,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -911,25 +907,23 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                         size: 20,
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Text(
-                      "MyPay",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
+                    // SizedBox(width: 12),
+                    // Text(
+                    //   "MyPay",
+                    //   style: TextStyle(
+                    //     fontSize: 22,
+                    //     fontWeight: FontWeight.bold,
+                    //     color: Colors.white,
+                    //     letterSpacing: 0.5,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Row(
                   children: [
-                    _buildAppBarIcon(Icons.qr_code_scanner, () {}),
-                    const SizedBox(width: 10),
                     _buildAppBarIcon(Icons.notifications_outlined, () {}),
                     const SizedBox(width: 10),
-                    _buildProfileAvatar(),
+                    _buildProfileAvatar(Icons.perm_identity,(){}),
                   ],
                 ),
               ],
@@ -947,28 +941,23 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Icon(icon, color: Colors.white, size: 18),
       ),
     );
   }
 
-  static Widget _buildProfileAvatar() {
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(11),
-        child: Container(
-          width: 34,
-          height: 34,
-          color: AppColors.primary,
-          child: const Icon(Icons.person, color: Colors.white, size: 18),
+  static Widget _buildProfileAvatar(IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20),
         ),
+        child: Icon(icon, color: Colors.white, size: 18),
       ),
     );
   }
@@ -1073,56 +1062,55 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Obx(
-                      () => Column(
+                      () => Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Total Balance',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.9),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-
-                          /// Amount + Eye in same row
-                          Row(
+                          SvgPicture.asset('assets/icons/streamline-ultimate-color_money-wallet-open.svg'),
+                          SizedBox(width: 18,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                controller.isBalanceVisible.value
-                                    ? "₹ ${NumberFormat("#,##0.00").format(controller.walletBalance.value)}"
-                                    : "₹ ****",
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                'Wallet Balance',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              GestureDetector(
-                                onTap: controller.toggleBalanceVisibility,
-                                child: Obx(
-                                  () => Icon(
+                              const SizedBox(height: 8),
+                              /// Amount + Eye in same row
+                              Row(
+                                children: [
+                                  Text(
                                     controller.isBalanceVisible.value
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    color: Colors.white.withOpacity(0.9),
-                                    size: 20,
+                                        ? "₹ ${NumberFormat("#,##0.00").format(controller.walletBalance.value)}"
+                                        : "₹ ****",
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 8),
+                                  GestureDetector(
+                                    onTap: controller.toggleBalanceVisibility,
+                                    child: Obx(
+                                      () => Icon(
+                                        controller.isBalanceVisible.value
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        color: Colors.white.withOpacity(0.9),
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ],
                       ),
-                    ),
-
-                    /// Lottie Animation (on right side)
-                    Lottie.asset(
-                      'assets/json/4r09bDTBS6.json',
-                      height: 50,
-                      repeat: true,
                     ),
                   ],
                 ),
@@ -1186,22 +1174,372 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   }
 
   // -------------------- QUICK ACTIONS SECTION --------------------
-  Widget _buildQuickActionsSection() {
+  Widget _buildMoneyTransferSection() {
     return _buildSectionContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Quick Actions",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A202C),
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(
+                spreadRadius: 6,
+                color: Colors.grey.withOpacity(.18),
+                blurRadius: 7
+            )],
+        ),
+        margin: EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Money Transfer",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A202C),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildQuickActions(),
+            ],
           ),
-          const SizedBox(height: 16),
-          _buildQuickActions(),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRechargeSection() {
+    return _buildSectionContainer(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(
+                spreadRadius: 6,
+                color: Colors.grey.withOpacity(.18),
+                blurRadius: 7
+            )]
+        ),
+        margin: EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Recharge & Bills",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A202C),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildRecharge(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCashWithDrawlSection() {
+    return _buildSectionContainer(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(
+                spreadRadius: 6,
+                color: Colors.grey.withOpacity(.18),
+                blurRadius: 7
+            )]
+        ),
+        margin: EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Cash withdrawal",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A202C),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildCashWithDrawl(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBookingSection() {
+    return _buildSectionContainer(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(
+                spreadRadius: 6,
+                color: Colors.grey.withOpacity(.18),
+                blurRadius: 7
+            )]
+        ),
+        margin: EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Booking",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A202C),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildBooking(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFinanceSection() {
+    return _buildSectionContainer(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          boxShadow: [BoxShadow(
+            spreadRadius: 6,
+            color: Colors.grey.withOpacity(.18),
+            blurRadius: 7
+          )]
+        ),
+        margin: EdgeInsets.only(bottom: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Finance",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A202C),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildFinance(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _buildFinance() {
+    final items = [
+      {
+        'img': "assets/images/coin_1311391.png",
+        'label': 'Personal Loan',
+      },
+      {
+        'img': "assets/images/coins_13540091 1.png",
+        'label': 'Business Loan',
+      },
+      {
+        'img': "assets/images/nepalese-rupee_17917284 1.png",
+        'label': 'Instant Loan',
+      },
+    ];
+
+    return SizedBox(
+      height: 90,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        physics: BouncingScrollPhysics(),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, i) {
+          final it = items[i];
+          return Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    it['img']!,
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                it['label']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A5568),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBooking() {
+    final items = [
+      {
+        'img': "assets/images/streamline-emojis_bus.png",
+        'label': 'Bus',
+      },
+      {
+        'img': "assets/images/noto-v1_bullet-train.png",
+        'label': 'Train',
+      },
+      {
+        'img': "assets/images/emojione_hotel.png",
+        'label': 'Hotel',
+      },
+      {
+        'img': "assets/images/watching-a-movie 1.png",
+        'label': 'Movie',
+      },
+      {
+        'img': "assets/images/airplane 1.png",
+        'label': 'Flight',
+      },
+    ];
+
+    return SizedBox(
+      height: 90,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        physics: BouncingScrollPhysics(),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, i) {
+          final it = items[i];
+          return Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    it['img']!,
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                it['label']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A5568),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCashWithDrawl() {
+    final items = [
+      {
+        'img': "assets/images/image 56.png",
+        'label': 'AEPS',
+      },
+      {
+        'img': "assets/images/file_573803.png",
+        'label': 'Mini Statement',
+      },
+      {
+        'img': "assets/images/pos-terminal_5705126.png",
+        'label': 'Micro ATM',
+      },
+      {
+        'img': "assets/images/investing_8079355.png",
+        'label': 'Bank Balance',
+      },
+      {
+        'img': "assets/images/image 56.png",
+        'label': 'AEPS',
+      },
+      {
+        'img': "assets/images/file_573803.png",
+        'label': 'Mini Statement',
+      },
+      {
+        'img': "assets/images/pos-terminal_5705126.png",
+        'label': 'Micro ATM',
+      },
+      {
+        'img': "assets/images/investing_8079355.png",
+        'label': 'Bank Balance',
+      },
+    ];
+
+    return SizedBox(
+      height: 90,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        physics: BouncingScrollPhysics(),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, i) {
+          final it = items[i];
+          return Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    it['img']!,
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                it['label']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A5568),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -1209,39 +1547,39 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   Widget _buildQuickActions() {
     final items = [
       {
-        'img': "https://img.icons8.com/color/96/flash-on.png",
-        'label': 'Pay Bills',
+        'img': "assets/images/mage_qr-code.png",
+        'label': 'Qr Code',
       },
       {
-        'img': "https://img.icons8.com/color/96/android.png",
-        'label': 'Recharge',
+        'img': "assets/images/bank-transfer 1.png",
+        'label': 'DMT Transaction',
       },
       {
-        'img': "https://img.icons8.com/color/96/money-transfer.png",
-        'label': 'Transfer',
+        'img': "assets/images/cashless-payment 1.png",
+        'label': 'AEPS Transaction',
+      },
+      {
+        'img': "assets/images/loan (2) 1.png",
+        'label': 'BBPS Transaction',
       },
     ];
 
     return SizedBox(
-      height: 100,
+      height: 90,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: items.length,
+        physics: BouncingScrollPhysics(),
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, i) {
-          if (i == 3) {
-            return InkWell(
-              onTap: () {
-                Get.find<HomePageController>().userchangeTab(1);
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: 80,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+          final it = items[i];
+          return Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.textColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade200, width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.04),
@@ -1253,86 +1591,102 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.more_horiz,
-                        color: Colors.grey,
-                        size: 20,
-                      ),
+                    Image.asset(
+                      it['img']!,
+                      height: 30,
+                      width: 30,
+                      fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "More",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF4A5568),
-                      ),
-                    ),
+
                   ],
                 ),
               ),
-            );
-          }
+              Text(
+                it['label']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A5568),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
+  Widget _buildRecharge() {
+    final items = [
+      {
+        'img': "assets/images/earth_13849445.png",
+        'label': 'DTH',
+      },
+      {
+        'img': "assets/images/atm-card_8739601.png",
+        'label': 'Credit Card',
+      },
+      {
+        'img': "assets/images/electricity_9746766.png",
+        'label': 'Electricity',
+      },
+      {
+        'img': "assets/images/payment_11703536.png",
+        'label': 'Mobile Recharge',
+      },
+      {
+        'img': "assets/images/toll 1.png",
+        'label': 'Fastag',
+      },
+      {
+        'img': "assets/images/electricity_9746766.png",
+        'label': 'Electricity',
+      },
+      {
+        'img': "assets/images/payment_11703536.png",
+        'label': 'Mobile Recharge',
+      },
+      {
+        'img': "assets/images/toll 1.png",
+        'label': 'Fastag',
+      },
+    ];
+
+    return SizedBox(
+      height: 90,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: items.length,
+        physics: BouncingScrollPhysics(),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, i) {
           final it = items[i];
-          return Container(
-            width: 80,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade200, width: 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    shape: BoxShape.circle,
+          return Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    it['img']!,
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      it['img']!,
-                      height: 20,
-                      width: 20,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.broken_image,
-                        size: 20,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
+
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                it['label']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A5568),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  it['label']!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF4A5568),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
@@ -1345,32 +1699,6 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'All Services',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A202C),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.find<HomePageController>().userchangeTab(1);
-                },
-                child: const Text(
-                  'View All',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 12),
           _buildServicesGrid(),
         ],
@@ -1380,6 +1708,20 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
 
   Widget _buildServicesGrid() {
     final services = [
+      {
+        'img': "https://img.icons8.com/color/96/electricity.png",
+        'title': 'Electricity',
+      },
+      {'img': "https://img.icons8.com/color/96/tv.png", 'title': 'DTH'},
+      {
+        'img': "https://img.icons8.com/color/96/fingerprint.png",
+        'title': 'AEPS',
+      },
+      {
+        'img': "https://img.icons8.com/color/96/insurance-agent.png",
+        'title': 'Insurance',
+      },
+      {'img': "https://img.icons8.com/color/96/bill.png", 'title': 'Bill Pay'},
       {
         'img': "https://img.icons8.com/color/96/electricity.png",
         'title': 'Electricity',
@@ -1499,14 +1841,6 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Special Offers",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A202C),
-            ),
-          ),
           const SizedBox(height: 16),
           _buildBannerCarousel(),
         ],
