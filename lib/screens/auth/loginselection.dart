@@ -47,6 +47,7 @@ class _LoginselectionState extends State<Loginselection> {
                 const SizedBox(height: 8),
                 Text(
                   'Select your account type to continue',
+
                   style: TextStyle(fontSize: 16, color: AppColors.primaryC),
                 ),
                 const SizedBox(height: 40),

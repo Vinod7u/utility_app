@@ -101,17 +101,32 @@ class _LoginState extends State<Login> {
                 appButton(
                   title: "Login with Password",
                   onTap: () {
-                    // if (controller.formKey.currentState!.validate()) {
-                    //   Get.offAll(() => UserHomePage());
-                    //   // Get.to(() => UserHomePage(userType: UserType.user));
-                    // } else {
-                    //   showSnackBar(
-                    //     title: "Error",
-                    //     message: "Enter valid credentials",
-                    //   );
-                    // }
-                  //  Get.offAll(() => RetailerRegister(userType: UserType.retailer));
-                    Get.offAll(() => UserHomeDashboard());
+
+                    if (controller.formKey.currentState!.validate()) {
+                      Get.offAll(() => RetailerHomePage());
+                     // Get.to(() => UserHomePage(userType: UserType.user));
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid credentials",
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: 10,),
+                appButton(
+                  title: "Login for User",
+                  onTap: () {
+                    if (controller.formKey.currentState!.validate()) {
+                      Get.offAll(() => UserHomePage());
+                      // Get.to(() => UserHomePage(userType: UserType.user));
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid credentials",
+                      );
+                    }
+
                   },
                 ),
 

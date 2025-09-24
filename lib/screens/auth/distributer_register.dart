@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/distributor_register_controller.dart';
+
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
@@ -81,7 +82,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
-        children: List.generate(4, (index) {
+        children: List.generate(5, (index) {
           return Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -105,13 +106,15 @@ class _DistributorRegisterState extends State<DistributorRegister> {
       case 0:
         return _buildBusinessDetails();
       case 1:
-        return _buildAddressDetails();
+        return _buildAadharDetails();
       case 2:
-        return _buildReferences();
+        return _buildPandVerify();
       case 3:
-        return _buildDocuments();
+        return _buildBankDetails();
+      case 4:
+        return _buildKycDetails();
       default:
-        return const SizedBox(); // Return an empty widget as a fallback
+        return _buildBusinessDetails();
     }
   }
 
@@ -121,171 +124,428 @@ class _DistributorRegisterState extends State<DistributorRegister> {
       step: 0,
       children: [
         _buildTextField(
-          controller: controller.firmNameController,
+          controller: controller.fullNameController,
           label: "Name",
           hint: "Enter name",
         ),
         _buildTextField(
-          controller: controller.DsEmailController,
+          controller: controller.emailController,
           label: "Email",
           hint: "Enter Email",
         ),
 
         _buildTextField(
-          controller: controller.DSMobile_NumberController,
+          controller: controller.mobileController,
           label: "Mobile Number",
           hint: "Enter Mobile Number",
         ),
 
         _buildTextField(
-          controller: controller.Mpin,
+          controller: controller.mpinController,
           label: "Mpin",
           hint: "Enter Mpin",
         ),
 
         _buildTextField(
-          controller: controller.Ds_password,
+          controller: controller.passwordController,
           label: "Password",
           hint: "Enter Password",
         ),
+
         _buildTextField(
-          controller: controller.Ds_confirm_password,
+          controller: controller.confirmPasswordController,
           label: "Confirm Password",
           hint: "Enter Confirm Password",
         ),
-      ],
-      onNext: () => stepIndex.value++,
-    );
-  }
 
-  /// Step 2: Address
-  Widget _buildAddressDetails() {
-    return _wrapStep(
-      step: 1,
-      children: [
-        _buildTextField(
-          controller: controller.districtController,
-          label: "District",
-          hint: "Enter district name",
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Business Questions",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
-        _buildTextField(
-          controller: controller.blockController,
-          label: "Block",
-          hint: "Enter block",
-        ),
-        _buildTextField(
-          controller: controller.stateController,
-          label: "State",
-          hint: "Enter state",
-        ),
-        _buildTextField(
-          controller: controller.subscriptionPlanController,
-          label: "Subscription Plan",
-          hint: "Enter subscription plan",
-        ),
-      ],
-      onNext: () => stepIndex.value++,
-    );
-  }
+        SizedBox(height: 20),
 
-  /// Step 3: References
-  Widget _buildReferences() {
-    return _wrapStep(
-      step: 2,
-      children: [
         _buildTextField(
-          controller: controller.Qus1Controller,
+          controller: controller.question1Controller,
           label: "How many total retailers?",
           hint: "",
         ),
         _buildTextField(
-          controller: controller.Qus2Controller,
+          controller: controller.question2Controller,
           label: "In present partnership with which company?",
           hint: "",
         ),
         _buildTextField(
-          controller: controller.Qus3Controller,
+          controller: controller.question3Controller,
           label: "District in which want to become distributor?",
           hint: "",
         ),
 
-        // _buildTextField(
-        //   controller: controller.qualificationController,
-        //   label: "Qualification",
-        //   hint: "Enter qualification",
-        // ),
-        // _buildTextField(
-        //   controller: controller.experienceController,
-        //   label: "Experience",
-        //   hint: "Enter experience",
-        // ),
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Business Details",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 20),
+
+        _buildTextField(
+          controller: controller.businessName,
+          label: "Business Name",
+          hint: "Enter business name",
+        ),
+
+        _buildTextField(
+          controller: controller.businessType,
+          label: "Business Tye",
+          hint: "Enter business type",
+        ),
+
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Distributor Additional Details",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 20),
+
+        _buildUploadTile(
+          title: "Live Photo",
+          fileObs: controller.selfieFile,
+          onTap: () {
+            controller.captureSelfie();
+          },
+        ),
+
+        _buildUploadTile(
+          title:
+              " Office/Shop Address Proof (electricity bill/rent agreement) *",
+          fileObs: controller.addressProof,
+          onTap: () {
+            controller.pickFile(controller.addressProof);
+          },
+        ),
+
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "References (2 persons)",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 20),
+
+        _buildTextField(
+          controller: controller.referencePerson1Name,
+          label: "First Reference Person Name ",
+          hint: "",
+        ),
+
+        _buildTextField(
+          controller: controller.referencePerson1Mobile,
+          label: "First Reference Person Mobile ",
+          hint: "",
+        ),
+        _buildTextField(
+          controller: controller.referencePerson2name,
+          label: "Second Reference Person Name ",
+          hint: "",
+        ),
+        _buildTextField(
+          controller: controller.referencePerson2Mobile,
+          label: "Second Reference Person Mobile ",
+          hint: "",
+        ),
+
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Qualifaction and Experience",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 20),
+
+        _buildTextField(
+          controller: controller.qualificationController,
+          label: "Education/Qualification (optional)",
+          hint: "",
+        ),
+
+        _buildTextField(
+          controller: controller.experienceController,
+          label: "Experience in Financial Services (years) *",
+          hint: "",
+        ),
+
+        SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Address",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 20),
+
+        _buildTextField(
+          controller: controller.pincodeController,
+          label: "PinCode",
+          hint: "Enter PinCode",
+          maxLength: 6,
+        ),
+        _buildTextField(
+          controller: controller.blockController,
+          label: "Block",
+          hint: "Enter block name",
+        ),
+        _buildTextField(
+          controller: controller.countryController,
+          label: "Country",
+          hint: "Enter Country name",
+        ),
+
+        _buildTextField(
+          controller: controller.stateController,
+          label: "State",
+          hint: "Enter state Name",
+        ),
+        _buildTextField(
+          controller: controller.cityController,
+          label: "City",
+          hint: "Enter City Name",
+        ),
+
+        _buildTextField(
+          controller: controller.fullAddressController,
+          label: "Enter Full Address",
+          hint: "Enter full address",
+        ),
+      ],
+      onNext: () {
+        controller.registerDestributerApi(stepIndex.value);
+      },
+    );
+  }
+
+  /// Step 2: Address
+  Widget _buildAadharDetails() {
+    return _wrapStep(
+      step: 1,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Aadhaar Details',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Verify Aadhaar and review the details',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(
+          controller: controller.aadhaarController,
+          label: "Aadhaar Number",
+          maxLength: 12,
+          hint: "Enter 12-digit Aadhaar number",
+        ),
+        const SizedBox(height: 10),
+        Obx(
+          () => controller.isOtpSending.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Send Otp',
+                  onTap: () async {
+                    if (controller.aadhaarController.text.length == 12) {
+                      await controller.sendAadhaarOtp();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter a valid 12-digit Aadhaar number",
+                      );
+                    }
+                  },
+                ),
+        ),
+        const SizedBox(height: 10),
+        if (controller.isOtpVerifying.value) ...[
+          _buildTextField(
+            controller: controller.aadharOtpController,
+            label: "Otp",
+            hint: "Enter Otp",
+          ),
+          Obx(
+            () => controller.isOtpVerifying.value
+                ? Center(
+                    child: CircularProgressIndicator(color: AppColors.primaryC),
+                  )
+                : appButton(
+                    title: 'Verify Otp',
+                    onTap: () async {
+                      if (controller.aadharOtpController.text.length == 6) {
+                        await controller.verifyAadhaarOtp();
+                      } else {
+                        showSnackBar(
+                          title: "Error",
+                          message: "Enter a valid 6-digit Otp",
+                        );
+                      }
+                    },
+                  ),
+          ),
+        ],
       ],
       onNext: () => stepIndex.value++,
     );
   }
 
-  /// Step 4: Documents + Terms
-  Widget _buildDocuments() {
+  /// Bank Step
+  Widget _buildBankDetails() {
     return _wrapStep(
       step: 3,
       children: [
         _buildTextField(
-          controller: controller.aadhaarController,
-          label: "Aadhaar Number",
-          hint: "",
+          controller: controller.bankAccountController,
+          label: "Account Number",
+          hint: "Enter bank account number",
         ),
-        _buildUploadTile(
-          title: "Upload Aadhaar",
-          fileObs: controller.aadhaarFile,
-          onTap: () => controller.pickFile(controller.aadhaarFile),
-        ),
-        _buildUploadTile(
-          title: "Upload PAN",
-          fileObs: controller.panFile,
-          onTap: () => controller.pickFile(controller.panFile),
-        ),
-        _buildUploadTile(
-          title: "Upload Bank Proof",
-          fileObs: controller.bankFile,
-          onTap: () => controller.pickFile(controller.bankFile),
-        ),
-        _buildUploadTile(
-          title: "Capture Selfie",
-          fileObs: controller.selfieFile,
-          onTap: controller.captureSelfie,
-          isImagePreview: true,
+        _buildTextField(
+          controller: controller.ifscController,
+          label: "IFSC Code",
+          hint: "Enter IFSC code",
         ),
         const SizedBox(height: 12),
         Obx(
-          () => CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: AppColors.primaryC,
-            title: const Text("I accept Terms & Conditions"),
-            value: controller.acceptedTerms.value,
-            onChanged: controller.toggleTerms,
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Verify Bank',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.verifyBankAccount();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid details",
+                      );
+                    }
+                  },
+                ),
+        ),
+      ],
+      onNext: () => stepIndex.value++,
+    );
+  }
+
+  /// PAN Verification Step
+  Widget _buildPandVerify() {
+    return _wrapStep(
+      step: 2,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'PAN Details',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
+        _buildTextField(
+          controller: controller.panController,
+          label: "PAN Card Number",
+          hint: "Enter PAN number",
+        ),
+        Obx(
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Verify Pan',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.verifyPan();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter a valid PAN number",
+                      );
+                    }
+                  },
+                ),
+        ),
       ],
-      onNext: () {
-        if (!controller.acceptedTerms.value) {
-          showSnackBar(
-            title: "Error",
-            message: "Please accept Terms & Conditions",
-          );
-        } else if (controller.aadhaarFile.value == null ||
-            controller.panFile.value == null ||
-            controller.bankFile.value == null ||
-            controller.selfieFile.value == null) {
-          showSnackBar(
-            title: "Error",
-            message: "Please upload all required documents",
-          );
-        } else {
-          Get.to(() => UserHomePage());
-        }
-      },
+      onNext: () => stepIndex.value++,
+    );
+  }
+
+  Widget _buildKycDetails() {
+    return _wrapStep(
+      step: 4,
       isLast: true,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Submit KYC',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Everything looks good -- submit your KYC',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Review Completed. Click below to submit your KYC',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Obx(
+          () => controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryC),
+                )
+              : appButton(
+                  title: 'Submit KYC',
+                  onTap: () async {
+                    if (formKeys[stepIndex.value].currentState!.validate()) {
+                      await controller.submitKYCApi();
+                    } else {
+                      showSnackBar(
+                        title: "Error",
+                        message: "Enter valid details",
+                      );
+                    }
+                  },
+                ),
+        ),
+      ],
+      onNext: () {},
     );
   }
 
@@ -334,6 +594,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
     required String label,
     required String hint,
     bool obscureText = false,
+    int? maxLength,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -352,6 +613,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
           TextFormField(
             controller: controller,
             obscureText: obscureText,
+            maxLength: maxLength,
             decoration: InputDecoration(
               hintText: hint,
               filled: true,
