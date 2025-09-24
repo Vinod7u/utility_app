@@ -43,11 +43,11 @@ class RetailerRegisterController extends GetxController{
   var panFile = Rx<File?>(null);
   var bankFile = Rx<File?>(null);
   var selfieFile = Rx<File?>(null);
-  var selectedValue = 'Select Type'.obs;
+  var selectedValue = ''.obs;
   var selectedShop = 'Normal'.obs;
   var isAadhaarVerify = false.obs;
   var isSendOtp = false.obs;
-
+  final RxInt stepIndex = 0.obs;
   final List<String> items = [
     'CSc',
     'General Store',
@@ -104,7 +104,7 @@ class RetailerRegisterController extends GetxController{
     Get.snackbar("Success", "Form submitted successfully");
   }
 
-  Future<void> createRetailerApi() async {
+  Future<bool> createRetailerApi() async {
     final mobileNo = phoneC.text;
     final name = nameC.text;
     final email = emailC.text;
@@ -121,6 +121,12 @@ class RetailerRegisterController extends GetxController{
     final state = stateC.text;
     final city = districtC.text;
     final shopName = shopNameC.text;
+
+    final shopType = selectedValue.value;
+
+
+
+
     //final block = pinCodeC.text;
     try {
       isLoading.value = true;
@@ -146,7 +152,7 @@ class RetailerRegisterController extends GetxController{
           "block": 'E',
         },
         "shopName": shopName,
-        "shopType": "CSc",
+        "shopType": shopType,
         "references": [],
         "educationQualification": "",
         "financialExperience": "",
@@ -172,6 +178,7 @@ class RetailerRegisterController extends GetxController{
       );
       log('status Code : ${response.statusCode}');
       if (response.statusCode == 200 || response.statusCode == 201) {
+
         print('HEllo');
         isLoading.value = false;
         log("${response.data}");
@@ -188,13 +195,16 @@ class RetailerRegisterController extends GetxController{
         // token = prefs.getString('token');
         print("Response : ${response.data}");
         showSnackBar(title: "Success", message: response.data["message"]);
+        return true;
       } else {
         isLoading.value = false;
         showSnackBar(title: "Failed", message: response.data["message"]);
+        return false;
       }
     } catch (e) {
       isLoading.value = false;
       showSnackBar(title: "Failed", message: e.toString());
+      return false;
     }
   }
 
@@ -202,7 +212,7 @@ class RetailerRegisterController extends GetxController{
   Future<void> sendAadhaarOtpApi() async {
     final aadhaar = aadhaarController.text;
     try {
-      isLoadingOtp.value = true;
+      isLoading.value = true;
       final data = {"aadharNumber": aadhaar};
       final response = await Apiservices().postRequest(
         ApiUrl.verifyAadhaarOtp,
@@ -212,25 +222,26 @@ class RetailerRegisterController extends GetxController{
       print("isAadhaarVerify : ${isAadhaarVerify.value}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Api Response : ${response.data}");
-        final clientID = response.data["data"]["data"]["data"]["client_id"] ?? '';
-        print("client Id : ${clientID}");
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('client_id', clientID);
-        print("client_id : ${clientID}");
-        if(response.data["message"] != "Invalid Aadhaar Number."){
+        if(response.data['data']["message"] != "Invalid Aadhaar Number."){
+          final clientID = response.data["data"]["data"]["data"]["client_id"] ?? '';
+          print("client Id : ${clientID}");
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('client_id', clientID);
+          print("client_id : ${clientID}");
           isAadhaarVerify.value = true;
         }
-        isLoadingOtp.value = false;
+
+        isLoading.value = false;
         print("Hell : ${isAadhaarVerify.value}");
         showSnackBar(title: "Success", message: response.data["data"]["message"]);
 
       } else {
-        isLoadingOtp.value = false;
+        isLoading.value = false;
 
         showSnackBar(title: "11111Failed", message: response.data["data"]["message"]);
       }
     } catch (e) {
-      isLoadingOtp.value = false;
+      isLoading.value = false;
 
       showSnackBar(title: "Failed", message: e.toString());
     }
