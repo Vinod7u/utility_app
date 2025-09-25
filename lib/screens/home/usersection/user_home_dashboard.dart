@@ -753,6 +753,8 @@ import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
 
+import '../retailerSection/drawer.dart';
+
 class UserHomeDashboard extends StatefulWidget {
   const UserHomeDashboard({super.key});
 
@@ -763,7 +765,7 @@ class UserHomeDashboard extends StatefulWidget {
 class _UserHomeDashboardState extends State<UserHomeDashboard>
     with TickerProviderStateMixin {
   final UserHomeController controller = Get.put(UserHomeController());
-
+  final _searchController = TextEditingController();
   late AnimationController _slideController;
   late AnimationController _fadeController;
   late Animation<Offset> _slideAnimation;
@@ -806,6 +808,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.off_white,
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -822,7 +825,6 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                   _buildCashWithDrawlSection(),
                   _buildBookingSection(),
                   _buildFinanceSection(),
-
 
                   const SizedBox(height: 20),
                 ],
@@ -875,6 +877,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       floating: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
+      //actionsPadding: EdgeInsets.symmetric(horizontal: 20),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: const BoxDecoration(
@@ -889,41 +892,58 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
+                Builder(builder: (context){
+                  return InkWell(
+                    onTap: (){
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Icon(Icons.menu,color: Colors.white,size: 32,),
+                    ),
+                  );
+                }),
+                SizedBox(width: 10,),
+                Expanded(
+                  child: TextFormField(
+                    controller: _searchController,
+                    keyboardType: TextInputType.text,
+                    cursorColor: Colors.black,
+                    cursorHeight: 14,
+                    cursorWidth: 1,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      hintStyle: TextStyle(color: Colors.white),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      fillColor: AppColors.newPrimaryColor,
+                      filled: true,
+                      prefixIcon: Icon(Icons.search, size: 16,color: Colors.white,),
+                      prefixIconConstraints: BoxConstraints(
+                        minHeight: 20,
+                        minWidth: 30,
                       ),
-                      child: Icon(
-                        Icons.account_balance_wallet,
-                        color: AppColors.primary,
-                        size: 20,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.white),
                       ),
                     ),
-                    // SizedBox(width: 12),
-                    // Text(
-                    //   "MyPay",
-                    //   style: TextStyle(
-                    //     fontSize: 22,
-                    //     fontWeight: FontWeight.bold,
-                    //     color: Colors.white,
-                    //     letterSpacing: 0.5,
-                    //   ),
-                    // ),
-                  ],
+                    onChanged: (v) {},
+                  ),
                 ),
+                SizedBox(width: 8,),
                 Row(
                   children: [
                     _buildAppBarIcon(Icons.notifications_outlined, () {}),
-                    const SizedBox(width: 10),
-                    _buildProfileAvatar(Icons.perm_identity,(){}),
+                    const SizedBox(width: 8),
+                    _buildProfileAvatar(Icons.perm_identity, () {}),
                   ],
                 ),
               ],
@@ -1045,12 +1065,12 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.new_blue, AppColors.primary],
+                colors: [Color(0xFF72CBF7), Color(0xFF44A5E9)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -1065,8 +1085,10 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                       () => Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SvgPicture.asset('assets/icons/streamline-ultimate-color_money-wallet-open.svg'),
-                          SizedBox(width: 18,),
+                          SvgPicture.asset(
+                            'assets/icons/streamline-ultimate-color_money-wallet-open.svg',
+                          ),
+                          SizedBox(width: 18),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1079,6 +1101,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                                 ),
                               ),
                               const SizedBox(height: 8),
+
                               /// Amount + Eye in same row
                               Row(
                                 children: [
@@ -1115,7 +1138,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 /// Actions Row
                 Row(
@@ -1151,7 +1174,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: AppColors.newPrimaryColor,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -1180,25 +1203,44 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(
-                spreadRadius: 6,
-                color: Colors.grey.withOpacity(.18),
-                blurRadius: 7
-            )],
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 6,
+              color: Colors.grey.withOpacity(.18),
+              blurRadius: 7,
+            ),
+          ],
         ),
         margin: EdgeInsets.only(bottom: 16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Money Transfer",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A202C),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Money Transfer",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A202C),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Icon(Icons.arrow_forward_ios,size: 12,),
+                    ],
+                  )
+                ],
               ),
               const SizedBox(height: 16),
               _buildQuickActions(),
@@ -1213,27 +1255,46 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(
-                spreadRadius: 6,
-                color: Colors.grey.withOpacity(.18),
-                blurRadius: 7
-            )]
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 6,
+              color: Colors.grey.withOpacity(.18),
+              blurRadius: 7,
+            ),
+          ],
         ),
         margin: EdgeInsets.only(bottom: 16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Recharge & Bills",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A202C),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Recharge & Bills",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A202C),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Icon(Icons.arrow_forward_ios,size: 12,),
+                    ],
+                  )
+                ],
               ),
               const SizedBox(height: 16),
               _buildRecharge(),
@@ -1248,27 +1309,46 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(
-                spreadRadius: 6,
-                color: Colors.grey.withOpacity(.18),
-                blurRadius: 7
-            )]
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 6,
+              color: Colors.grey.withOpacity(.18),
+              blurRadius: 7,
+            ),
+          ],
         ),
         margin: EdgeInsets.only(bottom: 16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Cash withdrawal",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A202C),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Cash Withdrawal",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A202C),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Icon(Icons.arrow_forward_ios,size: 12,),
+                    ],
+                  )
+                ],
               ),
               const SizedBox(height: 16),
               _buildCashWithDrawl(),
@@ -1283,27 +1363,46 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(
-                spreadRadius: 6,
-                color: Colors.grey.withOpacity(.18),
-                blurRadius: 7
-            )]
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 6,
+              color: Colors.grey.withOpacity(.18),
+              blurRadius: 7,
+            ),
+          ],
         ),
         margin: EdgeInsets.only(bottom: 16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Booking",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A202C),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Booking",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A202C),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                      SizedBox(width: 4,),
+                      Icon(Icons.arrow_forward_ios,size: 12,),
+                    ],
+                  )
+                ],
               ),
               const SizedBox(height: 16),
               _buildBooking(),
@@ -1318,17 +1417,19 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(
-            spreadRadius: 6,
-            color: Colors.grey.withOpacity(.18),
-            blurRadius: 7
-          )]
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 6,
+              color: Colors.grey.withOpacity(.18),
+              blurRadius: 7,
+            ),
+          ],
         ),
         margin: EdgeInsets.only(bottom: 16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1348,16 +1449,11 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       ),
     );
   }
+
   Widget _buildFinance() {
     final items = [
-      {
-        'img': "assets/images/coin_1311391.png",
-        'label': 'Personal Loan',
-      },
-      {
-        'img': "assets/images/coins_13540091 1.png",
-        'label': 'Business Loan',
-      },
+      {'img': "assets/images/coin_1311391.png", 'label': 'Personal Loan'},
+      {'img': "assets/images/coins_13540091 1.png", 'label': 'Business Loan'},
       {
         'img': "assets/images/nepalese-rupee_17917284 1.png",
         'label': 'Instant Loan',
@@ -1365,7 +1461,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     ];
 
     return SizedBox(
-      height: 90,
+      height: 70,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: items.length,
@@ -1384,10 +1480,9 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     width: 30,
                     fit: BoxFit.contain,
                   ),
-
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Text(
                 it['label']!,
                 textAlign: TextAlign.center,
@@ -1406,36 +1501,18 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
 
   Widget _buildBooking() {
     final items = [
-      {
-        'img': "assets/images/streamline-emojis_bus.png",
-        'label': 'Bus',
-      },
-      {
-        'img': "assets/images/noto-v1_bullet-train.png",
-        'label': 'Train',
-      },
-      {
-        'img': "assets/images/emojione_hotel.png",
-        'label': 'Hotel',
-      },
-      {
-        'img': "assets/images/watching-a-movie 1.png",
-        'label': 'Movie',
-      },
-      {
-        'img': "assets/images/airplane 1.png",
-        'label': 'Flight',
-      },
+      {'img': "assets/images/streamline-emojis_bus.png", 'label': 'Bus'},
+      {'img': "assets/images/noto-v1_bullet-train.png", 'label': 'Train'},
+      {'img': "assets/images/emojione_hotel.png", 'label': 'Hotel'},
+      {'img': "assets/images/watching-a-movie 1.png", 'label': 'Movie'},
+      //{'img': "assets/images/airplane 1.png", 'label': 'Flight'},
     ];
 
     return SizedBox(
-      height: 90,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        physics: BouncingScrollPhysics(),
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, i) {
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(items.length, (i){
           final it = items[i];
           return Column(
             children: [
@@ -1448,10 +1525,9 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     width: 30,
                     fit: BoxFit.contain,
                   ),
-
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Text(
                 it['label']!,
                 textAlign: TextAlign.center,
@@ -1463,71 +1539,35 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               ),
             ],
           );
-        },
-      ),
+        }),
+      )
     );
   }
 
   Widget _buildCashWithDrawl() {
     final items = [
-      {
-        'img': "assets/images/image 56.png",
-        'label': 'AEPS',
-      },
-      {
-        'img': "assets/images/file_573803.png",
-        'label': 'Mini Statement',
-      },
-      {
-        'img': "assets/images/pos-terminal_5705126.png",
-        'label': 'Micro ATM',
-      },
-      {
-        'img': "assets/images/investing_8079355.png",
-        'label': 'Bank Balance',
-      },
-      {
-        'img': "assets/images/image 56.png",
-        'label': 'AEPS',
-      },
-      {
-        'img': "assets/images/file_573803.png",
-        'label': 'Mini Statement',
-      },
-      {
-        'img': "assets/images/pos-terminal_5705126.png",
-        'label': 'Micro ATM',
-      },
-      {
-        'img': "assets/images/investing_8079355.png",
-        'label': 'Bank Balance',
-      },
+      {'img': "assets/images/image 56.png", 'label': 'AEPS'},
+      {'img': "assets/images/file_573803.png", 'label': 'Mini Statement'},
+      {'img': "assets/images/pos-terminal_5705126.png", 'label': 'Micro ATM'},
+      {'img': "assets/images/investing_8079355.png", 'label': 'Bank Balance'},
     ];
 
     return SizedBox(
-      height: 90,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        physics: BouncingScrollPhysics(),
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, i) {
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(4, (i) {
           final it = items[i];
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    it['img']!,
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.contain,
-                  ),
-
-                ],
+              Image.asset(
+                it['img']!,
+                height: 30,
+                width: 30,
+                fit: BoxFit.contain,
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10),
               Text(
                 it['label']!,
                 textAlign: TextAlign.center,
@@ -1539,46 +1579,36 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               ),
             ],
           );
-        },
+        }),
       ),
     );
+
   }
 
   Widget _buildQuickActions() {
     final items = [
+      {'img': "assets/images/qr-code 1.png", 'label': 'Qr Code'},
+      {'img': "assets/images/card 1.png", 'label': 'DMT \nTransaction'},
       {
-        'img': "assets/images/mage_qr-code.png",
-        'label': 'Qr Code',
+        'img': "assets/images/card (2) 1.png",
+        'label': 'AEPS \nTransaction',
       },
-      {
-        'img': "assets/images/bank-transfer 1.png",
-        'label': 'DMT Transaction',
-      },
-      {
-        'img': "assets/images/cashless-payment 1.png",
-        'label': 'AEPS Transaction',
-      },
-      {
-        'img': "assets/images/loan (2) 1.png",
-        'label': 'BBPS Transaction',
-      },
+      {'img': "assets/images/transaction (6) 1.png", 'label': 'BBPS \nTransaction'},
     ];
 
     return SizedBox(
       height: 90,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        physics: BouncingScrollPhysics(),
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, i) {
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(items.length, (i) {
           final it = items[i];
           return Column(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                margin: const EdgeInsets.symmetric(horizontal: 6),
                 decoration: BoxDecoration(
-                  color: AppColors.textColor,
+                  color: AppColors.containerBack,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -1588,19 +1618,15 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     ),
                   ],
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      it['img']!,
-                      height: 30,
-                      width: 30,
-                      fit: BoxFit.contain,
-                    ),
-
-                  ],
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                child: Image.asset(
+                  it['img']!,
+                  height: 30,
+                  width: 30,
+                  fit: BoxFit.contain,
                 ),
               ),
+              const SizedBox(height: 6),
               Text(
                 it['label']!,
                 textAlign: TextAlign.center,
@@ -1609,74 +1635,45 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF4A5568),
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           );
-        },
+        }),
       ),
     );
+
   }
 
   Widget _buildRecharge() {
     final items = [
-      {
-        'img': "assets/images/earth_13849445.png",
-        'label': 'DTH',
-      },
-      {
-        'img': "assets/images/atm-card_8739601.png",
-        'label': 'Credit Card',
-      },
-      {
-        'img': "assets/images/electricity_9746766.png",
-        'label': 'Electricity',
-      },
-      {
-        'img': "assets/images/payment_11703536.png",
-        'label': 'Mobile Recharge',
-      },
-      {
-        'img': "assets/images/toll 1.png",
-        'label': 'Fastag',
-      },
-      {
-        'img': "assets/images/electricity_9746766.png",
-        'label': 'Electricity',
-      },
-      {
-        'img': "assets/images/payment_11703536.png",
-        'label': 'Mobile Recharge',
-      },
-      {
-        'img': "assets/images/toll 1.png",
-        'label': 'Fastag',
-      },
+      {'img': "assets/images/earth_13849445.png", 'label': 'DTH'},
+      {'img': "assets/images/atm-card_8739601.png", 'label': 'Credit Card'},
+      {'img': "assets/images/electricity_9746766.png", 'label': 'Electricity'},
+      {'img': "assets/images/payment_11703536.png", 'label': 'Mobile Recharge'},
+      //
+      // {'img': "assets/images/toll 1.png", 'label': 'Fastag'},
+      // {'img': "assets/images/electricity_9746766.png", 'label': 'Electricity'},
+      // {'img': "assets/images/payment_11703536.png", 'label': 'Mobile Recharge'},
+      // {'img': "assets/images/toll 1.png", 'label': 'Fastag'},
     ];
 
     return SizedBox(
-      height: 90,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        physics: BouncingScrollPhysics(),
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, i) {
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(4, (i) {
           final it = items[i];
           return Column(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    it['img']!,
-                    height: 30,
-                    width: 30,
-                    fit: BoxFit.contain,
-                  ),
-
-                ],
+              Image.asset(
+                it['img']!,
+                height: 30,
+                width: 30,
+                fit: BoxFit.contain,
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10),
               Text(
                 it['label']!,
                 textAlign: TextAlign.center,
@@ -1688,9 +1685,10 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               ),
             ],
           );
-        },
+        }),
       ),
     );
+
   }
 
   // -------------------- SERVICES SECTION --------------------
@@ -1698,10 +1696,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 12),
-          _buildServicesGrid(),
-        ],
+        children: [const SizedBox(height: 12), _buildServicesGrid()],
       ),
     );
   }
@@ -1840,10 +1835,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return _buildSectionContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          _buildBannerCarousel(),
-        ],
+        children: [const SizedBox(height: 16), _buildBannerCarousel()],
       ),
     );
   }
@@ -1859,23 +1851,20 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               margin: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.black.withOpacity(0.1),
+                //     blurRadius: 10,
+                //     offset: const Offset(0, 4),
+                //   ),
+                // ],
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: AspectRatio(
-                  aspectRatio: 16 / 7,
-                  child: Image.network(
-                    url,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                child: Image.asset(
+                  'assets/images/Group 387.png',
+                  fit: BoxFit.contain,
+                 // width: double.infinity,
                 ),
               ),
             );
@@ -1890,7 +1879,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
             },
           ),
         ),
-        const SizedBox(height: 12),
+        //const SizedBox(height: 12),
         Obx(
           () => Row(
             mainAxisAlignment: MainAxisAlignment.center,

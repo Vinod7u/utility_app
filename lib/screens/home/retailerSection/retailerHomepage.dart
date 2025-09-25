@@ -30,7 +30,8 @@ class _RetailerHomePageState extends State<RetailerHomePage> {
             ),
           );
         }),
-        leadingWidth: 45,surfaceTintColor: Colors.white,
+        leadingWidth: 45,
+        surfaceTintColor: Colors.white,
         backgroundColor: Color(0xff8DDCFB),
         title:   Card(
           shape: RoundedRectangleBorder(
