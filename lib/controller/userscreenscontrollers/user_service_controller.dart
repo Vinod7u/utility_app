@@ -26,74 +26,135 @@ class ServiceCategory {
 class UserServiceController extends GetxController {
   var searchQuery = "".obs;
   var filteredServices = <Service>[].obs;
-  final List<ServiceCategory> serviceCategories = [
-    ServiceCategory(
-      name: "Recharge & Bills",
-      services: [
-        Service(
-          title: "Mobile Recharge",
-          subtitle: "Instant prepaid recharge",
-          iconUrl: "https://img.icons8.com/color/96/phone.png",
-          onTap: () {},
-        ),
-        Service(
-          title: "DTH Recharge",
-          subtitle: "Recharge your DTH instantly",
-          iconUrl: "https://img.icons8.com/color/96/tv.png",
-          onTap: () {},
-        ),
-        Service(
-          title: "Electricity Bill",
-          subtitle: "Pay electricity bills securely",
-          iconUrl: "https://img.icons8.com/color/96/electricity.png",
-          onTap: () {},
-        ),
-      ],
+  var services = <Service>[
+    Service(
+      title: "Mobile Recharge",
+      subtitle: "Prepaid & postpaid recharge",
+      iconUrl: "https://img.icons8.com/color/96/phone.png",
+      onTap: () {},
     ),
-    ServiceCategory(
-      name: "Banking",
-      services: [
-        Service(
-          title: "DMT Transfer",
-          subtitle: "Domestic Money Transfer",
-          iconUrl: "https://img.icons8.com/color/96/money-transfer.png",
-          onTap: () {},
-        ),
-        Service(
-          title: "AEPS",
-          subtitle: "Aadhar Enabled Payment System",
-          iconUrl: "https://img.icons8.com/color/96/fingerprint.png",
-          onTap: () {},
-        ),
-      ],
+    Service(
+      title: "DTH Recharge",
+      subtitle: "Recharge your DTH instantly",
+      iconUrl: "https://img.icons8.com/color/96/tv.png",
+      onTap: () {},
     ),
-    ServiceCategory(
-      name: "Insurance",
-      services: [
-        Service(
-          title: "Life Insurance",
-          subtitle: "Pay premiums easily",
-          iconUrl: "https://img.icons8.com/color/96/insurance-agent.png",
-          onTap: () {},
-        ),
-        Service(
-          title: "Health Insurance",
-          subtitle: "Manage your health policies",
-          iconUrl: "https://img.icons8.com/color/96/heart-health.png",
-          onTap: () {},
-        ),
-      ],
+    Service(
+      title: "Electricity Bill",
+      subtitle: "Pay electricity bills securely",
+      iconUrl: "https://img.icons8.com/color/96/electricity.png",
+      onTap: () {},
     ),
-  ];
-
-  List<Service> get allServices => serviceCategories.expand((c) => c.services).toList();
+    Service(
+      title: "Gas Bill",
+      subtitle: "Pay piped gas bills online",
+      iconUrl: "https://img.icons8.com/color/96/gas.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Water Bill",
+      subtitle: "Pay your water bills easily",
+      iconUrl: "https://img.icons8.com/color/96/water.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Broadband",
+      subtitle: "Pay internet broadband bills",
+      iconUrl: "https://img.icons8.com/color/96/wifi.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Loan Repayment",
+      subtitle: "Pay EMI for your loans",
+      iconUrl: "https://img.icons8.com/color/96/money-bag.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Credit Card Bill",
+      subtitle: "Pay your credit card dues",
+      iconUrl: "https://img.icons8.com/color/96/credit-card.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Flight Booking",
+      subtitle: "Book domestic & international flights",
+      iconUrl: "https://img.icons8.com/color/96/airplane-take-off.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Train Booking",
+      subtitle: "Book train tickets instantly",
+      iconUrl: "https://img.icons8.com/color/96/train.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Bus Booking",
+      subtitle: "Reserve bus tickets online",
+      iconUrl: "https://img.icons8.com/color/96/bus.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Movie Tickets",
+      subtitle: "Book tickets for latest movies",
+      iconUrl: "https://img.icons8.com/color/96/ticket.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Insurance",
+      subtitle: "Pay premiums & manage policies",
+      iconUrl: "https://img.icons8.com/color/96/insurance-agent.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Mutual Funds",
+      subtitle: "Invest & track your SIPs",
+      iconUrl: "https://img.icons8.com/color/96/combo-chart.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Gold Investment",
+      subtitle: "Buy & sell digital gold",
+      iconUrl: "https://img.icons8.com/color/96/gold-bars.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "UPI Transfer",
+      subtitle: "Send money instantly via UPI",
+      iconUrl: "https://img.icons8.com/color/96/money-transfer.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Bank Transfer",
+      subtitle: "IMPS, NEFT, RTGS transfers",
+      iconUrl: "https://img.icons8.com/color/96/bank.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "QR Payment",
+      subtitle: "Scan any QR to pay",
+      iconUrl: "https://img.icons8.com/color/96/qr-code.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Shopping",
+      subtitle: "Shop online across categories",
+      iconUrl: "https://img.icons8.com/color/96/shopping-cart.png",
+      onTap: () {},
+    ),
+    Service(
+      title: "Food Delivery",
+      subtitle: "Order food from nearby restaurants",
+      iconUrl: "https://img.icons8.com/color/96/meal.png",
+      onTap: () {},
+    ),
+  ].obs;
 
   void updateSearch(String query) {
     searchQuery.value = query;
     if (query.isEmpty) {
       filteredServices.clear();
     } else {
-      filteredServices.value = allServices
+      filteredServices.value = services
           .where(
             (s) =>
                 s.title.toLowerCase().contains(query.toLowerCase()) ||
