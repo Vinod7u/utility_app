@@ -749,6 +749,9 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_home_controller.dart';
+import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/scanner_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/serice_process_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
@@ -873,7 +876,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: 70,
+      expandedHeight: 60,
       floating: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -941,9 +944,11 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                 SizedBox(width: 8,),
                 Row(
                   children: [
-                    _buildAppBarIcon(Icons.notifications_outlined, () {}),
+                    _buildAppBarIcon(Icons.notifications_outlined, () {
+                      Get.to(() => NotificatonScreen());
+                    }),
                     const SizedBox(width: 8),
-                    _buildProfileAvatar(Icons.perm_identity, () {}),
+                    _buildProfileAvatar(Icons.person, () {}),
                   ],
                 ),
               ],
@@ -1228,17 +1233,22 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                       color: Color(0xFF1A202C),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                          fontSize: 10,
+                  InkWell(
+                    onTap: (){
+                      Get.find<HomePageController>().userchangeTab(1);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View all",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4,),
-                      Icon(Icons.arrow_forward_ios,size: 12,),
-                    ],
+                        SizedBox(width: 4,),
+                        Icon(Icons.arrow_forward_ios,size: 12,),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -1282,17 +1292,22 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                       color: Color(0xFF1A202C),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                          fontSize: 10,
+                  InkWell(
+                    onTap: (){
+                      Get.find<HomePageController>().userchangeTab(1);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View all",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4,),
-                      Icon(Icons.arrow_forward_ios,size: 12,),
-                    ],
+                        SizedBox(width: 4,),
+                        Icon(Icons.arrow_forward_ios,size: 12,),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -1336,17 +1351,22 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                       color: Color(0xFF1A202C),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                          fontSize: 10,
+                  InkWell(
+                    onTap: (){
+                      Get.find<HomePageController>().userchangeTab(1);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View all",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4,),
-                      Icon(Icons.arrow_forward_ios,size: 12,),
-                    ],
+                        SizedBox(width: 4,),
+                        Icon(Icons.arrow_forward_ios,size: 12,),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -1390,17 +1410,22 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                       color: Color(0xFF1A202C),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "View all",
-                        style: TextStyle(
-                          fontSize: 10,
+                  InkWell(
+                    onTap: (){
+                      Get.find<HomePageController>().userchangeTab(1);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View all",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4,),
-                      Icon(Icons.arrow_forward_ios,size: 12,),
-                    ],
+                        SizedBox(width: 4,),
+                        Icon(Icons.arrow_forward_ios,size: 12,),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -1605,25 +1630,36 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
           final it = items[i];
           return Column(
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.containerBack,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                child: Image.asset(
-                  it['img']!,
-                  height: 30,
-                  width: 30,
-                  fit: BoxFit.contain,
+              InkWell(
+                onTap: (){
+                  if(it['label'] == 'Qr Code'){
+                    Get.to(()=> ScannerScreen());
+                  }
+                  else{
+                    Get.to(()=> SericeProcessScreen(service: it['label'].toString()));
+                  }
+
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.containerBack,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                  child: Image.asset(
+                    it['img']!,
+                    height: 30,
+                    width: 30,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(height: 6),
@@ -2029,102 +2065,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     );
   }
 
-  // -------------------- TRANSACTIONS --------------------
-  Widget _buildRecentTransactions() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Recent Transactions',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryC,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.find<HomePageController>().userchangeTab(3);
-                },
-                child: const Text(
-                  'View All',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              children: const [
-                ListTile(
-                  leading: Icon(Icons.phone_android, color: Colors.blue),
-                  title: Text("Mobile Recharge"),
-                  subtitle: Text("Airtel - 9876543210"),
-                  trailing: Text(
-                    "-₹299",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.flash_on, color: Colors.orange),
-                  title: Text("Electricity Bill"),
-                  subtitle: Text("BSES - Payment"),
-                  trailing: Text(
-                    "-₹1250",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(
-                    Icons.account_balance_wallet,
-                    color: Colors.green,
-                  ),
-                  title: Text("Money Received"),
-                  subtitle: Text("From: John Smith"),
-                  trailing: Text(
-                    "+₹500",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   // -------------------- HELPER --------------------
   String _getGreeting() {
