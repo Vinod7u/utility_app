@@ -73,7 +73,6 @@ class _ScannedDataWithPaymentState extends State<ScannedDataWithPayment> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
-                  labelText: "Amount",
                   prefixText: "₹ ",
                   counterText: '',
                   fillColor: const Color(0xFFf9fafb),

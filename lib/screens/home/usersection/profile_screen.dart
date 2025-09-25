@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: 110,
+      expandedHeight: 60,
       floating: true,
       pinned: true,
       backgroundColor: Colors.transparent,
@@ -163,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.new_blue, AppColors.primary],
+            colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Text(
                   "Profile",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 0.5,
@@ -194,7 +194,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }),
                     const SizedBox(width: 10),
                     _buildAppBarIcon(Icons.logout, () {
-                      // TODO: Logout action
                     }),
                   ],
                 ),

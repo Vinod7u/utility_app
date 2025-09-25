@@ -16,6 +16,7 @@ import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 import '../home/retailerSection/retailerHomepage.dart';
 import '../home/usersection/user_home_dashboard.dart';
+import '../home/usersection/user_home_dashboard.dart';
 import 'retailer_register.dart';
 
 class Login extends StatefulWidget {
@@ -101,32 +102,17 @@ class _LoginState extends State<Login> {
                 appButton(
                   title: "Login with Password",
                   onTap: () {
-
-                    if (controller.formKey.currentState!.validate()) {
-                      Get.offAll(() => RetailerHomePage());
-                     // Get.to(() => UserHomePage(userType: UserType.user));
-                    } else {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter valid credentials",
-                      );
-                    }
-                  },
-                ),
-                SizedBox(height: 10,),
-                appButton(
-                  title: "Login for User",
-                  onTap: () {
-                    if (controller.formKey.currentState!.validate()) {
-                      Get.offAll(() => UserHomePage());
-                      // Get.to(() => UserHomePage(userType: UserType.user));
-                    } else {
-                      showSnackBar(
-                        title: "Error",
-                        message: "Enter valid credentials",
-                      );
-                    }
-
+                    // if (controller.formKey.currentState!.validate()) {
+                    //   Get.offAll(() => UserHomePage());
+                    //   // Get.to(() => UserHomePage(userType: UserType.user));
+                    // } else {
+                    //   showSnackBar(
+                    //     title: "Error",
+                    //     message: "Enter valid credentials",
+                    //   );
+                    // }
+                    //  Get.offAll(() => RetailerRegister(userType: UserType.retailer));
+                    Get.offAll(() => UserHomeDashboard());
                   },
                 ),
 

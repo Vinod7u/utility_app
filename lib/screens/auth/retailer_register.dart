@@ -920,4 +920,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       ),
     );
   }
+
+
+
 }

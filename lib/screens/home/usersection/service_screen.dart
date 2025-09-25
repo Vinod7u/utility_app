@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_service_controller.dart';
+import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/serice_process_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -81,40 +83,25 @@ class _ServiceScreenState extends State<ServiceScreen> {
               child: Obx(() {
                 if (controller.searchQuery.isEmpty) {
                   // Show all categories in Grid
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: controller.serviceCategories.length,
-                    itemBuilder: (context, i) {
-                      final cat = controller.serviceCategories[i];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            cat.name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: cat.services.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  childAspectRatio: 0.9,
-                                  mainAxisSpacing: 12,
-                                  crossAxisSpacing: 12,
-                                ),
-                            itemBuilder: (context, idx) {
-                              final s = cat.services[idx];
-                              return _buildServiceTile(s);
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                        ],
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.services.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                        ),
+                    itemBuilder: (context, idx) {
+                      final s = controller.services[idx];
+                      return _buildServiceTile(
+                        onTap: () {
+                          Get.to(() => SericeProcessScreen(service: s.title));
+                        },
+                        imageUrl: s.iconUrl,
+                        serviceName: s.title,
                       );
                     },
                   );
@@ -145,15 +132,16 @@ class _ServiceScreenState extends State<ServiceScreen> {
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: 80,
+      expandedHeight: 60,
       floating: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
+      centerTitle: true, // 🔹 ensures title centers
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.new_blue, AppColors.primary],
+              colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -163,67 +151,37 @@ class _ServiceScreenState extends State<ServiceScreen> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.widgets,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Services",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
+                // 🔹 Left Icon (Menu)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Icon(Icons.menu, color: Colors.white, size: 22),
                 ),
-                Row(
-                  children: [
-                    _buildAppBarIcon(Icons.qr_code_scanner, () {}),
-                    const SizedBox(width: 10),
-                    _buildAppBarIcon(Icons.notifications_outlined, () {}),
-                    const SizedBox(width: 10),
-                    _buildProfileAvatar(),
-                  ],
+
+                // 🔹 Center Title
+                Text(
+                  "All Services",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+
+                // 🔹 Right Icon (Notification)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: _buildAppBarIcon(Icons.notifications_outlined, () {
+                    Get.to(() => NotificatonScreen());
+                  }),
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileAvatar() {
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(11),
-        child: Container(
-          width: 34,
-          height: 34,
-          color: AppColors.primary,
-          child: const Icon(Icons.person, color: Colors.white, size: 18),
         ),
       ),
     );
@@ -244,27 +202,49 @@ class _ServiceScreenState extends State<ServiceScreen> {
   }
 
   /// ---------------- GRID STYLE ----------------
-  Widget _buildServiceTile(Service s) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200, width: 1),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 36,
-            width: 36,
-            child: Image.network(s.iconUrl, fit: BoxFit.contain),
+  Widget _buildServiceTile({
+    required VoidCallback onTap,
+    required String imageUrl,
+    required String serviceName,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.serice_card_color_first,
+              AppColors.serice_card_color_second,
+            ],
+            begin: AlignmentGeometry.topCenter,
+            end: AlignmentGeometry.bottomCenter,
           ),
-          const SizedBox(height: 6),
-          Text(
-            s.title,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-        ],
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 36,
+              width: 36,
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              serviceName,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -274,7 +254,14 @@ class _ServiceScreenState extends State<ServiceScreen> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: LinearGradient(
+          colors: [
+            AppColors.serice_card_color_first,
+            AppColors.serice_card_color_second,
+          ],
+          begin: AlignmentGeometry.topCenter,
+          end: AlignmentDirectional.bottomCenter,
+        ),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.grey.shade200),
       ),
@@ -283,11 +270,12 @@ class _ServiceScreenState extends State<ServiceScreen> {
           Container(
             height: 42,
             width: 42,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+            child: Image.network(
+              s.iconUrl,
+              fit: BoxFit.contain,
+              color: Colors.white,
             ),
-            child: Image.network(s.iconUrl, fit: BoxFit.contain),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -299,16 +287,17 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
                 Text(
                   s.subtitle,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ],
             ),
           ),
-          const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+          const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
         ],
       ),
     );
