@@ -21,26 +21,45 @@ class _MyDrawerState extends State<MyDrawer> {
     ScreenSize.init(context);
     return Drawer(
       width: ScreenSize.width * .8,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xff8DDCFB), Color(0xffFFFFFF)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero
+      ),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 50,),
-            InkWell(
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SvgPicture.asset('assets/icons/Vector.svg',color: AppColors.textColor,),
+            Icon(Icons.arrow_back_outlined,color: Colors.black,size: 32,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  shape: BoxShape.circle
+                ),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.perm_identity),
+                ),
               ),
+                SizedBox(width: 20,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Saurav'),
+                    Text('Retailer'),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * .02,vertical: 10),
+              child: Image.asset('assets/images/image 57.png',),
             ),
             //SizedBox(height: 60,),
             ListTile(

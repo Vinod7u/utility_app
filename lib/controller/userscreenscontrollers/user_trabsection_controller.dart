@@ -37,6 +37,9 @@ class UserTransactionController extends GetxController {
   var searchQuery = "".obs;
   var isSearching = false.obs;
 
+  var isFilterCategorySelected = false.obs;
+  var selectedFilterIndex = 0.obs;
+
   // Filter + Search logic
   List<Map<String, dynamic>> get filteredTransactions {
     List<Map<String, dynamic>> list = transactions;

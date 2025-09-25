@@ -23,4 +23,9 @@ class AppColors {
 
   static const Color textColor = Color(0xff115D8E);
   static const Color newPrimaryColor = Color(0xff8DDCFB);
+
+  static const Color containerBack = Color(0xFFEDF9FF);
+  static const Color bottomSheetColor = Color(0xFF72CBF7);
+
+
 }

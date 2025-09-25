@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_trabsection_controller.dart';
+import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+
+import '../../../widgets/filter_bottom_sheet.dart';
 
 class UserTrasectionHistoryScreen extends StatefulWidget {
   const UserTrasectionHistoryScreen({super.key});
@@ -15,14 +18,14 @@ class UserTrasectionHistoryScreen extends StatefulWidget {
 
 class _UserTrasectionHistoryScreenState
     extends State<UserTrasectionHistoryScreen> {
-  final UserTransactionController controller = Get.put(
-    UserTransactionController(),
-  );
+  final UserTransactionController controller = Get.put(UserTransactionController());
+  final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.off_white,
+      drawer: const MyDrawer(),
       body: Obx(() {
         return SafeArea(
           child: CustomScrollView(
@@ -33,18 +36,53 @@ class _UserTrasectionHistoryScreenState
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      // Filter chips
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildFilterChip("All"),
-                          const SizedBox(width: 10),
-                          _buildFilterChip("Debit"),
-                          const SizedBox(width: 10),
-                          _buildFilterChip("Credit"),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _searchController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                hintText: 'Search',
+                                filled: true,
+                                counterText: '',
+                                hintStyle: TextStyle(color: Colors.grey.shade400),
+                                fillColor: const Color(0xFFf9fafb),
+                                prefixIcon: Icon(Icons.search, size: 16,color: Colors.grey.shade400,),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide:  BorderSide(color: Colors.grey.shade200, width: 2),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide:  BorderSide(color: Colors.grey.shade200, width: 2),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          InkWell(
+                            onTap: () {
+                              Get.bottomSheet(
+                                FilterBottomSheet(),
+                                isScrollControlled: true, // 👈 optional if content is long
+                                backgroundColor: Colors.transparent, // keep rounded corners
+                              );
+                            },
+                            child: Icon(Icons.tune),
+                          ),
+
                         ],
                       ),
-                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -78,91 +116,55 @@ class _UserTrasectionHistoryScreenState
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      expandedHeight: 80,
+      expandedHeight: 0,
       floating: true,
       pinned: true,
+      centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
-        background: Obx(() {
-          return Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.new_blue, AppColors.primary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xffA9E2FF), Color(0xff44A5E9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Title / SearchBar
-                  controller.isSearching.value
-                      ? Expanded(
-                          child: TextField(
-                            autofocus: true,
-                            onChanged: controller.setSearchQuery,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                              hintText: "Search transactions...",
-                              hintStyle: TextStyle(color: Colors.white70),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        )
-                      : Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.account_balance_wallet,
-                                color: AppColors.primary,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              "Transactions",
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                  // Icons
-                  Row(
-                    children: [
-                      _buildAppBarIcon(
-                        controller.isSearching.value
-                            ? Icons.close
-                            : Icons.search,
-                        controller.toggleSearch,
-                      ),
-                      const SizedBox(width: 10),
-                      _buildAppBarIcon(Icons.filter_alt_outlined, () {
-                        // Optional: open filter bottom sheet
-                      }),
-                    ],
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Builder(builder: (context){
+                  return InkWell(
+                    onTap: (){
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Icon(Icons.menu,color: Colors.white,size: 32,),
+                    ),
+                  );
+                }),
+                Text(
+                  "History",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
                   ),
-                ],
-              ),
+                ),
+                _buildAppBarIcon(Icons.notifications_outlined, () {}),
+              ],
             ),
-          );
-        }),
+          ),
+        )
       ),
     );
   }
@@ -174,7 +176,7 @@ class _UserTrasectionHistoryScreenState
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Icon(icon, color: Colors.white, size: 18),
       ),
