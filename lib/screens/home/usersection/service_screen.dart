@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_service_controller.dart';
+import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/serice_process_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
@@ -18,6 +19,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       backgroundColor: AppColors.off_white,
       body: SafeArea(
         child: CustomScrollView(
@@ -26,7 +28,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  // 🔹 Search bar
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
@@ -158,7 +159,15 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 // 🔹 Left Icon (Menu)
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Icon(Icons.menu, color: Colors.white, size: 22),
+                  child: Builder(
+                    builder: (context) {
+                      return _buildAppBarIcon(Icons.menu, () {
+                        Scaffold.of(
+                          context,
+                        ).openDrawer(); // ✅ context is now under Scaffold
+                      });
+                    },
+                  ),
                 ),
 
                 // 🔹 Center Title

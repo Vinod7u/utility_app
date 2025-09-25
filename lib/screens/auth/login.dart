@@ -112,7 +112,7 @@ class _LoginState extends State<Login> {
                     //   );
                     // }
                     //  Get.offAll(() => RetailerRegister(userType: UserType.retailer));
-                    Get.offAll(() => UserHomeDashboard());
+                    Get.offAll(() => UserHomePage());
                   },
                 ),
 

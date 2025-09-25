@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_profile_controller.dart';
+import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/widgets/app_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,6 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       backgroundColor: AppColors.off_white,
       body: SafeArea(
         child: CustomScrollView(
@@ -23,124 +27,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildCustomAppBar(),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔹 Profile card
-                    Card(
-                      color: Colors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => CircleAvatar(
-                                radius: 50,
-                                backgroundImage:
-                                    controller.image_url.value.isNotEmpty
-                                    ? NetworkImage(controller.image_url.value)
-                                    : const AssetImage(
-                                            "assets/images/profile_placeholder.png",
-                                          )
-                                          as ImageProvider,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            const Text(
-                              "Full Name",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "user@example.com",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
-                        ),
+                    /// Profile Card
+                    _buildProfile(),
+                    const SizedBox(height: 12),
+                    Divider(color: Colors.blueGrey.shade200, thickness: 1),
+                    const SizedBox(height: 12),
+
+                    /// KYC
+                    _buildKycSection(),
+                    const SizedBox(height: 12),
+
+                    /// Rewards + Refer - UNCOMMENTED
+                    Row(
+                      children: [
+                        Expanded(child: _buildRewardsContainer()),
+                        const SizedBox(
+                          width: 8,
+                        ), // Add spacing between containers
+                        Expanded(child: _buildReferFriendContainer()),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    /// Manage Section
+                    const Text(
+                      "Manage",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-
+                    const SizedBox(height: 8),
+                    _buildActionTile(
+                      "assets/images/personal_Info.png",
+                      "Personal info",
+                      () {},
+                    ),
+                    _buildActionTile(
+                      "assets/images/account.png",
+                      "Accounts",
+                      () {},
+                    ),
                     const SizedBox(height: 20),
 
-                    // 🔹 Sections
-                    _buildSection("Personal Info", [
-                      _buildTile(Icons.phone, "Mobile Number", "9876543210"),
-                      _buildTile(Icons.email, "Email ID", "user@example.com"),
-                      _buildTile(
-                        Icons.home,
-                        "Address",
-                        "Street, District, State, Pincode",
+                    /// Support & Legal Section
+                    const Text(
+                      "Support & Manage",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ]),
-
-                    _buildSection("Documents", [
-                      _buildTile(
-                        Icons.badge,
-                        "Aadhaar Number",
-                        "XXXX-XXXX-XXXX",
-                      ),
-                      _buildTile(Icons.upload, "Aadhaar Upload", "aadhaar.pdf"),
-                      _buildTile(Icons.credit_card, "PAN Number", "ABCDE1234F"),
-                      _buildTile(Icons.upload, "PAN Upload", "pan.pdf"),
-                    ]),
-
-                    _buildSection("Bank Details", [
-                      _buildTile(
-                        Icons.account_balance,
-                        "Bank Account",
-                        "SBI Bank - 1234567890",
-                      ),
-                      _buildTile(
-                        Icons.upload,
-                        "Cancelled Cheque",
-                        "cheque.jpg",
-                      ),
-                    ]),
-
-                    _buildSection("Other", [
-                      _buildTile(Icons.person, "Nominee", "Suresh Kumar"),
-                      _buildTile(
-                        Icons.location_on,
-                        "Geo Location",
-                        "26.9124° N, 75.7873° E",
-                      ),
-                      _buildTile(Icons.camera_alt, "Live Photo", "selfie.jpg"),
-                      _buildTile(Icons.check_circle, "T&C Accepted", "Yes"),
-                      _buildTile(Icons.computer, "IP Address", "192.168.1.1"),
-                    ]),
-
-                    // 🔹 New Section: More Options
-                    _buildSection("More Options", [
-                      _buildActionTile(
-                        Icons.help_outline,
-                        "Help & Support",
-                        () {
-                          // TODO: Navigate to Help screen
-                        },
-                      ),
-                      _buildActionTile(Icons.info_outline, "About Us", () {
-                        // TODO: Navigate to About screen
-                      }),
-                      _buildActionTile(
-                        Icons.privacy_tip_outlined,
-                        "Privacy Policy",
-                        () {
-                          // TODO: Navigate to Privacy Policy screen
-                        },
-                      ),
-                    ]),
-
-                    const SizedBox(height: 20),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildActionTile("assets/images/help.png", "Help", () {}),
+                    _buildActionTile(
+                      "assets/images/report.png",
+                      "Report",
+                      () {},
+                    ),
+                    _buildActionTile(
+                      "assets/images/security.png",
+                      "Security",
+                      () {},
+                    ),
+                    _buildActionTile(
+                      "assets/images/grivencePolicy.png",
+                      "Grievance Policy",
+                      () {},
+                    ),
+                    _buildActionTile(
+                      "assets/images/privacy_policy.png",
+                      "Privacy Policy",
+                      () {},
+                    ),
+                    _buildActionTile(
+                      "assets/images/about_us.png",
+                      "About us",
+                      () {},
+                    ),
+                    const SizedBox(height: 80), // Space for bottom navigation
                   ],
                 ),
               ),
@@ -151,51 +120,260 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// 🔹 Custom App Bar
+  /// Profile - UNCHANGED
+  Widget _buildProfile() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          /// Left: Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Vinod Sain",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  "6547893210",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  "vinod@123",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          /// Right: Profile Image + QR
+          Obx(
+            () => Stack(
+              clipBehavior: Clip.none,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: (controller.image_url.value).isNotEmpty
+                      ? NetworkImage(controller.image_url.value)
+                      : const AssetImage(
+                              "assets/images/profile_placeholder.png",
+                            )
+                            as ImageProvider,
+                ),
+                Positioned(
+                  bottom: -15,
+                  right: 0,
+                  child: Image.asset(
+                    "assets/images/qr_image.png",
+                    height: 40,
+                    width: 40,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// KYC - UNCHANGED
+  Widget _buildKycSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.blue_shade,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+            child: SvgPicture.asset("assets/icons/solar_shield-star-bold.svg"),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Complete KYC",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "Unlock your wallet",
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[600],
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text("Start now"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Rewards - UNCHANGED
+  Widget _buildRewardsContainer() {
+    return Container(
+      width: double.infinity, // Ensure container takes full available width
+      decoration: BoxDecoration(
+        color: Colors.purple.shade50,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        // Changed from Row to Column for better layout
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SvgPicture.asset(
+            "assets/icons/material-symbols_cards-star-outline (1).svg",
+          ),
+          const SizedBox(width: 20),
+          Column(
+            children: [
+              Text(
+                "20 rewards",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
+              ),
+              Text(
+                "View now",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Refer Friend - UNCHANGED
+  Widget _buildReferFriendContainer() {
+    return Container(
+      width: double.infinity, // Ensure container takes full available width
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        // Changed from Row to Column for better layout
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SvgPicture.asset(
+            "assets/icons/material-symbols_contacts-product.svg",
+          ),
+          const SizedBox(height: 20),
+
+          Column(
+            children: [
+              Text(
+                "Get ₹201",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.blue_text,
+                ),
+              ),
+              Text(
+                "refer a friend",
+                style: TextStyle(fontSize: 14, color: AppColors.blue_text),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Custom AppBar - UNCHANGED
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       expandedHeight: 60,
       floating: true,
-      pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      centerTitle: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
           ),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Stack(
+              alignment: Alignment.center,
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Builder(
+                    builder: (context) {
+                      return _buildAppBarIcon(Icons.menu, () {
+                        Scaffold.of(context).openDrawer();
+                      });
+                    },
+                  ),
+                ),
                 const Text(
                   "Profile",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    letterSpacing: 0.5,
                   ),
                 ),
-                Row(
-                  children: [
-                    _buildAppBarIcon(Icons.edit, () {
-                      // TODO: Edit Profile action
-                    }),
-                    const SizedBox(width: 10),
-                    _buildAppBarIcon(Icons.logout, () {
-                    }),
-                  ],
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: _buildAppBarIcon(Icons.more_vert, () {}),
                 ),
               ],
             ),
@@ -205,7 +383,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// 🔹 AppBar Icon
+  /// AppBar Icon - UNCHANGED
   Widget _buildAppBarIcon(IconData icon, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
@@ -220,74 +398,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// 🔹 Section with title
-  Widget _buildSection(String title, List<Widget> children) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
+  /// Action Tile - UNCHANGED
+  Widget _buildActionTile(String icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Image.asset(icon, height: 30, width: 20),
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-            ),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
-          ...children,
+
+          Divider(color: Colors.blueGrey.shade200, thickness: 0.2),
         ],
       ),
-    );
-  }
 
-  /// 🔹 Profile Info Tile
-  Widget _buildTile(IconData icon, String title, String subtitle) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(fontSize: 13, color: Colors.grey),
-      ),
-    );
-  }
-
-  /// 🔹 Action Tile (navigations like Help, About, Privacy Policy)
-  Widget _buildActionTile(IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-      ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: Colors.grey,
-      ),
       onTap: onTap,
     );
   }
+
+  /// NEW METHODS - Bottom Navigation and Floating Button
 }

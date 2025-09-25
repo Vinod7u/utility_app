@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:utility_app_flutter/screens/home/retailerSection/service_management.dart';
 import 'package:utility_app_flutter/screens/home/retailerSection/view_plans.dart';
+import 'package:utility_app_flutter/screens/home/usersection/pay_in_transection_report.dart';
 import 'package:utility_app_flutter/utils/Constants/screen_size.dart';
 
 import '../../../utils/Constants/app_colors.dart';
@@ -23,43 +24,41 @@ class _MyDrawerState extends State<MyDrawer> {
       width: ScreenSize.width * .8,
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 50,),
-            Icon(Icons.arrow_back_outlined,color: Colors.black,size: 32,),
+            SizedBox(height: 50),
+            Icon(Icons.arrow_back_outlined, color: Colors.black, size: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  shape: BoxShape.circle
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.perm_identity),
+                  ),
                 ),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.perm_identity),
-                ),
-              ),
-                SizedBox(width: 20,),
+                SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Saurav'),
-                    Text('Retailer'),
-                  ],
+                  children: [Text('Saurav'), Text('Retailer')],
                 ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * .02,vertical: 10),
-              child: Image.asset('assets/images/image 57.png',),
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenSize.width * .02,
+                vertical: 10,
+              ),
+              child: Image.asset('assets/images/image 57.png'),
             ),
             //SizedBox(height: 60,),
             ListTile(
@@ -80,7 +79,10 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
             ExpansionTile(
               showTrailingIcon: false,
-              leading: SvgPicture.asset('assets/icons/Vector (2).svg', color: AppColors.textColor),
+              leading: SvgPicture.asset(
+                'assets/icons/Vector (2).svg',
+                color: AppColors.textColor,
+              ),
               title: Row(
                 children: [
                   Text(
@@ -90,15 +92,23 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: ScreenSize.width * .06,),
-                  Icon(Icons.arrow_forward_ios,size: 14,color: AppColors.textColor,)
+                  SizedBox(width: ScreenSize.width * .06),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textColor,
+                  ),
                 ],
               ),
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent), // no divider when expanded
+                side: BorderSide(
+                  color: Colors.transparent,
+                ), // no divider when expanded
                 borderRadius: BorderRadius.circular(0),
               ),
-              childrenPadding: EdgeInsets.only(left: 40), // optional: padding for children
+              childrenPadding: EdgeInsets.only(
+                left: 40,
+              ), // optional: padding for children
               children: [
                 ListTile(
                   title: Text(
@@ -108,7 +118,10 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/carbon_data-view.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/carbon_data-view.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
                     Get.to(ViewPlans());
                   },
@@ -121,9 +134,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/akar-icons_wallet.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/akar-icons_wallet.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
-                   // Navigator.pop(context);
+                    // Navigator.pop(context);
                     // Navigate to Plan 2 page
                   },
                 ),
@@ -133,7 +149,10 @@ class _MyDrawerState extends State<MyDrawer> {
 
             ExpansionTile(
               showTrailingIcon: false,
-              leading: SvgPicture.asset('assets/icons/Vector (3).svg', color: AppColors.textColor),
+              leading: SvgPicture.asset(
+                'assets/icons/Vector (3).svg',
+                color: AppColors.textColor,
+              ),
               title: Row(
                 children: [
                   Text(
@@ -143,15 +162,23 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: ScreenSize.width * .06,),
-                  Icon(Icons.arrow_forward_ios,size: 14,color: AppColors.textColor,)
+                  SizedBox(width: ScreenSize.width * .06),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textColor,
+                  ),
                 ],
               ),
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent), // no divider when expanded
+                side: BorderSide(
+                  color: Colors.transparent,
+                ), // no divider when expanded
                 borderRadius: BorderRadius.circular(0),
               ),
-              childrenPadding: EdgeInsets.only(left: 40), // optional: indent for children
+              childrenPadding: EdgeInsets.only(
+                left: 40,
+              ), // optional: indent for children
               children: [
                 ListTile(
                   title: Text(
@@ -161,10 +188,14 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/icon-park-outline_people-plus-one.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/icon-park-outline_people-plus-one.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
-                    Navigator.pop(context);
-                    // Navigate to Today’s Report page
+                    Get.to(
+                      () => PayinTransactionScreen(),
+                    ); // Navigate to Today’s Report page
                   },
                 ),
                 ListTile(
@@ -175,7 +206,10 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/icon-park-twotone_people-download.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/icon-park-twotone_people-download.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     // Navigate to Weekly Report page
@@ -200,10 +234,15 @@ class _MyDrawerState extends State<MyDrawer> {
             ExpansionTile(
               showTrailingIcon: false,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent), // no divider when expanded
+                side: BorderSide(
+                  color: Colors.transparent,
+                ), // no divider when expanded
                 borderRadius: BorderRadius.circular(0),
               ),
-              leading: SvgPicture.asset('assets/icons/akar-icons_info.svg', color: AppColors.textColor),
+              leading: SvgPicture.asset(
+                'assets/icons/akar-icons_info.svg',
+                color: AppColors.textColor,
+              ),
               title: Row(
                 children: [
                   Text(
@@ -213,11 +252,17 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: ScreenSize.width * .06,),
-                  Icon(Icons.arrow_forward_ios,size: 14,color: AppColors.textColor,)
+                  SizedBox(width: ScreenSize.width * .06),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textColor,
+                  ),
                 ],
               ),
-              childrenPadding: EdgeInsets.only(left: 40), // optional: indent for children
+              childrenPadding: EdgeInsets.only(
+                left: 40,
+              ), // optional: indent for children
               children: [
                 ListTile(
                   title: Text(
@@ -227,7 +272,10 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/la_hand-paper-solid.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/la_hand-paper-solid.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     // Navigate to Customer Enquiry page
@@ -238,10 +286,15 @@ class _MyDrawerState extends State<MyDrawer> {
             ExpansionTile(
               showTrailingIcon: false,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent), // no divider when expanded
+                side: BorderSide(
+                  color: Colors.transparent,
+                ), // no divider when expanded
                 borderRadius: BorderRadius.circular(0),
               ),
-              leading: SvgPicture.asset('assets/icons/icon-park_funds.svg', color: AppColors.textColor),
+              leading: SvgPicture.asset(
+                'assets/icons/icon-park_funds.svg',
+                color: AppColors.textColor,
+              ),
               title: Row(
                 children: [
                   Text(
@@ -251,11 +304,17 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: ScreenSize.width * .06,),
-                  Icon(Icons.arrow_forward_ios,size: 14,color: AppColors.textColor,)
+                  SizedBox(width: ScreenSize.width * .06),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: AppColors.textColor,
+                  ),
                 ],
               ),
-              childrenPadding: EdgeInsets.only(left: 40), // optional indentation for children
+              childrenPadding: EdgeInsets.only(
+                left: 40,
+              ), // optional indentation for children
               children: [
                 ListTile(
                   title: Text(
@@ -265,7 +324,10 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  leading: SvgPicture.asset('assets/icons/carbon_request-quote.svg', color: AppColors.textColor),
+                  leading: SvgPicture.asset(
+                    'assets/icons/carbon_request-quote.svg',
+                    color: AppColors.textColor,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     // Navigate to Fund History page
@@ -317,7 +379,7 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
