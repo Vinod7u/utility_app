@@ -154,7 +154,7 @@ class _UserTrasectionHistoryScreenState
                 Text(
                   "History",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 0.5,

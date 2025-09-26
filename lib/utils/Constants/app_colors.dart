@@ -26,6 +26,10 @@ class AppColors {
 
   static const Color containerBack = Color(0xFFEDF9FF);
   static const Color bottomSheetColor = Color(0xFF72CBF7);
+  static const Color lightColor = Color(0xFFD5EFFD);
+  static const Color darkColor = Color(0xFF1576AD);
+
+
   static const Color blue_shade = Color(0xffEDF9FF);
   static const Color blue_text = Color(0xff3C889D);
 }

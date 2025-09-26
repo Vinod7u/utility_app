@@ -3,11 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:utility_app_flutter/screens/home/retailerSection/service_management.dart';
+import 'package:utility_app_flutter/screens/home/usersection/view_plans.dart';
+import 'package:utility_app_flutter/screens/home/usersection/fund_request.dart';
 import 'package:utility_app_flutter/screens/home/retailerSection/view_plans.dart';
 import 'package:utility_app_flutter/screens/home/usersection/pay_in_transection_report.dart';
 import 'package:utility_app_flutter/utils/Constants/screen_size.dart';
 
 import '../../../utils/Constants/app_colors.dart';
+import '../usersection/bbps_report.dart';
+import '../usersection/enquiry_form.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -29,6 +33,21 @@ class _MyDrawerState extends State<MyDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 50,),
+            IconButton(onPressed: (){
+              Scaffold.of(context).closeDrawer();
+            }, icon: Icon(Icons.arrow_back_outlined,color: Colors.black,size: 32,),),
+
+            SizedBox(height: 6,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+               // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    shape: BoxShape.circle
             SizedBox(height: 50),
             Icon(Icons.arrow_back_outlined, color: Colors.black, size: 32),
             Row(
@@ -42,6 +61,24 @@ class _MyDrawerState extends State<MyDrawer> {
                   child: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
+                    child: Icon(Icons.person),
+                  ),
+                ),
+                  SizedBox(width: 20,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Saurav'),
+                      Text('Retailer'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * .04,vertical: 10),
+              child: Image.asset('assets/images/image 57.png',),
                     child: Icon(Icons.perm_identity),
                   ),
                 ),
@@ -277,7 +314,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     color: AppColors.textColor,
                   ),
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.to(()=> EnquiryFormView());
                     // Navigate to Customer Enquiry page
                   },
                 ),
@@ -329,8 +366,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     color: AppColors.textColor,
                   ),
                   onTap: () {
-                    Navigator.pop(context);
-                    // Navigate to Fund History page
+                    Get.to(()=> FundRequestView());
                   },
                 ),
               ],
@@ -346,7 +382,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Get.to(()=> BBPSReportView());
               },
             ),
             ListTile(
