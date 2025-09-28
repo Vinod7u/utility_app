@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppColors.primaryC, AppColors.primary],
+            colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
           ),
         ),
         child: SafeArea(
@@ -38,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Container(
                   width: 120,
                   height: 120,
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(30),
@@ -58,32 +59,15 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  'Your one-stop solution for all utility services',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white.withOpacity(0.9),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 50),
-                ElevatedButton(
-                  onPressed: () {
-
-                    Get.offAll(() => Login());
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: AppColors.primary,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Get Started',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    'Your one-stop solution for all utility services',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],

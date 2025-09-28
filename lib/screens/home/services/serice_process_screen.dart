@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/service_process_screen_controller.dart';
+import 'package:utility_app_flutter/screens/home/services/bill_detail_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class SericeProcessScreen extends StatefulWidget {
   final String service;
@@ -146,8 +148,57 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
+
+            // Replace your existing submit button's onPressed method with this:
             onPressed: () {
-              // 🔹 TODO: send formData to API
+              // Collect form data
+              Map<String, dynamic> formData = {};
+
+              // Collect text field data
+              controller.textControllers.forEach((key, textController) {
+                formData[key] = textController.text;
+              });
+
+              // Collect dropdown data
+              controller.selectedValues.forEach((key, rxString) {
+                formData[key] = rxString.value;
+              });
+
+              // Validate required fields (optional)
+              bool isValid = true;
+              String missingFields = '';
+
+              controller.fields.forEach((field) {
+                if (field.type == "text") {
+                  if (controller.textControllers[field.label]!.text.isEmpty) {
+                    isValid = false;
+                    missingFields += '${field.label}, ';
+                  }
+                } else if (field.type == "dropdown") {
+                  if (controller.selectedValues[field.label]!.value.isEmpty) {
+                    isValid = false;
+                    missingFields += '${field.label}, ';
+                  }
+                }
+              });
+
+              if (!isValid) {
+                showSnackBar(
+                  title: "Error",
+                  message:
+                      "Please fill all required fields: ${missingFields.substring(0, missingFields.length - 2)}",
+                );
+
+                return;
+              }
+
+              // Navigate to Bill Details Screen
+              Get.to(
+                () => BillDetailsScreen(
+                  serviceName: widget.service,
+                  formData: formData,
+                ),
+              );
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -178,7 +229,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.serice_card_color_first,
+            color: AppColors.textColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -202,7 +253,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(
-                color: AppColors.serice_card_color_second,
+                color: AppColors.textColor,
                 width: 2,
               ),
             ),
@@ -233,7 +284,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColors.serice_card_color_first,
+              color: AppColors.textColor,
             ),
           ),
           const SizedBox(height: 10),

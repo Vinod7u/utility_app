@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_profile_controller.dart';
-import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
+import 'package:utility_app_flutter/screens/home/usersection/aboutus_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/grievancy_policy.dart';
+import 'package:utility_app_flutter/screens/home/usersection/privacy_policy_screen.dart';
+import 'package:utility_app_flutter/widgets/drawer.dart';
+import 'package:utility_app_flutter/screens/home/usersection/personal_info_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/security_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_account_info_screen.dart';
+import 'package:utility_app_flutter/screens/home/usersection/user_help_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
 
@@ -18,104 +25,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      backgroundColor: AppColors.off_white,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            _buildCustomAppBar(),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// Profile Card
-                    _buildProfile(),
-                    const SizedBox(height: 12),
-                    Divider(color: Colors.blueGrey.shade200, thickness: 1),
-                    const SizedBox(height: 12),
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          _buildCustomAppBar(),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// Profile Card
+                  _buildProfile(),
+                  const SizedBox(height: 12),
+                  Divider(color: Colors.blueGrey.shade200, thickness: 1),
+                  const SizedBox(height: 12),
 
-                    /// KYC
-                    _buildKycSection(),
-                    const SizedBox(height: 12),
+                  /// KYC
+                  _buildKycSection(),
+                  const SizedBox(height: 12),
 
-                    /// Rewards + Refer - UNCOMMENTED
-                    Row(
-                      children: [
-                        Expanded(child: _buildRewardsContainer()),
-                        const SizedBox(
-                          width: 8,
-                        ), // Add spacing between containers
-                        Expanded(child: _buildReferFriendContainer()),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
+                  /// Rewards + Refer - UNCOMMENTED
+                  Row(
+                    children: [
+                      Expanded(child: _buildRewardsContainer()),
+                      const SizedBox(
+                        width: 8,
+                      ), // Add spacing between containers
+                      Expanded(child: _buildReferFriendContainer()),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
 
-                    /// Manage Section
-                    const Text(
-                      "Manage",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _buildActionTile(
-                      "assets/images/personal_Info.png",
-                      "Personal info",
-                      () {},
-                    ),
-                    _buildActionTile(
-                      "assets/images/account.png",
-                      "Accounts",
-                      () {},
-                    ),
-                    const SizedBox(height: 20),
+                  /// Manage Section
+                  const Text(
+                    "Manage",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildActionTile(
+                    "assets/images/personal_Info.png",
+                    "Personal info",
+                    () {
+                      Get.to(() => PersonalInfoScreen());
+                    },
+                  ),
+                  _buildActionTile("assets/images/account.png", "Accounts", () {
+                    Get.to(() => UserAccountInfoScreen());
+                  }),
+                  const SizedBox(height: 20),
 
-                    /// Support & Legal Section
-                    const Text(
-                      "Support & Manage",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _buildActionTile("assets/images/help.png", "Help", () {}),
-                    _buildActionTile(
-                      "assets/images/report.png",
-                      "Report",
-                      () {},
-                    ),
-                    _buildActionTile(
-                      "assets/images/security.png",
-                      "Security",
-                      () {},
-                    ),
-                    _buildActionTile(
-                      "assets/images/grivencePolicy.png",
-                      "Grievance Policy",
-                      () {},
-                    ),
-                    _buildActionTile(
-                      "assets/images/privacy_policy.png",
-                      "Privacy Policy",
-                      () {},
-                    ),
-                    _buildActionTile(
-                      "assets/images/about_us.png",
-                      "About us",
-                      () {},
-                    ),
-                    const SizedBox(height: 80), // Space for bottom navigation
-                  ],
-                ),
+                  /// Support & Legal Section
+                  const Text(
+                    "Support & Manage",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildActionTile("assets/images/help.png", "Help", () {
+                    Get.to(() => UserHelpScreen());
+                  }),
+                  _buildActionTile("assets/images/report.png", "Report", () {}),
+                  _buildActionTile(
+                    "assets/images/security.png",
+                    "Security",
+                    () {
+                      Get.to(() => SecurityScreen());
+                    },
+                  ),
+                  _buildActionTile(
+                    "assets/images/grivencePolicy.png",
+                    "Grievance Policy",
+                    () {
+                      Get.to(() => GrievancePolicyScreen());
+                    },
+                  ),
+                  _buildActionTile(
+                    "assets/images/privacy_policy.png",
+                    "Privacy Policy",
+                    () {
+                      Get.to(() => PrivacyPolicyScreen());
+                    },
+                  ),
+                  _buildActionTile(
+                    "assets/images/about_us.png",
+                    "About us",
+                    () {
+                      Get.to(() => AboutUsScreen());
+                    },
+                  ),
+                  const SizedBox(height: 80), // Space for bottom navigation
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -391,7 +394,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
+          shape: BoxShape.circle,
         ),
         child: Icon(icon, color: Colors.white, size: 18),
       ),

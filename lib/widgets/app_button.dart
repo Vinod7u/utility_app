@@ -16,7 +16,7 @@ Widget appButton({required String title, required VoidCallback onTap}) {
       child: Ink(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.new_blue, AppColors.primary],
+            colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

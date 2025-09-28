@@ -7,7 +7,7 @@ void showSnackBar({required String title, required String message}) {
     title,
     message,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: AppColors.primaryC,
+    backgroundColor: AppColors.appbarsecondColor,
     colorText: Colors.white,
     margin: const EdgeInsets.all(12),
     borderRadius: 8,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
+import 'package:utility_app_flutter/widgets/drawer.dart';
 import 'package:utility_app_flutter/screens/home/usersection/profile_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/scanner_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/service_screen.dart';
@@ -41,13 +42,17 @@ class _UserHomePageState extends State<UserHomePage> {
 
     return Obx(
       () => Scaffold(
-        backgroundColor: Colors.white,
+        drawer: MyDrawer(),
+        backgroundColor: AppColors.off_white,
         body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 100),
           transitionBuilder: (child, animation) {
             return ScaleTransition(
               scale: Tween<double>(begin: 0.9, end: 1.0).animate(
-                CurvedAnimation(parent: animation, curve: Curves.linear),
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.linearToEaseOut,
+                ),
               ),
               child: child,
             );
@@ -131,7 +136,7 @@ class _UserHomePageState extends State<UserHomePage> {
             child: const Icon(
               Icons.qr_code_scanner_outlined,
               color: Colors.white,
-              size: 36, 
+              size: 36,
             ),
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class DistributorRegister extends StatefulWidget {
@@ -33,8 +34,9 @@ class _DistributorRegisterState extends State<DistributorRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.off_white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         leading: stepIndex.value > 0
             ? InkWell(
                 onTap: () {
@@ -49,7 +51,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
             : null,
         centerTitle: true,
         title: const Text("Distributor Register"),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.off_white,
         automaticallyImplyLeading: false,
       ),
       body: Obx(
@@ -90,7 +92,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: stepIndex.value >= index
-                    ? AppColors.primary
+                    ? AppColors.new_blue
                     : Colors.grey.shade300,
               ),
             ),
@@ -124,35 +126,46 @@ class _DistributorRegisterState extends State<DistributorRegister> {
       step: 0,
       children: [
         _buildTextField(
+          icon: Icons.person,
           controller: controller.fullNameController,
           label: "Name",
           hint: "Enter name",
         ),
         _buildTextField(
+          icon: Icons.email,
+
           controller: controller.emailController,
           label: "Email",
           hint: "Enter Email",
         ),
 
         _buildTextField(
+          icon: Icons.mobile_friendly,
+
           controller: controller.mobileController,
           label: "Mobile Number",
           hint: "Enter Mobile Number",
         ),
 
         _buildTextField(
+          icon: Icons.password,
+
           controller: controller.mpinController,
           label: "Mpin",
           hint: "Enter Mpin",
         ),
 
         _buildTextField(
+          icon: Icons.lock,
+
           controller: controller.passwordController,
           label: "Password",
           hint: "Enter Password",
         ),
 
         _buildTextField(
+          icon: Icons.lock,
+
           controller: controller.confirmPasswordController,
           label: "Confirm Password",
           hint: "Enter Confirm Password",
@@ -169,16 +182,22 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         SizedBox(height: 20),
 
         _buildTextField(
+          icon: Icons.question_answer,
+
           controller: controller.question1Controller,
           label: "How many total retailers?",
           hint: "",
         ),
         _buildTextField(
+          icon: Icons.question_answer,
+
           controller: controller.question2Controller,
           label: "In present partnership with which company?",
           hint: "",
         ),
         _buildTextField(
+          icon: Icons.question_answer,
+
           controller: controller.question3Controller,
           label: "District in which want to become distributor?",
           hint: "",
@@ -195,12 +214,16 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         SizedBox(height: 20),
 
         _buildTextField(
+          icon: Icons.business,
+
           controller: controller.businessName,
           label: "Business Name",
           hint: "Enter business name",
         ),
 
         _buildTextField(
+          icon: Icons.business,
+
           controller: controller.businessType,
           label: "Business Tye",
           hint: "Enter business type",
@@ -225,8 +248,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         ),
 
         _buildUploadTile(
-          title:
-              " Office/Shop Address Proof (electricity bill/rent agreement) *",
+          title: " Office Address Proof(electricity bill/rent agreement)",
           fileObs: controller.addressProof,
           onTap: () {
             controller.pickFile(controller.addressProof);
@@ -244,22 +266,30 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         SizedBox(height: 20),
 
         _buildTextField(
+          icon: Icons.person,
+
           controller: controller.referencePerson1Name,
           label: "First Reference Person Name ",
           hint: "",
         ),
 
         _buildTextField(
+          icon: Icons.mobile_friendly_outlined,
+
           controller: controller.referencePerson1Mobile,
           label: "First Reference Person Mobile ",
           hint: "",
         ),
         _buildTextField(
+          icon: Icons.person,
+
           controller: controller.referencePerson2name,
           label: "Second Reference Person Name ",
           hint: "",
         ),
         _buildTextField(
+          icon: Icons.mobile_friendly,
+
           controller: controller.referencePerson2Mobile,
           label: "Second Reference Person Mobile ",
           hint: "",
@@ -276,12 +306,16 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         SizedBox(height: 20),
 
         _buildTextField(
+          icon: Icons.question_answer,
+
           controller: controller.qualificationController,
           label: "Education/Qualification (optional)",
           hint: "",
         ),
 
         _buildTextField(
+          icon: Icons.question_answer,
+
           controller: controller.experienceController,
           label: "Experience in Financial Services (years) *",
           hint: "",
@@ -298,34 +332,46 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         SizedBox(height: 20),
 
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.pincodeController,
           label: "PinCode",
           hint: "Enter PinCode",
           maxLength: 6,
         ),
         _buildTextField(
+          icon: Icons.location_history,
+
           controller: controller.blockController,
           label: "Block",
           hint: "Enter block name",
         ),
         _buildTextField(
+          icon: Icons.location_history,
+
           controller: controller.countryController,
           label: "Country",
           hint: "Enter Country name",
         ),
 
         _buildTextField(
+          icon: Icons.location_history,
+
           controller: controller.stateController,
           label: "State",
           hint: "Enter state Name",
         ),
         _buildTextField(
+          icon: Icons.location_history,
+
           controller: controller.cityController,
           label: "City",
           hint: "Enter City Name",
         ),
 
         _buildTextField(
+          icon: Icons.location_history,
+
           controller: controller.fullAddressController,
           label: "Enter Full Address",
           hint: "Enter full address",
@@ -358,6 +404,8 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         ),
         const SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.person,
+
           controller: controller.aadhaarController,
           label: "Aadhaar Number",
           maxLength: 12,
@@ -366,9 +414,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         const SizedBox(height: 10),
         Obx(
           () => controller.isOtpSending.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Send Otp',
                   onTap: () async {
@@ -386,15 +432,15 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         const SizedBox(height: 10),
         if (controller.isOtpVerifying.value) ...[
           _buildTextField(
+            icon: Icons.output,
+
             controller: controller.aadharOtpController,
             label: "Otp",
             hint: "Enter Otp",
           ),
           Obx(
             () => controller.isOtpVerifying.value
-                ? Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryC),
-                  )
+                ? Center(child: appLoader())
                 : appButton(
                     title: 'Verify Otp',
                     onTap: () async {
@@ -421,11 +467,15 @@ class _DistributorRegisterState extends State<DistributorRegister> {
       step: 3,
       children: [
         _buildTextField(
+          icon: Icons.numbers,
+
           controller: controller.bankAccountController,
           label: "Account Number",
           hint: "Enter bank account number",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.ifscController,
           label: "IFSC Code",
           hint: "Enter IFSC code",
@@ -433,9 +483,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         const SizedBox(height: 12),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Verify Bank',
                   onTap: () async {
@@ -469,15 +517,15 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         ),
         const SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.info,
+
           controller: controller.panController,
           label: "PAN Card Number",
           hint: "Enter PAN number",
         ),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Verify Pan',
                   onTap: () async {
@@ -527,9 +575,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
         const SizedBox(height: 12),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Submit KYC',
                   onTap: () async {
@@ -590,6 +636,8 @@ class _DistributorRegisterState extends State<DistributorRegister> {
 
   /// TextField builder
   Widget _buildTextField({
+    required IconData icon,
+
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -606,7 +654,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF374151),
+              color: AppColors.textColor,
             ),
           ),
           const SizedBox(height: 8),
@@ -616,7 +664,10 @@ class _DistributorRegisterState extends State<DistributorRegister> {
             maxLength: maxLength,
             decoration: InputDecoration(
               hintText: hint,
+              counterText: "",
+              hintStyle: TextStyle(fontSize: 12),
               filled: true,
+              prefixIcon: Icon(icon, color: AppColors.textColor),
               fillColor: const Color(0xFFf9fafb),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -676,7 +727,7 @@ class _DistributorRegisterState extends State<DistributorRegister> {
                     fileObs.value == null ? title : "Re-upload",
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ],
