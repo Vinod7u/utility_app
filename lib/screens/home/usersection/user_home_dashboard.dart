@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_home_controller.dart';
+import 'package:utility_app_flutter/screens/home/services/fasttag/fasttag_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/loans_services_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/recharge/mobile_recharge_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/scanner_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/serice_process_screen.dart';
@@ -114,7 +116,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'label': 'AEPS Payout',
                     'hasContainer': true,
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => FasttagScreen(),
                     ),
                   },
                   {
@@ -122,7 +124,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'label': 'Normal DMT',
                     'hasContainer': true,
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'AEPS Transaction'),
+                      () => ServiceProcessScreen(service: 'AEPS Transaction'),
                     ),
                   },
                   {
@@ -130,7 +132,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'label': 'Express DMT',
                     'hasContainer': true,
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'BBPS Transaction'),
+                      () => ServiceProcessScreen(service: 'BBPS Transaction'),
                     ),
                   },
                 ]),
@@ -139,27 +141,27 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': "assets/images/earth_13849445.png",
                     'label': 'DTH',
                     'onTap': () =>
-                        Get.to(() => SericeProcessScreen(service: 'DTH')),
+                        Get.to(() => ServiceProcessScreen(service: 'DTH')),
                   },
                   {
                     'image': "assets/images/atm-card_8739601.png",
                     'label': 'Credit Card',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'Credit Card'),
+                      () => ServiceProcessScreen(service: 'Credit Card'),
                     ),
                   },
                   {
                     'image': "assets/images/electricity_9746766.png",
                     'label': 'Electricity',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'Electricity'),
+                      () => ServiceProcessScreen(service: 'Electricity'),
                     ),
                   },
                   {
                     'image': "assets/images/payment_11703536.png",
                     'label': 'Mobile Recharge',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'Mobile Recharge'),
+                      () => MobileRechargeScreen(),
                     ),
                   },
                 ], showoffer: true),
@@ -171,28 +173,28 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.aeps,
                     'label': 'AEPS',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.ministatement,
                     'label': 'Mini Statement',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.aadharpay,
                     'label': 'AAdhar Pay',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.creditcard,
                     'label': 'Micro Atm',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                 ]),
@@ -201,28 +203,28 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.school,
                     'label': 'Bus',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.train,
                     'label': 'Train',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.building,
                     'label': 'Hotel',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.flight,
                     'label': 'Flight',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                 ], showoffer: true),
@@ -263,21 +265,21 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.car,
                     'label': 'Car Insurence',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.bike,
                     'label': 'Bike Insurence',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.home,
                     'label': 'LCB',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
 
@@ -285,7 +287,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.car,
                     'label': 'Instant Loan',
                     'onTap': () => Get.to(
-                      () => SericeProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(service: 'DMT Transaction'),
                     ),
                   },
                 ]),

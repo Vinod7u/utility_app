@@ -23,4 +23,9 @@ class Appimage {
   static const String fund = "assets/new_images/fund_drawer.png";
   static const String bbps_report = "assets/new_images/bbps.png";
   static const String all_services = "assets/new_images/setting.png";
+  static const String sbi = "assets/new_images/sbi.png";
+  static const String idfc = "assets/new_images/idfc.png";
+  static const String icici = "assets/new_images/icici.png";
+  static const String hsbc = "assets/new_images/hsbc.png";
+  static const String hdfc = "assets/new_images/hdfc.png";
 }

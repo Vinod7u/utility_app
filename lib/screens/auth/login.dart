@@ -44,12 +44,7 @@ class _LoginState extends State<Login> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.appbarFirstColor,
-                        AppColors.appbarsecondColor,
-                      ],
-                    ),
+                   color: AppColors.darkColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(Icons.person_2, color: Colors.white, size: 40),

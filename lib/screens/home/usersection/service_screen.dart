@@ -107,7 +107,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       final s = controller.services[idx];
                       return _buildServiceTile(
                         onTap: () {
-                          Get.to(() => SericeProcessScreen(service: s.title));
+                          Get.to(() => ServiceProcessScreen(service: s.title));
                         },
                         iconData: s.iconData,
                         serviceName: s.title,
@@ -268,7 +268,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
   /// ---------------- SEARCH RESULT TILE ----------------
   Widget _buildSearchResultTile(Service s) {
     return GestureDetector(
-      onTap: () => Get.to(() => SericeProcessScreen(service: s.title)),
+      onTap: () => Get.to(() => ServiceProcessScreen(service: s.title)),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

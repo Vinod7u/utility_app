@@ -72,10 +72,7 @@ class _LoginselectionState extends State<Loginselection> {
                           "${roleData.role} Login", // Role name from API
                           "Login as ${roleData.role}", // Subtitle
                           Icons.person, // you can map roles -> icons if needed
-                          [
-                            AppColors.appbarFirstColor,
-                            AppColors.appbarsecondColor,
-                          ],
+
                           () {
                             // 🔹 Navigate based on role
                             if (roleData.role?.toLowerCase() == "user") {
@@ -121,7 +118,6 @@ class _LoginselectionState extends State<Loginselection> {
     String title,
     String subtitle,
     IconData icon,
-    List<Color> gradientColors,
     VoidCallback onTap,
   ) {
     return GestureDetector(
@@ -147,7 +143,7 @@ class _LoginselectionState extends State<Loginselection> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: gradientColors),
+                color: AppColors.darkColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Colors.white, size: 24),

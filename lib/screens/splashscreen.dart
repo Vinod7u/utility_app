@@ -22,13 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         width: double.maxFinite,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.appbarFirstColor, AppColors.appbarsecondColor],
-          ),
-        ),
+        decoration: BoxDecoration(color: AppColors.darkColor),
         child: SafeArea(
           child: FadeTransition(
             opacity: controller.fadeAnimation,

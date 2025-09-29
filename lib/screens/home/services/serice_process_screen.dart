@@ -7,15 +7,15 @@ import 'package:utility_app_flutter/screens/home/services/bill_detail_screen.dar
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
-class SericeProcessScreen extends StatefulWidget {
+class ServiceProcessScreen extends StatefulWidget {
   final String service;
-  const SericeProcessScreen({super.key, required this.service});
+  const ServiceProcessScreen({super.key, required this.service});
 
   @override
-  State<SericeProcessScreen> createState() => _SericeProcessScreenState();
+  State<ServiceProcessScreen> createState() => _ServiceProcessScreenState();
 }
 
-class _SericeProcessScreenState extends State<SericeProcessScreen> {
+class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
   final controller = Get.put(ServiceProcessScreenController());
 
   @override
@@ -111,12 +111,12 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           Text(
             "Select Service Provider",
             style: TextStyle(
-              color: AppColors.new_blue,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Divider(color: AppColors.appbarFirstColor),
+          Divider(color: Colors.grey.shade400),
 
           // 🔹 Render Dynamic Fields
           ...controller.fields.map((f) {
@@ -143,7 +143,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           // 🔹 Submit button
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.new_blue,
+              backgroundColor: AppColors.darkColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
