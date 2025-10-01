@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:utility_app_flutter/screens/home/retailerSection/service_management.dart';
 import 'package:utility_app_flutter/screens/home/usersection/view_plans.dart';
 import 'package:utility_app_flutter/screens/home/usersection/fund_request.dart';
-import 'package:utility_app_flutter/screens/home/retailerSection/view_plans.dart';
 import 'package:utility_app_flutter/screens/home/usersection/pay_in_transection_report.dart';
 import 'package:utility_app_flutter/utils/Constants/screen_size.dart';
 
@@ -13,409 +11,246 @@ import '../../../utils/Constants/app_colors.dart';
 import '../usersection/bbps_report.dart';
 import '../usersection/enquiry_form.dart';
 
-class MyDrawer extends StatefulWidget {
+class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
-  @override
-  State<MyDrawer> createState() => _MyDrawerState();
-}
-
-class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
     return Drawer(
-      width: ScreenSize.width * .8,
+      width: ScreenSize.width * 0.8,
       backgroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 50,),
-            IconButton(onPressed: (){
-              Scaffold.of(context).closeDrawer();
-            }, icon: Icon(Icons.arrow_back_outlined,color: Colors.black,size: 32,),),
+            const SizedBox(height: 50),
 
-            SizedBox(height: 6,),
+            // Close button
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () => Scaffold.of(context).closeDrawer(),
+                icon: const Icon(Icons.close, color: Colors.black, size: 32),
+              ),
+            ),
+
+            // Profile Section
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
-               // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    shape: BoxShape.circle
-            SizedBox(height: 50),
-            Icon(Icons.arrow_back_outlined, color: Colors.black, size: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    shape: BoxShape.circle,
-                  ),
-                  child: CircleAvatar(
-                    radius: 20,
+                  CircleAvatar(
+                    radius: 25,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.person),
+                    child: Icon(
+                      Icons.person,
+                      color: AppColors.textColor,
+                      size: 28,
+                    ),
                   ),
-                ),
-                  SizedBox(width: 20,),
+                  const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Saurav'),
-                      Text('Retailer'),
+                    children: const [
+                      Text(
+                        'Saurav',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'Retailer',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textColor,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * .04,vertical: 10),
-              child: Image.asset('assets/images/image 57.png',),
-                    child: Icon(Icons.perm_identity),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('Saurav'), Text('Retailer')],
-                ),
-              ],
-            ),
+
+            // Banner / Image
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenSize.width * .02,
+                horizontal: ScreenSize.width * 0.04,
                 vertical: 10,
               ),
               child: Image.asset('assets/images/image 57.png'),
             ),
-            //SizedBox(height: 60,),
-            ListTile(
-              leading: const Icon(
-                Icons.home_outlined,
-                color: AppColors.textColor,
-              ),
-              title: Text(
-                'Dashboard',
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context); // close drawer
-              },
-            ),
-            ExpansionTile(
-              showTrailingIcon: false,
-              leading: SvgPicture.asset(
-                'assets/icons/Vector (2).svg',
-                color: AppColors.textColor,
-              ),
-              title: Row(
-                children: [
-                  Text(
-                    'Plans Management',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(width: ScreenSize.width * .06),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: AppColors.textColor,
-                  ),
-                ],
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Colors.transparent,
-                ), // no divider when expanded
-                borderRadius: BorderRadius.circular(0),
-              ),
-              childrenPadding: EdgeInsets.only(
-                left: 40,
-              ), // optional: padding for children
-              children: [
-                ListTile(
-                  title: Text(
-                    'View Plans',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/carbon_data-view.svg',
-                    color: AppColors.textColor,
-                  ),
-                  onTap: () {
-                    Get.to(ViewPlans());
-                  },
-                ),
-                ListTile(
-                  title: Text(
-                    'BY Pass Plan',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/akar-icons_wallet.svg',
-                    color: AppColors.textColor,
-                  ),
-                  onTap: () {
-                    // Navigator.pop(context);
-                    // Navigate to Plan 2 page
-                  },
-                ),
-                // Add more sub-items as needed
-              ],
+
+            // Drawer Items
+            _buildListTile(
+              icon: Icons.home_outlined,
+              title: 'Dashboard',
+              onTap: () => Get.back(),
             ),
 
-            ExpansionTile(
-              showTrailingIcon: false,
-              leading: SvgPicture.asset(
-                'assets/icons/Vector (3).svg',
-                color: AppColors.textColor,
-              ),
-              title: Row(
-                children: [
-                  Text(
-                    'Payin Payout Report',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(width: ScreenSize.width * .06),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: AppColors.textColor,
-                  ),
-                ],
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Colors.transparent,
-                ), // no divider when expanded
-                borderRadius: BorderRadius.circular(0),
-              ),
-              childrenPadding: EdgeInsets.only(
-                left: 40,
-              ), // optional: indent for children
+            _buildExpansionTile(
+              iconPath: 'assets/icons/Vector (2).svg',
+              title: 'Plans Management',
               children: [
-                ListTile(
-                  title: Text(
-                    'Payin',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/icon-park-outline_people-plus-one.svg',
-                    color: AppColors.textColor,
-                  ),
-                  onTap: () {
-                    Get.to(
-                      () => PayinTransactionScreen(),
-                    ); // Navigate to Today’s Report page
-                  },
+                _buildListTileSvg(
+                  iconPath: 'assets/icons/carbon_data-view.svg',
+                  title: 'View Plans',
+                  onTap: () => Get.to(() => const ViewPlans()),
                 ),
-                ListTile(
-                  title: Text(
-                    'Payout',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/icon-park-twotone_people-download.svg',
-                    color: AppColors.textColor,
-                  ),
+                _buildListTileSvg(
+                  iconPath: 'assets/icons/akar-icons_wallet.svg',
+                  title: 'BY Pass Plan',
                   onTap: () {
-                    Navigator.pop(context);
-                    // Navigate to Weekly Report page
+                    // TODO: Navigate to BY Pass Plan screen
                   },
                 ),
               ],
             ),
 
-            ListTile(
-              leading: SvgPicture.asset('assets/icons/akar-icons_wallet.svg'),
-              title: const Text(
-                'E-Wallet Report',
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ExpansionTile(
-              showTrailingIcon: false,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Colors.transparent,
-                ), // no divider when expanded
-                borderRadius: BorderRadius.circular(0),
-              ),
-              leading: SvgPicture.asset(
-                'assets/icons/akar-icons_info.svg',
-                color: AppColors.textColor,
-              ),
-              title: Row(
-                children: [
-                  Text(
-                    'Enquiry',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(width: ScreenSize.width * .06),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: AppColors.textColor,
-                  ),
-                ],
-              ),
-              childrenPadding: EdgeInsets.only(
-                left: 40,
-              ), // optional: indent for children
+            _buildExpansionTile(
+              iconPath: 'assets/icons/Vector (3).svg',
+              title: 'Payin Payout Report',
               children: [
-                ListTile(
-                  title: Text(
-                    'Raise Enquiry',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/la_hand-paper-solid.svg',
-                    color: AppColors.textColor,
-                  ),
-                  onTap: () {
-                    Get.to(()=> EnquiryFormView());
-                    // Navigate to Customer Enquiry page
-                  },
+                _buildListTileSvg(
+                  iconPath:
+                  'assets/icons/icon-park-outline_people-plus-one.svg',
+                  title: 'Payin',
+                  onTap: () => Get.to(() => const PayinTransactionScreen()),
                 ),
-              ],
-            ),
-            ExpansionTile(
-              showTrailingIcon: false,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Colors.transparent,
-                ), // no divider when expanded
-                borderRadius: BorderRadius.circular(0),
-              ),
-              leading: SvgPicture.asset(
-                'assets/icons/icon-park_funds.svg',
-                color: AppColors.textColor,
-              ),
-              title: Row(
-                children: [
-                  Text(
-                    'Fund',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(width: ScreenSize.width * .06),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: AppColors.textColor,
-                  ),
-                ],
-              ),
-              childrenPadding: EdgeInsets.only(
-                left: 40,
-              ), // optional indentation for children
-              children: [
-                ListTile(
-                  title: Text(
-                    'Fund Request',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: SvgPicture.asset(
-                    'assets/icons/carbon_request-quote.svg',
-                    color: AppColors.textColor,
-                  ),
+                _buildListTileSvg(
+                  iconPath:
+                  'assets/icons/icon-park-twotone_people-download.svg',
+                  title: 'Payout',
                   onTap: () {
-                    Get.to(()=> FundRequestView());
+                    // TODO: Navigate to Payout screen
                   },
                 ),
               ],
             ),
 
-            ListTile(
-              leading: SvgPicture.asset('assets/icons/tabler_report.svg'),
-              title: const Text(
-                'BBPS Report',
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTap: () {
-                Get.to(()=> BBPSReportView());
-              },
+            _buildListTileSvg(
+              iconPath: 'assets/icons/akar-icons_wallet.svg',
+              title: 'E-Wallet Report',
+              onTap: () => Get.back(),
             ),
-            ListTile(
-              leading: SvgPicture.asset(
-                'assets/icons/grommet-icons_services.svg',
-              ),
-              title: const Text(
-                'All Services',
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.w500,
+
+            _buildExpansionTile(
+              iconPath: 'assets/icons/akar-icons_info.svg',
+              title: 'Enquiry',
+              children: [
+                _buildListTileSvg(
+                  iconPath: 'assets/icons/la_hand-paper-solid.svg',
+                  title: 'Raise Enquiry',
+                  onTap: () => Get.to(() => const EnquiryFormView()),
                 ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              ],
             ),
-            ListTile(
-              leading: SvgPicture.asset('assets/icons/mdi_account-service.svg'),
-              title: const Text(
-                'Service Management',
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontWeight: FontWeight.w500,
+
+            _buildExpansionTile(
+              iconPath: 'assets/icons/icon-park_funds.svg',
+              title: 'Fund',
+              children: [
+                _buildListTileSvg(
+                  iconPath: 'assets/icons/carbon_request-quote.svg',
+                  title: 'Fund Request',
+                  onTap: () => Get.to(() => const FundRequestView()),
                 ),
-              ),
-              onTap: () {
-                Get.to(ServiceManagement());
-              },
+              ],
+            ),
+
+            _buildListTileSvg(
+              iconPath: 'assets/icons/tabler_report.svg',
+              title: 'BBPS Report',
+              onTap: () => Get.to(() => const BBPSReportView()),
+            ),
+
+            _buildListTileSvg(
+              iconPath: 'assets/icons/grommet-icons_services.svg',
+              title: 'All Services',
+              onTap: () => Get.back(),
+            ),
+
+            _buildListTileSvg(
+              iconPath: 'assets/icons/mdi_account-service.svg',
+              title: 'Service Management',
+              onTap: () => Get.to(() => const ServiceManagement()),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  /// Common ListTile
+  Widget _buildListTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.textColor),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.textColor,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+
+  /// Common ListTile with SVG
+  Widget _buildListTileSvg({
+    required String iconPath,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: SvgPicture.asset(iconPath, color: AppColors.textColor),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.textColor,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+
+  /// Common ExpansionTile
+  Widget _buildExpansionTile({
+    required String iconPath,
+    required String title,
+    required List<Widget> children,
+  }) {
+    return ExpansionTile(
+      leading: SvgPicture.asset(iconPath, color: AppColors.textColor),
+      showTrailingIcon: false,
+      title: Row(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: AppColors.textColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const Spacer(),
+          const Icon(
+            Icons.arrow_forward_ios,
+            size: 14,
+            color: AppColors.textColor,
+          ),
+        ],
+      ),
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: Colors.transparent),
+      ),
+      childrenPadding: const EdgeInsets.only(left: 40),
+      children: children,
     );
   }
 }
