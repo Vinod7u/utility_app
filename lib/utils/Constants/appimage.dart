@@ -28,4 +28,5 @@ class Appimage {
   static const String icici = "assets/new_images/icici.png";
   static const String hsbc = "assets/new_images/hsbc.png";
   static const String hdfc = "assets/new_images/hdfc.png";
+  static const String bannerImage = "assets/new_images/bannerImage.png";
 }

@@ -133,7 +133,7 @@ class _AllContactsScreenState extends State<AllContactsScreen> {
         // controller.selectedName.value = name;     // Assume RxString selectedName in controller
         // controller.detectOperatorAndPlans(number);  // Fetch operator/plans
         Get.to(
-          () => ServiceProcessScreen(service: "Mobile Recharge"),
+          () => ServiceProcessScreen(serviceName: "Mobile Recharge"),
         ); // Return to previous screen
         // Or directly: Get.to(() => PlanSelectionScreen()); if preferred
       },

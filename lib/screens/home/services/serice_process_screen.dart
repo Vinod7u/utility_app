@@ -1,39 +1,96 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:utility_app_flutter/controller/userscreenscontrollers/service_process_screen_controller.dart';
-import 'package:utility_app_flutter/screens/home/services/bill_detail_screen.dart';
+import 'package:utility_app_flutter/controller/services/service_process_controlle.dart';
+import 'package:utility_app_flutter/models/service_selection_model.dart';
+import 'package:utility_app_flutter/screens/home/services/fasttag/service_data_field_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
-import 'package:utility_app_flutter/widgets/snackbar.dart';
+import 'package:utility_app_flutter/utils/Constants/appimage.dart';
 
+// Model for service configuration
 class ServiceProcessScreen extends StatefulWidget {
-  final String service;
-  const ServiceProcessScreen({super.key, required this.service});
+  final String serviceName;
+
+  const ServiceProcessScreen({super.key, required this.serviceName});
 
   @override
   State<ServiceProcessScreen> createState() => _ServiceProcessScreenState();
 }
 
 class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
-  final controller = Get.put(ServiceProcessScreenController());
+  final controller = Get.put(ServiceProcessController());
 
   @override
   void initState() {
     super.initState();
-    controller.loadFields(widget.service);
+    controller.config = controller.getServiceConfig(widget.serviceName);
+    controller.filteredItems = controller.config.allItems;
+  }
+
+  @override
+  void dispose() {
+    controller.searchController.dispose();
+    controller.inputController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.off_white,
-      body: SafeArea(
-        child: CustomScrollView(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.off_white,
+        body: CustomScrollView(
           slivers: [
             _buildCustomAppBar(),
             SliverToBoxAdapter(
-              child: Obx(() => Column(children: [_buildscreenContent()])),
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+
+                  // Input row (search bar for electricity, vehicle number for fasttag)
+                  if (controller.config.showSearchBar)
+                    _buildSearchBar()
+                  else
+                    _buildInputRow(),
+
+                  const SizedBox(height: 15),
+
+                  // Info card (only for electricity bill)
+                  if (controller.config.showInfoCard) _buildInfoCard(),
+
+                  if (controller.config.showInfoCard)
+                    const SizedBox(height: 15),
+
+                  // Top section (only if items exist)
+                  if (controller.config.topItems.isNotEmpty)
+                    _buildContent(
+                      onTap: (itemName) {
+                        _handleItemTap(itemName);
+                      },
+                      title: controller.config.topSectionTitle,
+                      itemList: controller.config.topItems,
+                    ),
+
+                  if (controller.config.topItems.isNotEmpty)
+                    const SizedBox(height: 15),
+
+                  // All items section
+                  _buildContent(
+                    onTap: (itemName) {
+                      _handleItemTap(itemName);
+                    },
+                    title:
+                        controller.config.showSearchBar &&
+                            controller.config.topItems.isEmpty
+                        ? controller.config.topSectionTitle
+                        : controller.config.allSectionTitle,
+                    itemList: controller.config.showSearchBar
+                        ? controller.filteredItems
+                        : controller.config.allItems,
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ],
         ),
@@ -41,7 +98,311 @@ class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
     );
   }
 
-  /// ---------------- APP BAR ----------------
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller.searchController,
+              onChanged: controller.filterItems,
+              decoration: InputDecoration(
+                hintText: controller.config.inputHint,
+                hintStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                    color: AppColors.appbarFirstColor,
+                    width: 1.5,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: () {
+              // Navigate to offers page
+              print("Offers tapped");
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.grey.shade400),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.local_offer, color: Colors.green, size: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    "5 offers",
+                    style: TextStyle(
+                      color: Colors.green.shade700,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller.inputController,
+              decoration: InputDecoration(
+                hintText: controller.config.inputHint,
+                hintStyle: const TextStyle(fontSize: 14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                    color: AppColors.appbarFirstColor,
+                    width: 1.5,
+                  ),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 100,
+            child: GestureDetector(
+              onTap: () {
+                print(
+                  "Proceed tapped with: ${controller.inputController.text}",
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey.shade400),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.local_offer, color: Colors.green, size: 16),
+                    SizedBox(width: 4),
+                    Text(
+                      "offer",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  controller.config.infoCardTitle ?? "",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  controller.config.infoCardDescription ?? "",
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle permission request
+                    print("Allow button tapped");
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.darkColor,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    controller.config.infoCardButtonText ?? "Allow",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Image.asset(
+            Appimage.bannerImage, // Replace with your illustration image
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContent({
+    required Function(String) onTap,
+    required String title,
+    required List<Map<String, String>> itemList,
+  }) {
+    if (itemList.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: AppColors.icon_blue,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Material(
+              color: Colors.transparent,
+              child: ListView.separated(
+                itemCount: itemList.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.grey.shade200,
+                  thickness: 0.5,
+                  height: 1,
+                ),
+                itemBuilder: (context, index) {
+                  final data = itemList[index];
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.grey.shade100,
+                      child: Image.asset(
+                        data['logo']!,
+                        height: 30,
+                        width: 30,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    title: Text(
+                      data['name']!,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Get.to(() => ServiceDatafieldScreen(service: widget.serviceName));
+                      onTap(data['name']!);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildCustomAppBar() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
@@ -68,7 +429,6 @@ class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // 🔹 Back Icon
                 Align(
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
@@ -80,15 +440,32 @@ class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
                     ),
                   ),
                 ),
-
-                // 🔹 Center Title
                 Text(
-                  widget.service,
+                  controller.config.title,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
-                    letterSpacing: 0.5,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.help_outline,
+                        color: AppColors.appbarFirstColor,
+                        size: 18,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -99,215 +476,9 @@ class _ServiceProcessScreenState extends State<ServiceProcessScreen> {
     );
   }
 
-  Widget _buildscreenContent() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      width: double.maxFinite,
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Select Service Provider",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Divider(color: Colors.grey.shade400),
-
-          // 🔹 Render Dynamic Fields
-          ...controller.fields.map((f) {
-            if (f.type == "text") {
-              return _buildTextField(
-                controller: controller.textControllers[f.label]!,
-                label: f.label,
-                hint: f.hint,
-                maxL: f.maxLength,
-              );
-            } else if (f.type == "dropdown") {
-              return _buildDropDownTile(
-                title: f.hint,
-                label: f.label,
-                items: f.options!,
-                selectedValue: controller.selectedValues[f.label]!,
-              );
-            }
-            return const SizedBox();
-          }).toList(),
-
-          const SizedBox(height: 20),
-
-          // 🔹 Submit button
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-
-            // Replace your existing submit button's onPressed method with this:
-            onPressed: () {
-              // Collect form data
-              Map<String, dynamic> formData = {};
-
-              // Collect text field data
-              controller.textControllers.forEach((key, textController) {
-                formData[key] = textController.text;
-              });
-
-              // Collect dropdown data
-              controller.selectedValues.forEach((key, rxString) {
-                formData[key] = rxString.value;
-              });
-
-              // Validate required fields (optional)
-              bool isValid = true;
-              String missingFields = '';
-
-              controller.fields.forEach((field) {
-                if (field.type == "text") {
-                  if (controller.textControllers[field.label]!.text.isEmpty) {
-                    isValid = false;
-                    missingFields += '${field.label}, ';
-                  }
-                } else if (field.type == "dropdown") {
-                  if (controller.selectedValues[field.label]!.value.isEmpty) {
-                    isValid = false;
-                    missingFields += '${field.label}, ';
-                  }
-                }
-              });
-
-              if (!isValid) {
-                showSnackBar(
-                  title: "Error",
-                  message:
-                      "Please fill all required fields: ${missingFields.substring(0, missingFields.length - 2)}",
-                );
-
-                return;
-              }
-
-              // Navigate to Bill Details Screen
-              Get.to(
-                () => BillDetailsScreen(
-                  serviceName: widget.service,
-                  formData: formData,
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              child: Text(
-                "Submit",
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    String? label,
-    required String hint,
-    bool obscureText = false,
-    int? maxL,
-    FormFieldValidator<String>? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label!,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textColor,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          maxLength: maxL,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          decoration: InputDecoration(
-            hintText: hint,
-            filled: true,
-            counterText: '',
-            fillColor: AppColors.textfield_inside_color,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.textfield_border_color,
-                width: 2,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.textColor,
-                width: 2,
-              ),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
-          validator: (value) {},
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  Widget _buildDropDownTile({
-    required String title,
-    required String label,
-    required List<String> items,
-    required RxString selectedValue,
-  }) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textColor,
-            ),
-          ),
-          const SizedBox(height: 10),
-          DropdownButtonFormField<String>(
-            value: selectedValue.value.isEmpty ? null : selectedValue.value,
-            hint: Text(title),
-            onChanged: (val) => selectedValue.value = val!,
-            items: items
-                .map((item) => DropdownMenuItem(value: item, child: Text(item)))
-                .toList(),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 10,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
+  void _handleItemTap(String itemName) {
+    print("Selected: $itemName for ${widget.serviceName}");
+    // Navigate to appropriate screen based on service name
+    // Get.to(() => NextScreen(serviceName: widget.serviceName, selectedItem: itemName));
   }
 }

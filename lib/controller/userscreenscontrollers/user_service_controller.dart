@@ -135,7 +135,7 @@ class UserServiceController extends GetxController {
       onTap: () {},
     ),
     Service(
-      title: "Mobile prepaid",
+      title: "Mobile Recharge",
       subtitle: "Recharge prepaid mobile",
       iconData: Icons.phone_android_outlined,
       onTap: () {},

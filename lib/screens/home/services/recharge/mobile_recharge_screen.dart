@@ -292,7 +292,7 @@ class _MobileRechargeScreenState extends State<MobileRechargeScreen>
               child: ElevatedButton(
                 onPressed: () {
                   Get.to(
-                    () => ServiceProcessScreen(service: "Mobile Recharge"),
+                    () => ServiceProcessScreen(serviceName: "Mobile Recharge"),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -385,7 +385,7 @@ class _MobileRechargeScreenState extends State<MobileRechargeScreen>
           ),
           ElevatedButton(
             onPressed: () {
-              Get.to(() => ServiceProcessScreen(service: "Mobile Recharge"));
+              Get.to(() => ServiceProcessScreen(serviceName: "Mobile Recharge"));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.darkColor,
@@ -435,7 +435,7 @@ class _MobileRechargeScreenState extends State<MobileRechargeScreen>
     return  InkWell(
       onTap: (){
          Get.to(
-          () => ServiceProcessScreen(service: "Mobile Recharge"),
+          () => ServiceProcessScreen(serviceName: "Mobile Recharge"),
         );
       },
       child: Container(

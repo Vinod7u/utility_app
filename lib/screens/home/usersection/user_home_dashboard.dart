@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_home_controller.dart';
-import 'package:utility_app_flutter/screens/home/services/fasttag/fasttag_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/fasttag/service_data_field_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/loans_services_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/recharge/mobile_recharge_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
@@ -115,16 +115,15 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': "assets/images/card 1.png",
                     'label': 'AEPS Payout',
                     'hasContainer': true,
-                    'onTap': () => Get.to(
-                      () => FasttagScreen(),
-                    ),
+                    'onTap': () {},
                   },
                   {
                     'image': "assets/images/card (2) 1.png",
                     'label': 'Normal DMT',
                     'hasContainer': true,
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'AEPS Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'AEPS Transaction'),
                     ),
                   },
                   {
@@ -132,36 +131,35 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'label': 'Express DMT',
                     'hasContainer': true,
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'BBPS Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'BBPS Transaction'),
                     ),
                   },
                 ]),
                 _serviceSection("Recharge & Bills", [
                   {
+                    'image': "assets/images/payment_11703536.png",
+                    'label': 'Mobile Recharge',
+                    'onTap': () => Get.to(() => MobileRechargeScreen()),
+                  },
+                  {
                     'image': "assets/images/earth_13849445.png",
                     'label': 'DTH',
                     'onTap': () =>
-                        Get.to(() => ServiceProcessScreen(service: 'DTH')),
+                        Get.to(() => ServiceProcessScreen(serviceName: 'DTH')),
                   },
                   {
                     'image': "assets/images/atm-card_8739601.png",
                     'label': 'Credit Card',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'Credit Card'),
+                      () => ServiceProcessScreen(serviceName: 'Credit Card'),
                     ),
                   },
                   {
                     'image': "assets/images/electricity_9746766.png",
                     'label': 'Electricity',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'Electricity'),
-                    ),
-                  },
-                  {
-                    'image': "assets/images/payment_11703536.png",
-                    'label': 'Mobile Recharge',
-                    'onTap': () => Get.to(
-                      () => MobileRechargeScreen(),
+                      () => ServiceProcessScreen(serviceName: 'Electricity'),
                     ),
                   },
                 ], showoffer: true),
@@ -173,28 +171,32 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.aeps,
                     'label': 'AEPS',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.ministatement,
                     'label': 'Mini Statement',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.aadharpay,
                     'label': 'AAdhar Pay',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'DMT Transaction'),
                     ),
                   },
                   {
                     'image': Appimage.creditcard,
                     'label': 'Micro Atm',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () =>
+                          ServiceProcessScreen(serviceName: 'DMT Transaction'),
                     ),
                   },
                 ]),
@@ -203,28 +205,28 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.school,
                     'label': 'Bus',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Bus Booking'),
                     ),
                   },
                   {
                     'image': Appimage.train,
                     'label': 'Train',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Train Booking'),
                     ),
                   },
                   {
                     'image': Appimage.building,
                     'label': 'Hotel',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Hotel Booking'),
                     ),
                   },
                   {
                     'image': Appimage.flight,
                     'label': 'Flight',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Flight Booking'),
                     ),
                   },
                 ], showoffer: true),
@@ -265,30 +267,28 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.car,
                     'label': 'Car Insurence',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Car Insurence'),
                     ),
                   },
                   {
                     'image': Appimage.bike,
                     'label': 'Bike Insurence',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
+                      () => ServiceProcessScreen(serviceName: 'Bike Insurence'),
                     ),
                   },
                   {
                     'image': Appimage.home,
                     'label': 'LCB',
-                    'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
-                    ),
+                    'onTap': () =>
+                        Get.to(() => ServiceProcessScreen(serviceName: 'LCB')),
                   },
 
                   {
                     'image': Appimage.car,
                     'label': 'Instant Loan',
-                    'onTap': () => Get.to(
-                      () => ServiceProcessScreen(service: 'DMT Transaction'),
-                    ),
+                    'onTap': () =>
+                        Get.to(() => ServiceProcessScreen(serviceName: '')),
                   },
                 ]),
 
@@ -517,65 +517,68 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: RadialGradient(
+                center: Alignment(0, 2),
+                radius: 2.1,
                 colors: [
-                  AppColors.appbarFirstColor,
-                  AppColors.appbarsecondColor,
+                  Color(0xFF1A41B3),
+                  Color(0xFF4F39D9),
+                  Color(0xFF10359E),
+                  Color(0xFF5F3FED),
+                  Color(0xFF115CBA),
+                  Color(0xFF268DFB),
+                  Color(0xFF1B66D0),
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                stops: [0.0, 0.1056, 0.2786, 0.4613, 0.625, 0.8125, 1.5],
               ),
             ),
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: [
-                    SvgPicture.asset(
-                      'assets/icons/streamline-ultimate-color_money-wallet-open.svg',
+                    Text(
+                      'E-Wallet',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white.withOpacity(0.9),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    const SizedBox(width: 18),
+
+                    Transform.rotate(
+                      angle:
+                          90 *
+                          3.1415926535 /
+                          180, // rotate 90 degrees to the right
+                      child: Icon(
+                        Icons.wifi_outlined,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 25),
+                Row(
+                  children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Wallet Balance',
+                          "Wallet Bal:",
                           style: TextStyle(
+                            color: Colors.white.withOpacity(0.4),
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Obx(
-                              () => Text(
-                                controller.isBalanceVisible.value
-                                    ? "₹ ${NumberFormat("#,##0.00").format(controller.walletBalance.value)}"
-                                    : "₹ ****",
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: controller.toggleBalanceVisibility,
-                              child: Obx(
-                                () => Icon(
-                                  controller.isBalanceVisible.value
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                  color: Colors.white.withOpacity(0.9),
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ],
+
+                        Text(
+                          "₹ 2000/-",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ],
                     ),
@@ -583,21 +586,18 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                 ),
                 const SizedBox(height: 16),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _balanceAction(
-                        'Add Money',
-                        Icons.add_circle_outline,
-                        () => controller.addMoney(500),
-                      ),
+                    _balanceAction(
+                      'Add Money',
+                      Icons.add_circle_outline,
+                      () => controller.addMoney(500),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _balanceAction(
-                        'Send Money',
-                        Icons.send_outlined,
-                        () => controller.sendMoney(500),
-                      ),
+                    SizedBox(width: 50),
+                    _balanceAction(
+                      'Send Money',
+                      Icons.send_outlined,
+                      () => controller.sendMoney(500),
                     ),
                   ],
                 ),
@@ -615,7 +615,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.newPrimaryColor,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

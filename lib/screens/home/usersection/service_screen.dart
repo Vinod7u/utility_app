@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_service_controller.dart';
+import 'package:utility_app_flutter/screens/home/services/recharge/mobile_recharge_screen.dart';
 import 'package:utility_app_flutter/widgets/drawer.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/serice_process_screen.dart';
@@ -107,7 +108,16 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       final s = controller.services[idx];
                       return _buildServiceTile(
                         onTap: () {
-                          Get.to(() => ServiceProcessScreen(service: s.title));
+                          if (s.title == "Mobile Recharge") {
+                            Get.to(
+                              () => MobileRechargeScreen()
+                            );
+                          }else{
+                            Get.to(
+                            () => ServiceProcessScreen(serviceName: s.title),
+                          );
+                          }
+                          
                         },
                         iconData: s.iconData,
                         serviceName: s.title,
@@ -268,7 +278,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
   /// ---------------- SEARCH RESULT TILE ----------------
   Widget _buildSearchResultTile(Service s) {
     return GestureDetector(
-      onTap: () => Get.to(() => ServiceProcessScreen(service: s.title)),
+      onTap: () => Get.to(() => ServiceProcessScreen(serviceName: s.title)),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
