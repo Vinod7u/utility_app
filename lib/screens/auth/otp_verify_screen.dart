@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:utility_app_flutter/controller/otpverify_controller.dart';
+import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class OtpVerifyScreen extends StatefulWidget {
@@ -50,9 +52,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: CircularProgressIndicator(color: AppColors.primaryC),
-          );
+          return Center(child: appLoader());
         }
 
         return SingleChildScrollView(
@@ -103,15 +103,16 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                 const SizedBox(height: 32),
 
                 /// 🔹 Verify Button with Gradient
-
                 appButton(
                   title: "Verify Otp",
                   onTap: () {
                     if (controller.otpController.text.length == 6) {
-                      controller.verifyOtp(
-                        otp: controller.otpController.text,
-                        mobile: mobile,
-                      );
+                      Get.to(() => Loginselection());
+
+                      // controller.verifyOtp(
+                      //   otp: controller.otpController.text,
+                      //   mobile: mobile,
+                      // );
                     } else {
                       showSnackBar(
                         title: "Error",

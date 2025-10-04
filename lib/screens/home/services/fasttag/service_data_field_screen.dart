@@ -1,20 +1,22 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Add this to pubspec.yaml: flutter_svg: ^2.0.9
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:utility_app_flutter/controller/userscreenscontrollers/service_process_screen_controller.dart';
+import 'package:utility_app_flutter/controller/userscreenscontrollers/service_data_detail_controller.dart';
+import 'package:utility_app_flutter/screens/home/services/bill_detail_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/utils/Constants/appimage.dart';
+import 'package:utility_app_flutter/widgets/snackbar.dart';
 
-class SericeProcessScreen extends StatefulWidget {
+class ServiceDatafieldScreen extends StatefulWidget {
   final String service;
-  const SericeProcessScreen({super.key, required this.service});
+  const ServiceDatafieldScreen({super.key, required this.service});
 
   @override
-  State<SericeProcessScreen> createState() => _SericeProcessScreenState();
+  State<ServiceDatafieldScreen> createState() => _ServiceDatafieldScreenState();
 }
 
-class _SericeProcessScreenState extends State<SericeProcessScreen> {
-  final controller = Get.put(ServiceProcessScreenController());
+class _ServiceDatafieldScreenState extends State<ServiceDatafieldScreen> {
+  final controller = Get.put(ServiceDataDetailController());
 
   @override
   void initState() {
@@ -109,12 +111,12 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           Text(
             "Select Service Provider",
             style: TextStyle(
-              color: AppColors.new_blue,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Divider(color: AppColors.appbarFirstColor),
+          Divider(color: Colors.grey.shade400),
 
           // 🔹 Render Dynamic Fields
           ...controller.fields.map((f) {
@@ -141,13 +143,62 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           // 🔹 Submit button
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.new_blue,
+              backgroundColor: AppColors.darkColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
+
+            // Replace your existing submit button's onPressed method with this:
             onPressed: () {
-              // 🔹 TODO: send formData to API
+              // Collect form data
+              Map<String, dynamic> formData = {};
+
+              // Collect text field data
+              controller.textControllers.forEach((key, textController) {
+                formData[key] = textController.text;
+              });
+
+              // Collect dropdown data
+              controller.selectedValues.forEach((key, rxString) {
+                formData[key] = rxString.value;
+              });
+
+              // Validate required fields (optional)
+              bool isValid = true;
+              String missingFields = '';
+
+              controller.fields.forEach((field) {
+                if (field.type == "text") {
+                  if (controller.textControllers[field.label]!.text.isEmpty) {
+                    isValid = false;
+                    missingFields += '${field.label}, ';
+                  }
+                } else if (field.type == "dropdown") {
+                  if (controller.selectedValues[field.label]!.value.isEmpty) {
+                    isValid = false;
+                    missingFields += '${field.label}, ';
+                  }
+                }
+              });
+
+              if (!isValid) {
+                showSnackBar(
+                  title: "Error",
+                  message:
+                      "Please fill all required fields: ${missingFields.substring(0, missingFields.length - 2)}",
+                );
+
+                return;
+              }
+
+              // Navigate to Bill Details Screen
+              Get.to(
+                () => BillDetailsScreen(
+                  serviceName: widget.service,
+                  formData: formData,
+                ),
+              );
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -178,7 +229,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.serice_card_color_first,
+            color: AppColors.textColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -202,7 +253,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(
-                color: AppColors.serice_card_color_second,
+                color: AppColors.textColor,
                 width: 2,
               ),
             ),
@@ -233,7 +284,7 @@ class _SericeProcessScreenState extends State<SericeProcessScreen> {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColors.serice_card_color_first,
+              color: AppColors.textColor,
             ),
           ),
           const SizedBox(height: 10),

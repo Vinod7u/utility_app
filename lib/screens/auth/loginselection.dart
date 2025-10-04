@@ -7,6 +7,7 @@ import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/auth/login.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 
 class Loginselection extends StatefulWidget {
   const Loginselection({super.key});
@@ -37,11 +38,11 @@ class _LoginselectionState extends State<Loginselection> {
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Text(
-                  'Choose Login Type',
+                  'Choose Account Type',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.primaryC,
+                    color: AppColors.textColor,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -55,11 +56,7 @@ class _LoginselectionState extends State<Loginselection> {
                 // 🔹 Role List from API
                 Obx(() {
                   if (roleController.isLoading.value) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryC,
-                      ),
-                    );
+                    return Center(child: appLoader());
                   }
 
                   if (roleController.roles.isEmpty) {
@@ -75,7 +72,7 @@ class _LoginselectionState extends State<Loginselection> {
                           "${roleData.role} Login", // Role name from API
                           "Login as ${roleData.role}", // Subtitle
                           Icons.person, // you can map roles -> icons if needed
-                          [AppColors.primaryC, AppColors.primary],
+
                           () {
                             // 🔹 Navigate based on role
                             if (roleData.role?.toLowerCase() == "user") {
@@ -91,7 +88,11 @@ class _LoginselectionState extends State<Loginselection> {
                               );
                             } else if (roleData.role?.toLowerCase() ==
                                 "distributor") {
-                              Get.offAll(() => DistributorRegister(userType: UserType.distributor,));
+                              Get.offAll(
+                                () => DistributorRegister(
+                                  userType: UserType.distributor,
+                                ),
+                              );
                             } else {
                               Get.snackbar(
                                 "Info",
@@ -117,7 +118,6 @@ class _LoginselectionState extends State<Loginselection> {
     String title,
     String subtitle,
     IconData icon,
-    List<Color> gradientColors,
     VoidCallback onTap,
   ) {
     return GestureDetector(
@@ -143,7 +143,7 @@ class _LoginselectionState extends State<Loginselection> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: gradientColors),
+                color: AppColors.darkColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Colors.white, size: 24),
@@ -154,13 +154,13 @@ class _LoginselectionState extends State<Loginselection> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primaryC,
+                color: AppColors.textColor,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: TextStyle(fontSize: 12, color: AppColors.primary),
+              style: TextStyle(fontSize: 12, color: AppColors.blue_text),
             ),
           ],
         ),

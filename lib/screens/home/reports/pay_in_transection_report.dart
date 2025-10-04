@@ -250,7 +250,7 @@ class _PayinTransactionScreenState extends State<PayinTransactionScreen> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.serice_card_color_first,
+                    backgroundColor: AppColors.textColor,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 30,
                       vertical: 12,
@@ -289,74 +289,112 @@ class _PayinTransactionScreenState extends State<PayinTransactionScreen> {
 
   /// -------------------- TRANSACTION TABLE --------------------
   Widget _transactionTable() {
+    // 🔹 Dummy data
+    final List<Map<String, String>> transactions = List.generate(100, (index) {
+      return {
+        "id": "${index + 1}",
+        "name": "User ${index + 1}",
+        "date": "25-09-2025",
+        "amount": "₹${(index + 1) * 500}",
+        "utr": "UTR${1000 + index}",
+        "reference": "REF${2000 + index}",
+        "status": index % 2 == 0 ? "Success" : "Pending",
+        "remark": index % 2 == 0 ? "Payment received" : "Waiting",
+      };
+    });
+
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16,
-      ), // 🔹 margin 16
-      decoration: const BoxDecoration(
-        color: Colors.white, // 🔹 background white
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      child: Column(
-        children: [
-          // 🔹 Horizontal Scroll
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Table(
-              border: TableBorder.all(),
-              defaultColumnWidth:
-                  const IntrinsicColumnWidth(), // adjust column size
-              children: const [
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "ID",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Name",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Date",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Amount",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    // you can add more columns if needed
-                  ],
-                ),
-                // Sample Row
-                TableRow(
-                  children: [
-                    Padding(padding: EdgeInsets.all(8.0), child: Text("1")),
-                    Padding(padding: EdgeInsets.all(8.0), child: Text("John")),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("25-09-2025"),
-                    ),
-                    Padding(padding: EdgeInsets.all(8.0), child: Text("₹500")),
-                  ],
-                ),
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Table(
+          columnWidths: const {
+            0: FixedColumnWidth(50), // ID
+            1: FixedColumnWidth(100), // Name
+            2: FixedColumnWidth(100), // Date
+            3: FixedColumnWidth(80), // Amount
+            4: FixedColumnWidth(120), // UTR
+            5: FixedColumnWidth(120), // Reference
+            6: FixedColumnWidth(100), // Status
+            7: FixedColumnWidth(150), // Remark
+          },
+          border: TableBorder.all(color: Colors.grey.shade300),
+          children: [
+            // 🔹 Header Row
+            TableRow(
+              decoration: BoxDecoration(color: Colors.grey.shade200),
+              children: [
+                _headerCell("ID"),
+                _headerCell("Name"),
+                _headerCell("Date"),
+                _headerCell("Amount"),
+                _headerCell("UTR"),
+                _headerCell("Reference"),
+                _headerCell("Status"),
+                _headerCell("Remark"),
               ],
             ),
-          ),
-        ],
+
+            // 🔹 Data Rows
+            for (var txn in transactions)
+              TableRow(
+                decoration: BoxDecoration(
+                  color: transactions.indexOf(txn) % 2 == 0
+                      ? Colors.grey.shade50
+                      : Colors.white,
+                ),
+                children: [
+                  _dataCell(txn["id"]!),
+                  _dataCell(txn["name"]!),
+                  _dataCell(txn["date"]!),
+                  _dataCell(txn["amount"]!),
+                  _dataCell(txn["utr"]!),
+                  _dataCell(txn["reference"]!),
+                  _dataCell(
+                    txn["status"]!,
+                    color: txn["status"] == "Success"
+                        ? Colors.green
+                        : Colors.orange,
+                    bold: true,
+                  ),
+                  _dataCell(txn["remark"]!),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 Reusable Header Cell
+  Widget _headerCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: Colors.black87,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  /// 🔹 Reusable Data Cell
+  Widget _dataCell(String text, {Color? color, bool bold = false}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+          color: color ?? Colors.black87,
+          fontSize: 13,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }

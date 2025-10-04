@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 
 import '../../controller/retailer_register_controller.dart';
 import '../../utils/Validators/validators.dart';
@@ -38,7 +39,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.off_white,
       appBar: AppBar(
         leading: controller.stepIndex.value > 0
             ? InkWell(
@@ -53,16 +54,14 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               )
             : null, // No leading icon when stepIndex == 0
         centerTitle: true,
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         title: const Text("Register"),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.off_white,
         automaticallyImplyLeading: false,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: CircularProgressIndicator(color: AppColors.primaryC),
-          );
+          return Center(child: appLoader());
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,17 +131,23 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       step: 0,
       children: [
         _buildTextField(
+          icon: Icons.person,
+
           controller: controller.nameC,
           label: "Full Name",
           hint: "Enter full name",
         ),
         _buildTextField(
+          icon: Icons.mobile_friendly,
+
           controller: controller.phoneC,
           label: "Mobile Number",
           maxL: 10,
           hint: "Enter 10-digit mobile number",
         ),
         _buildTextField(
+          icon: Icons.email_outlined,
+
           controller: controller.emailC,
           label: "Email",
           hint: "Enter email",
@@ -151,6 +156,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
 
         //_buildDropDownTile(title: 'Role', label: 'Select Role'),
         _buildTextField(
+          icon: Icons.password,
+
           controller: controller.mPinC,
           label: "MPIN",
           obscureText: true,
@@ -158,6 +165,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           hint: "",
         ),
         _buildTextField(
+          icon: Icons.lock,
+
           controller: controller.passC,
           label: "Password",
           obscureText: true,
@@ -165,6 +174,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           validator: Validators.validatePassword,
         ),
         _buildTextField(
+          icon: Icons.lock,
+
           controller: controller.confirmPassC,
           label: "Confirm Password",
           obscureText: true,
@@ -180,6 +191,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         ),
         SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.business,
+
           controller: controller.shopNameC,
           label: "Shop Name",
           hint: "Enter Shop name",
@@ -212,22 +225,30 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           ),
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.stateC,
           label: "State Name",
           hint: "Enter State name",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.districtC,
           label: "District Name",
           hint: "Enter district name",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.pinCodeC,
           label: "Pin Code",
           maxL: 6,
           hint: "Enter 6-digit pin code",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.addressC,
           label: "Full Address",
           hint: "Enter Full Address",
@@ -265,6 +286,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         ),
         SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.person,
+
           controller: controller.aadhaarController,
           label: "Aadhaar Number",
           maxL: 12,
@@ -295,6 +318,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         // ),
         if (controller.isAadhaarVerify.value)
           _buildTextField(
+            icon: Icons.numbers,
+
             controller: controller.otpC,
             label: "Otp",
             maxL: 6,
@@ -303,9 +328,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         if (controller.isAadhaarVerify.value)
           Obx(() {
             if (controller.isLoadingVerifyOtp.value) {
-              return Center(
-                child: CircularProgressIndicator(color: AppColors.primaryC),
-              );
+              return Center(child: appLoader());
             }
             return appButton(
               title: 'Verify Otp',
@@ -354,6 +377,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         ),
         SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.info,
+
           controller: controller.panController,
           label: "PAN Card Number",
           hint: "Enter PAN number",
@@ -367,9 +392,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         // ),
         Obx(() {
           if (controller.isLoadingOtp.value) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryC),
-            );
+            return Center(child: appLoader());
           }
           return appButton(
             title: 'Verify Pan',
@@ -407,6 +430,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       step: 3,
       children: [
         _buildTextField(
+          icon: Icons.numbers,
           controller: controller.bankAccountController,
           label: "Bank Account Number",
           maxL: 14,
@@ -414,6 +438,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
           //validator: Validators
         ),
         _buildTextField(
+          icon: Icons.code,
+
           controller: controller.ifscController,
           label: "IFSC Code",
           maxL: 11,
@@ -439,9 +465,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         const SizedBox(height: 12),
         Obx(() {
           if (controller.isLoadingOtp.value) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryC),
-            );
+            return Center(child: appLoader());
           }
           return appButton(
             title: 'Verify Bank',
@@ -538,9 +562,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
         const SizedBox(height: 12),
         Obx(() {
           if (controller.isLoadingOtp.value) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryC),
-            );
+            return Center(child: appLoader());
           }
           return appButton(
             title: 'Submit KYC',
@@ -602,9 +624,7 @@ class _RetailerRegisterState extends State<RetailerRegister> {
             if (controller.initialButtonShow.value)
               Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryC),
-                  );
+                  return Center(child: appLoader());
                 }
                 return appButton(
                   title: isLast ? "Register" : "Next",
@@ -679,6 +699,8 @@ class _RetailerRegisterState extends State<RetailerRegister> {
   }
 
   Widget _buildTextField({
+    required IconData icon,
+
     required TextEditingController controller,
     String? label,
     required String hint,
@@ -691,10 +713,10 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       children: [
         Text(
           label!,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF374151),
+            color: AppColors.textColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -712,22 +734,28 @@ class _RetailerRegisterState extends State<RetailerRegister> {
               ? TextInputType.phone
               : TextInputType.text,
           decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: AppColors.textColor),
             hintText: hint,
+            hintStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             filled: true,
             counterText: '',
-            fillColor: const Color(0xFFf9fafb),
+            fillColor: AppColors.off_white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFe5e7eb), width: 2),
+              borderSide: BorderSide(color: Colors.grey.shade400, width: 2),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF667eea), width: 2),
+              borderSide: BorderSide(
+                color: AppColors.appbarsecondColor,
+                width: 2,
+              ),
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -920,7 +948,4 @@ class _RetailerRegisterState extends State<RetailerRegister> {
       ),
     );
   }
-
-
-
 }

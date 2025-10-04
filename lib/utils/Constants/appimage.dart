@@ -1,0 +1,32 @@
+class Appimage {
+  static const String qrCode = "assets/images/qr-code 1.png";
+  static const String aadharpay = "assets/new_images/aadharpay.png";
+  static const String aeps = "assets/new_images/aeps.png";
+  static const String bank = "assets/new_images/bank.png";
+  static const String bike = "assets/new_images/bike.png";
+  static const String building = "assets/new_images/building.png";
+  static const String car_insurence = "assets/new_images/car_insurance.png";
+  static const String car = "assets/new_images/car.png";
+  static const String creditcard = "assets/new_images/creditcard.png";
+  static const String flight = "assets/new_images/flight.png";
+  static const String funds = "assets/new_images/funds.png";
+  static const String handshakes = "assets/new_images/handshake.png";
+  static const String home = "assets/new_images/home.png";
+  static const String ministatement = "assets/new_images/ministatement.png";
+  static const String school = "assets/new_images/school.png";
+  static const String train = "assets/new_images/train.png";
+  static const String drawer_home = "assets/new_images/drawer_home.png";
+  static const String plans = "assets/new_images/plans.png";
+  static const String payin = "assets/new_images/transaction.png";
+  static const String ewallet = "assets/new_images/ewallet.png";
+  static const String enquiry = "assets/new_images/enquiry.png";
+  static const String fund = "assets/new_images/fund_drawer.png";
+  static const String bbps_report = "assets/new_images/bbps.png";
+  static const String all_services = "assets/new_images/setting.png";
+  static const String sbi = "assets/new_images/sbi.png";
+  static const String idfc = "assets/new_images/idfc.png";
+  static const String icici = "assets/new_images/icici.png";
+  static const String hsbc = "assets/new_images/hsbc.png";
+  static const String hdfc = "assets/new_images/hdfc.png";
+  static const String bannerImage = "assets/new_images/bannerImage.png";
+}

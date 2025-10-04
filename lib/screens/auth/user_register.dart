@@ -7,6 +7,7 @@ import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/Validators/validators.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 import 'package:utility_app_flutter/widgets/snackbar.dart';
 
 class UserRegister extends StatefulWidget {
@@ -30,6 +31,7 @@ class _UserRegisterState extends State<UserRegister> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         leading: stepIndex.value > 0
             ? InkWell(
                 onTap: () {
@@ -62,7 +64,7 @@ class _UserRegisterState extends State<UserRegister> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
                         color: stepIndex.value >= index
-                            ? AppColors.primary
+                            ? AppColors.new_blue
                             : Colors.grey.shade300,
                       ),
                     ),
@@ -139,9 +141,7 @@ class _UserRegisterState extends State<UserRegister> {
         const SizedBox(height: 12),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Submit KYC',
                   onTap: () async {
@@ -175,15 +175,15 @@ class _UserRegisterState extends State<UserRegister> {
         ),
         const SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.info_rounded,
+
           controller: controller.panController,
           label: "PAN Card Number",
           hint: "Enter PAN number",
         ),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Verify Pan',
                   onTap: () async {
@@ -209,31 +209,40 @@ class _UserRegisterState extends State<UserRegister> {
       step: 0,
       children: [
         _buildTextField(
+          icon: Icons.person,
           controller: controller.fullNameController,
           label: "Full Name",
           hint: "Enter full name",
         ),
         _buildTextField(
+          icon: Icons.mobile_friendly,
           controller: controller.mobileController,
           label: "Mobile Number",
           hint: "Enter 10-digit mobile number",
         ),
         _buildTextField(
+          icon: Icons.email,
+
           controller: controller.emailController,
           label: "Email",
           hint: "Enter email",
         ),
         _buildTextField(
+          icon: Icons.password,
+
           controller: controller.mpinController,
           label: "Mpin",
           hint: "Enter Mpin",
         ),
         _buildTextField(
+          icon: Icons.lock,
+
           controller: controller.passwordController,
           label: "Password",
           hint: "Enter password",
         ),
         _buildTextField(
+          icon: Icons.lock,
           controller: controller.confirmPasswordController,
           label: "Confirm Password",
           hint: "Confirm Password",
@@ -252,33 +261,45 @@ class _UserRegisterState extends State<UserRegister> {
         ),
         const SizedBox(height: 20),
         _buildTextField(
+          icon: Icons.location_city,
           controller: controller.districtController,
           label: "District Name",
           hint: "Enter district name",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.stateController,
           label: "State Name",
           hint: "Enter state name",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.countryController,
           label: "Country Name",
           hint: "Enter country name",
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.pincodeController,
           label: "Pin Code",
           hint: "Enter 6-digit pin code",
           maxlength: 6,
         ),
         _buildTextField(
+          icon: Icons.location_city,
+
           controller: controller.fullAddressController,
           label: "Full Address",
           hint: "Enter full Address",
         ),
       ],
-      onNext: () => controller.registerUserApi(stepIndex.value),
+      onNext: () {
+        stepIndex.value++;
+        // controller.registerUserApi(stepIndex.value)
+      },
     );
   }
 
@@ -291,18 +312,24 @@ class _UserRegisterState extends State<UserRegister> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Aadhaar Details',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ),
         const Align(
           alignment: Alignment.centerLeft,
           child: Text(
             'Verify Aadhaar and review the details',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
           ),
         ),
         const SizedBox(height: 10),
         _buildTextField(
+          icon: Icons.perm_identity,
+
           controller: controller.aadhaarController,
           label: "Aadhaar Number",
           maxlength: 12,
@@ -311,9 +338,7 @@ class _UserRegisterState extends State<UserRegister> {
         const SizedBox(height: 10),
         Obx(
           () => controller.isOtpSending.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Send Otp',
                   onTap: () async {
@@ -331,15 +356,14 @@ class _UserRegisterState extends State<UserRegister> {
         const SizedBox(height: 10),
         if (controller.isOtpVerifying.value) ...[
           _buildTextField(
+            icon: Icons.output,
             controller: controller.aadharOtpController,
             label: "Otp",
             hint: "Enter Otp",
           ),
           Obx(
             () => controller.isOtpVerifying.value
-                ? Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryC),
-                  )
+                ? Center(child: appLoader())
                 : appButton(
                     title: 'Verify Otp',
                     onTap: () async {
@@ -366,11 +390,14 @@ class _UserRegisterState extends State<UserRegister> {
       step: 3,
       children: [
         _buildTextField(
+          icon: Icons.money,
+
           controller: controller.bankAccountController,
           label: "Account Number",
           hint: "Enter bank account number",
         ),
         _buildTextField(
+          icon: Icons.location_city,
           controller: controller.ifscController,
           label: "IFSC Code",
           hint: "Enter IFSC code",
@@ -378,9 +405,7 @@ class _UserRegisterState extends State<UserRegister> {
         const SizedBox(height: 12),
         Obx(
           () => controller.isLoading.value
-              ? Center(
-                  child: CircularProgressIndicator(color: AppColors.primaryC),
-                )
+              ? Center(child: appLoader())
               : appButton(
                   title: 'Verify Bank',
                   onTap: () async {
@@ -422,14 +447,16 @@ class _UserRegisterState extends State<UserRegister> {
             appButton(
               title: isLast ? "Register" : "Next",
               onTap: () {
-                if (formKeys[step].currentState!.validate()) {
-                  onNext();
-                } else {
-                  showSnackBar(
-                    title: "Error",
-                    message: "Please fill all required fields",
-                  );
-                }
+                onNext();
+
+                // if (formKeys[step].currentState!.validate()) {
+                //   onNext();
+                // } else {
+                //   showSnackBar(
+                //     title: "Error",
+                //     message: "Please fill all required fields",
+                //   );
+                // }
               },
             ),
             const SizedBox(height: 20),
@@ -441,6 +468,8 @@ class _UserRegisterState extends State<UserRegister> {
 
   /// TextField Builder with validation
   Widget _buildTextField({
+    required IconData icon,
+
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -469,9 +498,12 @@ class _UserRegisterState extends State<UserRegister> {
                 ? TextInputType.phone
                 : TextInputType.text,
             decoration: InputDecoration(
+              prefixIcon: Icon(icon, color: AppColors.textColor),
               hintText: hint,
               filled: true,
-              fillColor: const Color(0xFFf9fafb),
+              counterText: '',
+              hintStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              fillColor: AppColors.off_white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(

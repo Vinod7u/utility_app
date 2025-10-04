@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_service_controller.dart';
-import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
+import 'package:utility_app_flutter/screens/home/services/recharge/mobile_recharge_screen.dart';
+import 'package:utility_app_flutter/widgets/drawer.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
-import 'package:utility_app_flutter/screens/home/usersection/serice_process_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/serice_process_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -18,113 +19,135 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      backgroundColor: AppColors.off_white,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            _buildCustomAppBar(),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade300),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.search, color: Colors.grey),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextField(
-                              onChanged: controller.updateSearch,
-                              decoration: const InputDecoration(
-                                hintText: "Search services",
-                                border: InputBorder.none,
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          _buildCustomAppBar(),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                // Search Bar
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search_outlined,
+                          color: Colors.grey.shade400,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextField(
+                            onChanged: controller.updateSearch,
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              hintStyle: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontSize: 16,
                               ),
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
                             ),
                           ),
-                          Obx(
-                            () => controller.searchQuery.value.isNotEmpty
-                                ? GestureDetector(
-                                    onTap: () => controller.updateSearch(""),
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.grey,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Obx(
+                          () => controller.searchQuery.value.isNotEmpty
+                              ? GestureDetector(
+                                  onTap: () => controller.updateSearch(""),
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.grey.shade400,
+                                    size: 20,
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            // 🔹 Body
-            SliverFillRemaining(
-              child: Obx(() {
-                if (controller.searchQuery.isEmpty) {
-                  // Show all categories in Grid
-                  return GridView.builder(
-                    shrinkWrap: true,
+          // Services Grid
+          SliverFillRemaining(
+            child: Obx(() {
+              if (controller.searchQuery.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: GridView.builder(
                     physics: const BouncingScrollPhysics(),
                     itemCount: controller.services.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
+                          crossAxisCount: 4,
+                          childAspectRatio: 0.85,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 16,
                         ),
                     itemBuilder: (context, idx) {
                       final s = controller.services[idx];
                       return _buildServiceTile(
                         onTap: () {
-                          Get.to(() => SericeProcessScreen(service: s.title));
+                          if (s.title == "Mobile Recharge") {
+                            Get.to(
+                              () => MobileRechargeScreen()
+                            );
+                          }else{
+                            Get.to(
+                            () => ServiceProcessScreen(serviceName: s.title),
+                          );
+                          }
+                          
                         },
-                        imageUrl: s.iconUrl,
+                        iconData: s.iconData,
                         serviceName: s.title,
                       );
                     },
-                  );
-                } else {
-                  // Show search results (like Paytm)
-                  if (controller.filteredServices.isEmpty) {
-                    return const Center(child: Text("No services found"));
-                  }
-                  return ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: controller.filteredServices.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, i) {
-                      final s = controller.filteredServices[i];
-                      return _buildSearchResultTile(s);
-                    },
+                  ),
+                );
+              } else {
+                // Show search results
+                if (controller.filteredServices.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No services found",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
                   );
                 }
-              }),
-            ),
-          ],
-        ),
+                return ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: controller.filteredServices.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, i) {
+                    final s = controller.filteredServices[i];
+                    return _buildSearchResultTile(s);
+                  },
+                );
+              }
+            }),
+          ),
+        ],
       ),
     );
   }
@@ -137,7 +160,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
       floating: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      centerTitle: true, // 🔹 ensures title centers
+      centerTitle: true,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: const BoxDecoration(
@@ -156,24 +179,22 @@ class _ServiceScreenState extends State<ServiceScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // 🔹 Left Icon (Menu)
+                // Left Icon (Menu)
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Builder(
                     builder: (context) {
                       return _buildAppBarIcon(Icons.menu, () {
-                        Scaffold.of(
-                          context,
-                        ).openDrawer(); // ✅ context is now under Scaffold
+                        Scaffold.of(context).openDrawer();
                       });
                     },
                   ),
                 ),
 
-                // 🔹 Center Title
-                Text(
+                // Center Title
+                const Text(
                   "All Services",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -181,7 +202,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   ),
                 ),
 
-                // 🔹 Right Icon (Notification)
+                // Right Icon (Notification)
                 Align(
                   alignment: Alignment.centerRight,
                   child: _buildAppBarIcon(Icons.notifications_outlined, () {
@@ -200,56 +221,52 @@ class _ServiceScreenState extends State<ServiceScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(icon, color: Colors.white, size: 18),
+        child: Icon(icon, color: Colors.white, size: 20),
       ),
     );
   }
 
-  /// ---------------- GRID STYLE ----------------
+  /// ---------------- SERVICE TILE ----------------
   Widget _buildServiceTile({
     required VoidCallback onTap,
-    required String imageUrl,
+    required IconData iconData,
     required String serviceName,
   }) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.serice_card_color_first,
-              AppColors.serice_card_color_second,
-            ],
-            begin: AlignmentGeometry.topCenter,
-            end: AlignmentGeometry.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(14),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 36,
-              width: 36,
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
-                color: Colors.white,
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.icon_blue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
+              child: Icon(iconData, size: 28, color: AppColors.icon_blue),
             ),
-            const SizedBox(height: 6),
-            Text(
-              serviceName,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                serviceName,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textColor,
+                  height: 1.2,
+                ),
               ),
             ),
           ],
@@ -258,56 +275,65 @@ class _ServiceScreenState extends State<ServiceScreen> {
     );
   }
 
-  /// ---------------- SEARCH RESULT ----------------
+  /// ---------------- SEARCH RESULT TILE ----------------
   Widget _buildSearchResultTile(Service s) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.serice_card_color_first,
-            AppColors.serice_card_color_second,
+    return GestureDetector(
+      onTap: () => Get.to(() => ServiceProcessScreen(serviceName: s.title)),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
           ],
-          begin: AlignmentGeometry.topCenter,
-          end: AlignmentDirectional.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 42,
-            width: 42,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-            child: Image.network(
-              s.iconUrl,
-              fit: BoxFit.contain,
-              color: Colors.white,
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(s.iconData, color: AppColors.icon_blue, size: 24),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  s.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    s.title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textColor,
+                    ),
                   ),
-                ),
-                Text(
-                  s.subtitle,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ],
+                  const SizedBox(height: 2),
+                  Text(
+                    s.subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textColor.withOpacity(0.9),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
-        ],
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppColors.icon_blue.withOpacity(0.8),
+            ),
+          ],
+        ),
       ),
     );
   }

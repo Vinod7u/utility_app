@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_trabsection_controller.dart';
-import 'package:utility_app_flutter/screens/home/retailerSection/drawer.dart';
+import 'package:utility_app_flutter/widgets/drawer.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 import '../../../widgets/filter_bottom_sheet.dart';
@@ -18,98 +18,111 @@ class UserTrasectionHistoryScreen extends StatefulWidget {
 
 class _UserTrasectionHistoryScreenState
     extends State<UserTrasectionHistoryScreen> {
-  final UserTransactionController controller = Get.put(UserTransactionController());
+  final UserTransactionController controller = Get.put(
+    UserTransactionController(),
+  );
   final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.off_white,
-      drawer: const MyDrawer(),
-      body: Obx(() {
-        return SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              _buildCustomAppBar(),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _searchController,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                filled: true,
-                                counterText: '',
-                                hintStyle: TextStyle(color: Colors.grey.shade400),
-                                fillColor: const Color(0xFFf9fafb),
-                                prefixIcon: Icon(Icons.search, size: 16,color: Colors.grey.shade400,),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+    return Obx(() {
+      return SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            _buildCustomAppBar(),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _searchController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              filled: true,
+                              counterText: '',
+                              hintStyle: TextStyle(color: Colors.grey.shade400),
+                              fillColor: const Color(0xFFf9fafb),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: 16,
+                                color: Colors.grey.shade400,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 2,
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide:  BorderSide(color: Colors.grey.shade200, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 2,
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide:  BorderSide(color: Colors.grey.shade200, width: 2),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 2,
                                 ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
                               ),
                             ),
                           ),
-                          SizedBox(width: 10,),
-                          InkWell(
-                            onTap: () {
-                              Get.bottomSheet(
-                                FilterBottomSheet(),
-                                isScrollControlled: true, // 👈 optional if content is long
-                                backgroundColor: Colors.transparent, // keep rounded corners
-                              );
-                            },
-                            child: Icon(Icons.tune),
-                          ),
-
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            Get.bottomSheet(
+                              FilterBottomSheet(),
+                              isScrollControlled:
+                                  true, // 👈 optional if content is long
+                              backgroundColor:
+                                  Colors.transparent, // keep rounded corners
+                            );
+                          },
+                          child: Icon(Icons.tune),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final tx = controller.filteredTransactions[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: _buildTransactionCard(
-                      tx["title"],
-                      tx["subtitle"],
-                      tx["amount"],
-                      tx["icon"],
-                      tx["time"],
-                    ),
-                  );
-                }, childCount: controller.filteredTransactions.length),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final tx = controller.filteredTransactions[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: _buildTransactionCard(
+                    tx["title"],
+                    tx["subtitle"],
+                    tx["amount"],
+                    tx["icon"],
+                    tx["time"],
+                  ),
+                );
+              }, childCount: controller.filteredTransactions.length),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   /// ---------------- CUSTOM APP BAR ----------------
@@ -140,17 +153,19 @@ class _UserTrasectionHistoryScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Builder(builder: (context){
-                  return InkWell(
-                    onTap: (){
-                      Scaffold.of(context).openDrawer();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(Icons.menu,color: Colors.white,size: 32,),
-                    ),
-                  );
-                }),
+                Builder(
+                  builder: (context) {
+                    return InkWell(
+                      onTap: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Icon(Icons.menu, color: Colors.white, size: 32),
+                      ),
+                    );
+                  },
+                ),
                 Text(
                   "History",
                   style: TextStyle(
@@ -164,7 +179,7 @@ class _UserTrasectionHistoryScreenState
               ],
             ),
           ),
-        )
+        ),
       ),
     );
   }

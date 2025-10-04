@@ -3,21 +3,11 @@ import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
-import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
-import 'package:utility_app_flutter/screens/auth/loginselection.dart';
 import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
-import 'package:utility_app_flutter/screens/auth/retailer_register.dart';
-import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
-import 'package:utility_app_flutter/utils/utils.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
-import 'package:utility_app_flutter/widgets/snackbar.dart';
-
-import '../home/retailerSection/retailerHomepage.dart';
-import '../home/usersection/user_home_dashboard.dart';
-import '../home/usersection/user_home_dashboard.dart';
-import 'retailer_register.dart';
+import 'package:utility_app_flutter/widgets/app_loader.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -29,25 +19,18 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final controller = Get.put(Logincontroller());
 
-  // Decide the text based on userType
-
   @override
   Widget build(BuildContext context) {
-    String prefixText = "Don't have an account? ";
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.off_white,
       appBar: AppBar(
-        centerTitle: true,
-        title: Text("Login"),
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: CircularProgressIndicator(color: AppColors.primaryC),
-          );
+          return Center(child: appLoader());
         }
 
         return SingleChildScrollView(
@@ -61,9 +44,7 @@ class _LoginState extends State<Login> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primaryC, AppColors.primary],
-                    ),
+                   color: AppColors.darkColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(Icons.person_2, color: Colors.white, size: 40),
@@ -74,7 +55,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1a202c),
+                    color: AppColors.textColor,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -84,6 +65,7 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 40),
                 _buildTextField(
+                  icon: Icons.person,
                   controller: controller.mobileNumberController,
                   label: 'Mobile Number',
                   hint: 'Enter Number',
@@ -91,6 +73,7 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 16),
 
                 _buildTextField(
+                  icon: Icons.lock,
                   controller: controller.passwordController,
                   label: 'Password',
                   hint: 'Enter Password',
@@ -122,8 +105,8 @@ class _LoginState extends State<Login> {
                 appButton(
                   title: "Send Otp",
                   onTap: () {
-                    // final mobile = controller.mobileNumberController.text
-                    //     .trim();
+                    final mobile = controller.mobileNumberController.text
+                        .trim();
                     //
                     // if (mobile.isEmpty) {
                     //   showSnackBar(
@@ -136,8 +119,10 @@ class _LoginState extends State<Login> {
                     //     message: "Enter a valid 10-digit mobile number",
                     //   );
                     // } else {
-                    //   // Get.to(() => Loginselection());
-                    //   controller.sendOtpApi(mobile);
+                    Get.to(
+                      () => OtpVerifyScreen(),
+                      arguments: {"mobile": mobile},
+                    ); //   controller.sendOtpApi(mobile);
                     // }
                   },
                 ),
@@ -179,6 +164,7 @@ class _LoginState extends State<Login> {
   }
 
   Widget _buildTextField({
+    required IconData icon,
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -192,7 +178,7 @@ class _LoginState extends State<Login> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF374151),
+            color: AppColors.textColor,
           ),
         ),
         SizedBox(height: 8),
@@ -204,10 +190,12 @@ class _LoginState extends State<Login> {
               ? TextInputType.phone
               : TextInputType.text,
           decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: AppColors.textColor),
             hintText: hint,
+            hintStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             filled: true,
             counterText: '',
-            fillColor: Color(0xFFf9fafb),
+            fillColor: AppColors.off_white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.grey.shade400, width: 2),
@@ -218,7 +206,10 @@ class _LoginState extends State<Login> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.primary, width: 2),
+              borderSide: BorderSide(
+                color: AppColors.appbarsecondColor,
+                width: 2,
+              ),
             ),
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
