@@ -29,4 +29,8 @@ class Appimage {
   static const String hsbc = "assets/new_images/hsbc.png";
   static const String hdfc = "assets/new_images/hdfc.png";
   static const String bannerImage = "assets/new_images/bannerImage.png";
+    static const String aeps_balance_enquiry = "assets/new_images/balance_enquiry.png";
+  static const String cash = "assets/new_images/cash.png";
+  static const String ministatment_aeps = "assets/new_images/ministatement_aeps.png";
+
 }

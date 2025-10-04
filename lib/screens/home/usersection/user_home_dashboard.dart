@@ -5,7 +5,11 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:utility_app_flutter/controller/home_page_controller.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_home_controller.dart';
-import 'package:utility_app_flutter/screens/home/services/fasttag/service_data_field_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/aeps/aeps_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/booking/booking_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/normalDmt/express_dmt_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/normalDmt/normal_dmt_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/service_data_field_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/loans_services_screen.dart';
 import 'package:utility_app_flutter/screens/home/services/recharge/mobile_recharge_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/notificaton_screen.dart';
@@ -115,25 +119,19 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': "assets/images/card 1.png",
                     'label': 'AEPS Payout',
                     'hasContainer': true,
-                    'onTap': () {},
+                    'onTap': () => Get.to(() => AepsScreen()),
                   },
                   {
                     'image': "assets/images/card (2) 1.png",
                     'label': 'Normal DMT',
                     'hasContainer': true,
-                    'onTap': () => Get.to(
-                      () =>
-                          ServiceProcessScreen(serviceName: 'AEPS Transaction'),
-                    ),
+                    'onTap': () => Get.to(() => NormalDmtScreen()),
                   },
                   {
                     'image': "assets/images/transaction (6) 1.png",
                     'label': 'Express DMT',
                     'hasContainer': true,
-                    'onTap': () => Get.to(
-                      () =>
-                          ServiceProcessScreen(serviceName: 'BBPS Transaction'),
-                    ),
+                    'onTap': () => Get.to(() => ExpressDmtScreen()),
                   },
                 ]),
                 _serviceSection("Recharge & Bills", [
@@ -205,32 +203,39 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'image': Appimage.school,
                     'label': 'Bus',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(serviceName: 'Bus Booking'),
+                      () => BookingScreen(bookingService: "Bus Booking"),
                     ),
                   },
                   {
                     'image': Appimage.train,
                     'label': 'Train',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(serviceName: 'Train Booking'),
-                    ),
-                  },
-                  {
-                    'image': Appimage.building,
-                    'label': 'Hotel',
-                    'onTap': () => Get.to(
-                      () => ServiceProcessScreen(serviceName: 'Hotel Booking'),
+                      () => BookingScreen(bookingService: "Train Booking"),
                     ),
                   },
                   {
                     'image': Appimage.flight,
                     'label': 'Flight',
                     'onTap': () => Get.to(
-                      () => ServiceProcessScreen(serviceName: 'Flight Booking'),
+                      () => BookingScreen(bookingService: "Flight Booking"),
+                    ),
+                  },
+                  {
+                    'image': Appimage.building,
+                    'label': 'Hotel',
+                    'onTap': () => Get.to(
+                      () => BookingScreen(bookingService: "Hotel Booking"),
                     ),
                   },
                 ], showoffer: true),
                 _serviceSection("Finance", [
+                  {
+                    'image': Appimage.home,
+                    'label': 'Instant Loan',
+                    'onTap': () => Get.to(
+                      () => LoansServicesScreen(serviceName: "Instant Loan"),
+                    ),
+                  },
                   {
                     'image': Appimage.funds,
                     'label': 'Personal Loan',
@@ -243,13 +248,6 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                     'label': 'Business Loan',
                     'onTap': () => Get.to(
                       () => LoansServicesScreen(serviceName: "Business Loan"),
-                    ),
-                  },
-                  {
-                    'image': Appimage.home,
-                    'label': 'Instant Loan',
-                    'onTap': () => Get.to(
-                      () => LoansServicesScreen(serviceName: "Instant Loan"),
                     ),
                   },
 
@@ -815,8 +813,8 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
             padding: const EdgeInsets.all(12),
             child: Image.asset(
               service['image'],
-              height: 30,
-              width: 30,
+              height: 25,
+              width: 25,
               fit: BoxFit.contain,
             ),
           ),

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:utility_app_flutter/screens/auth/distributer_register.dart';
 import 'package:utility_app_flutter/screens/auth/user_register.dart';
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/screens/splashscreen.dart';
+import 'package:utility_app_flutter/utils/appServices/bio_matrics_services.dart';
 import 'package:utility_app_flutter/utils/utils.dart';
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize BiometricService as a singleton
+  Get.put(BiometricService(), permanent: true);
   runApp(MyApp());
 }
 

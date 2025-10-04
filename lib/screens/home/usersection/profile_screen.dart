@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/userscreenscontrollers/user_profile_controller.dart';
+import 'package:utility_app_flutter/screens/auth/login.dart';
 import 'package:utility_app_flutter/screens/home/usersection/aboutus_screen.dart';
 import 'package:utility_app_flutter/screens/home/usersection/grievancy_policy.dart';
 import 'package:utility_app_flutter/screens/home/usersection/privacy_policy_screen.dart';
@@ -113,6 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Get.to(() => AboutUsScreen());
                     },
                   ),
+
+                  _buildActionTile("assets/images/about_us.png", "Logout", () {
+                    Get.offAll(() => Login());
+                  }),
                   const SizedBox(height: 80), // Space for bottom navigation
                 ],
               ),

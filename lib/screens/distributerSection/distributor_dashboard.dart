@@ -77,25 +77,22 @@ class _DistributorDashboardState extends State<DistributorDashboard>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.off_white,
-        body: CustomScrollView(
-          slivers: [
-            _buildCustomAppBar(),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  const SizedBox(height: 15),
-                  _buildWelcomeSection(),
-                  _walletSection(),
-                  _buildGridSection(),
-                  _buildGraphSection(),
-                  _buildProfileSection(),
-                ],
-              ),
+      child: CustomScrollView(
+        slivers: [
+          _buildCustomAppBar(),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const SizedBox(height: 15),
+                _buildWelcomeSection(),
+                _walletSection(),
+                _buildGridSection(),
+                _buildGraphSection(),
+                _buildProfileSection(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
