@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/services/service_process_controlle.dart';
 import 'package:utility_app_flutter/models/service_selection_model.dart';
-import 'package:utility_app_flutter/screens/home/services/fasttag/service_data_field_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/service_data_field_screen.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/utils/Constants/appimage.dart';
 

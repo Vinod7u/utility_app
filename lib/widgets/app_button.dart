@@ -4,7 +4,7 @@ import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 Widget appButton({required String title, required VoidCallback onTap}) {
   return SizedBox(
     width: double.infinity,
-    height: 55,
+    height: 50,
     child: ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(

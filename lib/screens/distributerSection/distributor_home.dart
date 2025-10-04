@@ -56,7 +56,7 @@ class _DistributorHomeState extends State<DistributorHome> {
               child: child,
             );
           },
-          child: screens[controller.userselectedIndex.value],
+          child: screens[controller.distributerselectedIndex.value],
         ),
 
         bottomNavigationBar: BottomAppBar(
@@ -69,7 +69,7 @@ class _DistributorHomeState extends State<DistributorHome> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(icons.length, (index) {
                 final bool isSelected =
-                    controller.userselectedIndex.value == index;
+                    controller.distributerselectedIndex.value == index;
                 return Expanded(
                   child: InkWell(
                     onTap: () => controller.distributerchangeTab(index),

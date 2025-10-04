@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:utility_app_flutter/controller/loginController.dart';
 import 'package:utility_app_flutter/screens/auth/otp_verify_screen.dart';
+import 'package:utility_app_flutter/screens/distributerSection/distributor_home.dart';
 import 'package:utility_app_flutter/screens/home/usersection/user_home_page.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 import 'package:utility_app_flutter/widgets/app_button.dart';
@@ -44,7 +45,7 @@ class _LoginState extends State<Login> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                   color: AppColors.darkColor,
+                    color: AppColors.darkColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(Icons.person_2, color: Colors.white, size: 40),
