@@ -57,7 +57,7 @@ class _ExpressDmtScreenState extends State<ExpressDmtScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Normal Dmt Transfer",
+            "Express Dmt Transfer",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
 
@@ -220,7 +220,7 @@ class _ExpressDmtScreenState extends State<ExpressDmtScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Normal Dmt Transfer",
+            "Express Dmt Transfer",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
 

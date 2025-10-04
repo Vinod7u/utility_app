@@ -296,6 +296,8 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
 
                 _buildCreditscoreSection(),
                 _buildGetCreditCardSection(),
+                _bannerSection(),
+
                 _buildFreeToolsSection(),
                 _buildTrendingSection(context),
               ],
@@ -430,10 +432,11 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   // -------------------- BANNER --------------------
   Widget _bannerSection() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+
       child: Column(
         children: [
-          const SizedBox(height: 16),
+          const SizedBox(height: 4),
 
           // 🔹 Carousel
           CarouselSlider.builder(
@@ -452,7 +455,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               height: 140,
               autoPlay: true,
               enlargeCenterPage: true,
-              viewportFraction: 0.88,
+              viewportFraction: 1,
               onPageChanged: (index, reason) {
                 controller.currentBanner.value = index;
               },
@@ -501,7 +504,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     return SlideTransition(
       position: _slideAnimation,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
@@ -652,7 +655,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     double itemWidth = (MediaQuery.of(context).size.width - 68) / 4;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -890,8 +893,8 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.blue_shade,
         borderRadius: BorderRadius.circular(16),
@@ -1001,8 +1004,8 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
   Widget _buildCreditscoreSection() {
     return Container(
       decoration: const BoxDecoration(color: Colors.transparent),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           // Header Row
@@ -1203,7 +1206,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
                   onTap: () {},
                   child: Container(
                     height: 120, // 🔹 Same height
-                    margin: const EdgeInsets.only(left: 8),
+                    margin: const EdgeInsets.only(left: 2),
                     decoration: BoxDecoration(
                       color: const Color(0xffE6EEFB),
                       borderRadius: BorderRadius.circular(12),
@@ -1271,7 +1274,7 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
 
     return Container(
       decoration: const BoxDecoration(color: Colors.transparent),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1384,49 +1387,15 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
               ),
             ),
           ),
-
-          const SizedBox(height: 16),
-
-          _bannerSection(),
         ],
-      ),
-    );
-  }
-
-  Widget _infoBadge({
-    required String text,
-    required String iconPath,
-    Color backgroundColor = const Color(0xFFFFE4E1), // default pink shade
-    VoidCallback? onTap,
-  }) {
-    return InkWell(
-      onTap: onTap ?? () {},
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(iconPath, height: 10, width: 10),
-              const SizedBox(width: 4),
-              Text(text, style: const TextStyle(fontSize: 10)),
-              const SizedBox(width: 4),
-            ],
-          ),
-        ),
       ),
     );
   }
 
   Widget _buildFreeToolsSection() {
     return Container(
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -1620,8 +1589,8 @@ class _UserHomeDashboardState extends State<UserHomeDashboard>
     ];
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,

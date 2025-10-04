@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:utility_app_flutter/screens/home/services/normalDmt/add_beneficiary_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/normalDmt/beneficiary_list_screen.dart';
+import 'package:utility_app_flutter/screens/home/services/normalDmt/dmt_transcation_history.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
 
 class BenifiacaryManagementScreen extends StatefulWidget {
@@ -89,7 +92,7 @@ class _BenifiacaryManagementScreenState
                   ),
                 ),
                 const Text(
-                  "Normal Dmt Transfer",
+                  "Beneficiary Management",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -123,12 +126,13 @@ class _BenifiacaryManagementScreenState
 
   Widget _buildTabSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
-        height: 45,
+        height: 50,
         decoration: const BoxDecoration(color: Colors.white),
         child: TabBar(
           controller: _tabController,
+          // isScrollable: true, // <-- Make tabs scrollable
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.black),
@@ -137,30 +141,29 @@ class _BenifiacaryManagementScreenState
           unselectedLabelColor: Colors.black,
           labelStyle: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: 12,
           ),
           unselectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 14,
+            fontSize: 12,
           ),
           tabs: const [
-            // Added internal padding inside tab labels
             Tab(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                 child: Text("Add Beneficiary"),
               ),
             ),
             Tab(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Text("Manage"),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Text("Beneficiary List"),
               ),
             ),
             Tab(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Text("History"),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Text("Transaction"),
               ),
             ),
           ],
@@ -171,12 +174,15 @@ class _BenifiacaryManagementScreenState
 
   Widget _buildTabContent() {
     return SizedBox(
+      height:
+          MediaQuery.of(context).size.height -
+          200, // adjust based on appbar + other paddings
       child: TabBarView(
         controller: _tabController,
         children: const [
           AddBeneficiaryScreen(),
-          ManageBeneficiaryScreen(),
-          TransactionHistoryScreen(),
+          BeneficiaryListScreen(),
+          DmtTransactionHistory(),
         ],
       ),
     );
@@ -184,45 +190,3 @@ class _BenifiacaryManagementScreenState
 }
 
 /// ---------------- SEPARATE SCREENS ----------------
-
-class AddBeneficiaryScreen extends StatelessWidget {
-  const AddBeneficiaryScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Add Beneficiary Screen",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class ManageBeneficiaryScreen extends StatelessWidget {
-  const ManageBeneficiaryScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Manage Beneficiaries Screen",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class TransactionHistoryScreen extends StatelessWidget {
-  const TransactionHistoryScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Transaction History Screen",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}

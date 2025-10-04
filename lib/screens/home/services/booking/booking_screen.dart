@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:utility_app_flutter/controller/services/bookings/booking_screen_controller.dart';
 import 'package:utility_app_flutter/screens/home/services/booking/bus_booking_ui.dart';
-import 'package:utility_app_flutter/screens/home/services/booking/flight_booking.dart';
+import 'package:utility_app_flutter/screens/home/services/booking/flight/flight_booking.dart';
 import 'package:utility_app_flutter/screens/home/services/booking/hotel_booking_ui.dart';
 import 'package:utility_app_flutter/screens/home/services/booking/tarin_booking_ui.dart';
 import 'package:utility_app_flutter/utils/Constants/app_colors.dart';
@@ -44,7 +44,6 @@ class BookingScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Obx(
               () => Container(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColors.blue_shade,
@@ -191,6 +190,4 @@ class BookingScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }
